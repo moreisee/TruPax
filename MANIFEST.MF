@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Sealed: true
+Main-Class: coderslagoon.trupax.exe.GUI
+Class-Path: . swt.jar fat32-lib-0.6.2.jar
+Name: coderslagoon/trupax/exe/gui
+Specification-Title: TruPax Executables
+Specification-Version: 7 A
+Specification-Vendor: CODERSLAGOON
+Implementation-Title: trupax.exe
+Implementation-Version: 7 A
+Implementation-Vendor: CODERSLAGOON
+Trusted-Library: true

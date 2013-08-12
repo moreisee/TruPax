@@ -1,0 +1,4 @@
+#!/bin/bash
+realpath=`readlink -f $0`
+trupaxdir=`dirname $realpath`
+exec -a trupax java -Xmx256m -cp "$trupaxdir/trupax.jar" trupax.exe.CmdLn "$@"

@@ -1,0 +1,21 @@
+INSTALLATION - WINDOWS
+
+Durch Starten der Datei setup.vbs wird eine Verknüpfung auf dem Desktop
+angelegt. Sie verweist auf das Installationsverzeichnis, wird also ungültig
+wenn dieses verschoben oder später nicht mehr vorhanden sein sollte. Abhängig
+von der Java-Installation sollte entweder setup.vbs oder setup64.vbs verwendet
+werden. Letzteres ist nur dann notwendig, wenn 32bit Java auf einem 64bit
+Windows installiert ist, welches allerdings zur Zeit der Standard ist (wg. der
+Verwendung von 32bit Webbrowsern). 
+
+INSTALLATION - LINUX
+
+Zum Starten von TruPax verwenden Sie ausführbare Datei trupaxgui, welche dann
+z.B. unter GNOME in einem Starter verwendet werden kann, zusammen mit dem
+mitgelieferten Bild trupax_icon.png als Symbol. Falls Sie auf dem System über
+Administratorrechte (via sudo) verfügen, so können Sie TruPax zudem bequem über
+das mitgelieferte Shellskript install.sh installieren. Die Dateien werden dann
+nach /opt/trupax kopiert und ein Starter wird automatisch angelegt. Zudem ist
+die Kommadozeilenversion dann automatisch verfügbar. Im Installationsverzeichnis
+befindet sich ein Skript namens uninstall.sh welches zum Entfernen der Software
+dient. 

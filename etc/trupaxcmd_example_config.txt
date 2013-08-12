@@ -1,0 +1,46 @@
+
+# Default settings for command line TruPax. To activate copy this file into
+# your TruPax folder (or alternatively your home folder) and rename it to
+# "trupaxcmd.properties" under Windows or ".trupaxrc" under Linux/etc.
+
+
+# switches the language, supported are "de" (German) and "en" (English)
+trupax.exe.lang=en
+
+# default amount of free space
+trupax.cmdln.freespace=0
+
+# tell the software to be verbose on the command line
+trupax.cmdln.verbose=true
+
+# allow merging of conflicting file and folder selections (true) or not (false)
+trupax.prg.allowmerge=false
+
+# the default label to use for volumes
+trupax.prg.label=UDFVolume
+
+# whether (true) or not (false) existing volumes should be overwritten - you
+# probably want to do this on the command line and keep this value set to false
+trupax.prg.overwrite=false
+
+# if folders should always (true) be registered recursively or not (false)
+trupax.prg.recursivesearch=true
+
+# if empty directories should be included (true) or ignored (false)
+trupax.prg.skipemptydirs=false
+
+# if full paths (down to the root) should be stored (true) or just the relative
+# portion (false) from the declared search path and up
+trupax.prg.storefullpath=false
+
+# if the material should be wiped out after volume creation (true) or if it
+# shouldn't (false, recommended unless absolutely sure!)
+trupax.prg.wipe=false
+
+# keep (very likely incomplete or truncated respectivly)) volumes for which the
+# creation process terminated early due to an error (true) or not (false)
+trupax.prg.keepbrokenvolume=false
+
+# whether to delete a volume after invalidation (true) or not (false)
+trupax.prg.deleteafter=true
+

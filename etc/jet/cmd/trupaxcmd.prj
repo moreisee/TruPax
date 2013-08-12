@@ -1,0 +1,54 @@
+%%Excelsior JET v7.6 project file
+
+-jpiiproject=C:\Users\maakus\workspace\TruPax\etc\jet\cmd\trupaxcmd.jpn
+
+-compilewithfixedheap-
+-genstackalloc+
+-genstacktrace-
+-global-
+-gui-
+-ignoreclassduplication+
+-ignorememberabsence+
+-inline+
+-jetcpenablemanualsettings+
+-multiapp-
+-splashgetfrommanifest-
+
+-apptype=Plain
+-classabsence=HANDLE
+-compilerheap=1207959552
+-inlinelimit=100
+-inlinetolimit=1000
+-jetcplastpage:=PageCompile
+-jetrt=Desktop
+-jetvmprop=-Djet.jit.fast -Djet.gc.heaplimit:2147483648
+-main=coderslagoon/trupax/exe/CmdLn
+-outputdir=.
+-outputname=trupaxcmd
+-saprofmode=JETCPONLY
+-saproftimeout=20
+-stacklimit=900000
+-startupprofile=./trupaxcmd.startup
+-versioninfocompanyname=CODERSLAGOON
+-versioninfofiledescription=TruPax Command Line
+-versioninfolegalcopyright=Copyright 2010-2013 CODERSLAGOON
+-versioninfoproductname=TruPax Command Line
+-versioninfoproductversion=7.1.0.0
+
+
+
+
+!classpathentry ../../../build/trupax.jar
+  -pack=noncompiled
+  -protect=all
+  -optimize=all
+!end
+!classpathentry ../../../lib/fat32-lib-0.6.2.jar
+  -pack=noncompiled
+  -protect=nomatter
+  -optimize=all
+!end
+
+!module ../../images/trupax_all.ico
+!module ./trupaxcmd.usg
+
