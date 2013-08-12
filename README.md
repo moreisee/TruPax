@@ -5,7 +5,7 @@ TruPax generates [TrueCrypt](http://www.truecrypt.org) compatible container file
 
 The generated file system of the containers is UDF 1.02, which is supported by all of the modern operating systems. Most of them also support writing - meaning files in a container can also be deleted or new ones added. TruPax also wipes files after container generation, or just as a separate action. You also invalidate any TrueCrypt container with it very quickly.
 
-TruPax is completely written in Java. It gets shipped as either a single JAR, or built as a JRE-less EXE (powered by (Excelsior Jet)[http://www.excelsiorjet.com/]) for Windows. Installation is simple and optional, thus Trupax is also highly portable.
+TruPax is completely written in Java. It gets shipped as either a single JAR, or built as a JRE-less EXE (powered by[Excelsior Jet](http://www.excelsiorjet.com/) for Windows. Installation is simple and optional, thus Trupax is also highly portable.
 
 Next to the UI there is also a command line version, and with it TruPax can be used in fully automated scenarios.
 
@@ -17,4 +17,4 @@ If you want to use the TruPax technology in your own applications, the API is th
 
 Contributors are highly welcome, please contact the maintainer for further information.
 
-For build and development instructions please (check out the wiki)[https://github.com/coderslagoon/TruPax/wiki].
+For build and development instructions please [check out the wiki](https://github.com/coderslagoon/TruPax/wiki).
