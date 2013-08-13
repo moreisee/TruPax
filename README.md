@@ -6,6 +6,7 @@ TruPax generates [TrueCrypt](http://www.truecrypt.org/) compatible container fil
 The generated file system of the containers is UDF 1.02, which is supported by all of the modern operating systems. Most of them also support writing - meaning files in a container can also be deleted or new ones added. TruPax also wipes files after container generation, or just as a separate action. You also invalidate any TrueCrypt container with it very quickly.
 
 TruPax is completely written in Java 6+.
+
 Next to the SWT UI there is also a command line version, and with it TruPax can be used in fully automated scenarios.
 
 TruPax works fast and also uses all available CPU cores. Containers get generated in just one pass.
