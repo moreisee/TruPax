@@ -325,7 +325,7 @@ public class Verifier {
     private class BrowserMatcher implements Matcher {
         BrowserMatcher() { }
 
-		public void match(final File rootDir, File volume, int blockSz, Key key,
+        public void match(final File rootDir, File volume, int blockSz, Key key,
                           String hashFunction, String blockCipher,
                           final Setup setup) throws Exception {
             final String FOUND_EXT = ".found";
@@ -441,7 +441,7 @@ public class Verifier {
     private class ReaderMatcher implements Matcher {
         ReaderMatcher() { }
 
-		public void match(final File rootDir, File volume, int blockSz, Key key,
+        public void match(final File rootDir, File volume, int blockSz, Key key,
                           String hashFunction, String blockCipher,
                           final Setup setup) throws Exception {
             RandomAccessFile raf = new RandomAccessFile(volume, "r");
@@ -456,19 +456,19 @@ public class Verifier {
                 File    fl;
                 Long    size;
                 Long    tstamp;
-				public Result onMounting(int numOfObjects) {
-					return Result.OK;
-				}
+                public Result onMounting(int numOfObjects) {
+                    return Result.OK;
+                }
                 public Result onMount(int numOfFiles, int numOfDirs) {
-                	nofiles.v = numOfFiles;
-                	nodirs .v = numOfDirs;
+                    nofiles.v = numOfFiles;
+                    nodirs .v = numOfDirs;
                     return Result.OK;
                 }
                 public Result onDirectory(File dir, long size, Long tstamp) {
-                	return onObject(dir, size, tstamp);
+                    return onObject(dir, size, tstamp);
                 }
                 public Result onFile(File fl, long size, Long tstamp) {
-                	return onObject(fl, size, tstamp);
+                    return onObject(fl, size, tstamp);
                 }
                 private Result onObject(File fl, long size, Long tstamp) {
                     this.fl     = fl;
@@ -478,90 +478,90 @@ public class Verifier {
                 }
                 public Result onData(long written) {
                     if (written > this.size) {
-                    	throw new TestError("overread on '%s' (%d>%d)", 
-                    					    this.fl, written, this.size);
+                        throw new TestError("overread on '%s' (%d>%d)", 
+                                            this.fl, written, this.size);
                     }
-                	return Result.OK;
+                    return Result.OK;
                 }
                 public Result onDone(long total) {
                     String fpath = TestUtils.extractRelativePath(extractDir, this.fl);
                     if (total != this.size) {
-                    	throw new TestError("total mismatch '%s' (%d>%d)", 
-                    					    fpath, total, this.size);
+                        throw new TestError("total mismatch '%s' (%d>%d)", 
+                                            fpath, total, this.size);
                     }
                     File parent;
                     if (setup.usingAbsolutePath()) {
-                    	parent = IOUtils.getRoot(rootDir);
+                        parent = IOUtils.getRoot(rootDir);
                     }
                     else {
-                    	parent = 0 == fpath.length() ? rootDir : rootDir.getParentFile();
+                        parent = 0 == fpath.length() ? rootDir : rootDir.getParentFile();
                     }
                     File obj = new File(parent, fpath);
                     if (!obj.exists()) {
-                    	throw new TestError("missing original object '%s'", obj.getAbsolutePath());
+                        throw new TestError("missing original object '%s'", obj.getAbsolutePath());
                     }
                     if (null != this.tstamp) {
-                    	// NOTE: root directory is in temporary folder which
-                    	//       might change, hence we should not check it...
-                    	boolean ird = obj.isDirectory() &&
-                    	              obj    .getAbsolutePath().length() < 
-                    	              rootDir.getAbsolutePath().length();
-                    	if (!ird && obj.lastModified() != this.fl.lastModified()) {
-	                    	throw new TestError("file '%s' time off by %,d", 
-	                    		fpath, obj.lastModified() - this.fl.lastModified());
-	                    }
-	                    if (this.tstamp != this.fl.lastModified()) {
-	                    	throw new TestError("restored time of '%s' off by %,d", 
-	                    		fpath, this.tstamp - this.fl.lastModified());
-	                    }
+                        // NOTE: root directory is in temporary folder which
+                        //       might change, hence we should not check it...
+                        boolean ird = obj.isDirectory() &&
+                                      obj    .getAbsolutePath().length() < 
+                                      rootDir.getAbsolutePath().length();
+                        if (!ird && obj.lastModified() != this.fl.lastModified()) {
+                            throw new TestError("file '%s' time off by %,d", 
+                                fpath, obj.lastModified() - this.fl.lastModified());
+                        }
+                        if (this.tstamp != this.fl.lastModified()) {
+                            throw new TestError("restored time of '%s' off by %,d", 
+                                fpath, this.tstamp - this.fl.lastModified());
+                        }
                     }
                     if (this.fl.isDirectory() ^ obj.isDirectory()) {
-                    	throw new TestError("file '%s' dir/file mismatch", fpath);
+                        throw new TestError("file '%s' dir/file mismatch", fpath);
                     }
                     if (!this.fl.isDirectory()) {
-                    	if (this.fl.length() != obj.length()) {
-                        	throw new TestError("size mismatch on '%s' by %,d", 
-            					    fpath, obj.length() - this.fl.length());
-                    	}
-                    	try {
-	                    	if (!TestUtils.areFilesEqual(this.fl, obj)) {
-	                        	throw new TestError("content mismatch on '%s'", fpath);
-	            			}
-                    	}
-                    	catch (IOException ioe) {
-                    		throw new TestError("I/O error while comparing (%s)", 
-                    				            ioe.getMessage());
-                    	}
+                        if (this.fl.length() != obj.length()) {
+                            throw new TestError("size mismatch on '%s' by %,d", 
+                                    fpath, obj.length() - this.fl.length());
+                        }
+                        try {
+                            if (!TestUtils.areFilesEqual(this.fl, obj)) {
+                                throw new TestError("content mismatch on '%s'", fpath);
+                            }
+                        }
+                        catch (IOException ioe) {
+                            throw new TestError("I/O error while comparing (%s)", 
+                                                ioe.getMessage());
+                        }
                     }
                     return Result.OK;
                 }
             });
             FilePathWalker fpw = new FilePathWalker() {
-				public boolean onObject(File obj) {
+                public boolean onObject(File obj) {
                     String fpath;
                     if (setup.usingAbsolutePath()) {
-                    	fpath = IOUtils.stripRoot(obj).toString();
+                        fpath = IOUtils.stripRoot(obj).toString();
                     }
                     else {
-                    	fpath = TestUtils.extractRelativePath(rootDir, obj);
-                    	if (0 < fpath.length()) {
-                    		fpath = rootDir.getName() + File.separatorChar + fpath;
-                    	}
-                    }	
+                        fpath = TestUtils.extractRelativePath(rootDir, obj);
+                        if (0 < fpath.length()) {
+                            fpath = rootDir.getName() + File.separatorChar + fpath;
+                        }
+                    }   
                     File expected = new File(extractDir, fpath);
                     if (!expected.exists()) {
-                    	throw new TestError("'%s' not extracted!?", expected.getAbsolutePath());
+                        throw new TestError("'%s' not extracted!?", expected.getAbsolutePath());
                     }
                     if (expected.isDirectory() ^ obj.isDirectory()) {
-                    	throw new TestError("dir/file mismatch (%s)", fpath);
+                        throw new TestError("dir/file mismatch (%s)", fpath);
                     }
-					return true;
-				}
+                    return true;
+                }
             };
             fpw.walk(rootDir);
             if (!TestUtils.removeDir(extractDir, true)) {
-            	throw new TestError("removal of extraction tempdir '%s' failed", 
-            			            extractDir.getAbsolutePath());
+                throw new TestError("removal of extraction tempdir '%s' failed", 
+                                    extractDir.getAbsolutePath());
             }
             tcr.close(false);
         }
@@ -641,17 +641,17 @@ public class Verifier {
        
         FileOutputStream fos = new FileOutputStream(outFile);
         try {
-	        for (; no < end; no++) {
-	            if ((Header.BLOCK_SIZE != IOUtils.readAll(raf, buf, 0, Header.BLOCK_SIZE))) {
-	                throw new IOException(String.format("block %d read incomplete", no));
-	            }
-	            
-	            vol.processBlock(no, buf, 0); 
-	            fos.write(buf, 0, Header.BLOCK_SIZE);
-	        }
+            for (; no < end; no++) {
+                if ((Header.BLOCK_SIZE != IOUtils.readAll(raf, buf, 0, Header.BLOCK_SIZE))) {
+                    throw new IOException(String.format("block %d read incomplete", no));
+                }
+                
+                vol.processBlock(no, buf, 0); 
+                fos.write(buf, 0, Header.BLOCK_SIZE);
+            }
         }
         finally {
-        	fos.close();
+            fos.close();
         }
         
         if (buf.length != IOUtils.readAll(raf, buf, 0, buf.length)) {

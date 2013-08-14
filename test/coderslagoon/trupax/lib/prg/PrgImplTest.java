@@ -70,7 +70,7 @@ public class PrgImplTest {
 
     @After
     public void tearDown() {
-    	delPrg();
+        delPrg();
         assertTrue(PrgImpl.cleanup().isSuccess());
         Prp.global().clear();
         NLS.Reg.instance().reset();
@@ -79,14 +79,14 @@ public class PrgImplTest {
     ///////////////////////////////////////////////////////////////////////////
     
     Prg newPrg() {
-    	assertNull(this.prgi);
-    	return (this.prgi = new PrgImpl());
+        assertNull(this.prgi);
+        return (this.prgi = new PrgImpl());
     }
     void delPrg() {
-    	if (null != this.prgi) {
+        if (null != this.prgi) {
             assertTrue(this.prgi.dtor().isSuccess());
             this.prgi = null;
-    	}
+        }
     }
     private Prg prgi;
     
@@ -225,8 +225,8 @@ public class PrgImplTest {
                 dcount.v++;
                 return Result.ok();
             }
-			public void configLocked() {
-			}
+            public void configLocked() {
+            }
         });
         
         Prg.RegSum rsum = prg.registerSummary();
@@ -263,10 +263,10 @@ public class PrgImplTest {
                 pcount.v++;
                 return Result.ok();
             }
-			public Result onFreeSpace() {
-				fspace.v = true;
-				return Result.ok();
-			}
+            public Result onFreeSpace() {
+                fspace.v = true;
+                return Result.ok();
+            }
         });
         assertTrue(res.isSuccess());
         assertTrue(fbytes.v == rsum.bytesTotal);
@@ -280,10 +280,10 @@ public class PrgImplTest {
         // BinUtils.hexDump(dec, 0, dec.length, System.out, 32, 4);
 
         for (Verifier.Matcher matcher : new Verifier.Matcher[] {
-        	ver.readerMatcher (),
+            ver.readerMatcher (),
             ver.browserMatcher()
         }) {
-        	matcher.match(base, vol, PrgImpl.BLOCK_SIZE, 
+            matcher.match(base, vol, PrgImpl.BLOCK_SIZE, 
                 new Password(PASSW.toCharArray(), null),
                 prg.getProperty(Prg.Prop.HASH_FUNCTION),
                 prg.getProperty(Prg.Prop.BLOCK_CIPHER),
@@ -354,9 +354,9 @@ public class PrgImplTest {
                     dcount.v++;
                     return Result.ok();
                 }
-    			public void configLocked() {
-    				locked.v = true;
-    			}
+                public void configLocked() {
+                    locked.v = true;
+                }
             });
             assertTrue(locked.v);
             
@@ -386,9 +386,9 @@ public class PrgImplTest {
                     pcount.v++;
                     return Result.ok();
                 }
-				public Result onFreeSpace() {
-					return Result.ok();
-				}
+                public Result onFreeSpace() {
+                    return Result.ok();
+                }
             });
             assertTrue(res.isSuccess());
             assertTrue(volBytes == vol.length());
@@ -401,7 +401,7 @@ public class PrgImplTest {
                 ver.readerMatcher (),
                 ver.browserMatcher()
             }) {
-            	matcher.match(base, vol, PrgImpl.BLOCK_SIZE, 
+                matcher.match(base, vol, PrgImpl.BLOCK_SIZE, 
                     new Password(PASSW.toCharArray(), null), 
                     prg.getProperty(Prg.Prop.HASH_FUNCTION),
                     prg.getProperty(Prg.Prop.BLOCK_CIPHER),
@@ -480,8 +480,8 @@ public class PrgImplTest {
                 public Result onDirectory(String dir) {
                     return Result.ok();
                 }
-    			public void configLocked() {
-    			}
+                public void configLocked() {
+                }
             });
             
             long[] w = walkDir(base);
@@ -526,9 +526,9 @@ public class PrgImplTest {
                     }
                     return Result.ok();
                 }
-				public Result onFreeSpace() {
-					return null;
-				}
+                public Result onFreeSpace() {
+                    return null;
+                }
             });
             System.out.printf(" %,d bytes/sec\n",
                     (volBytes * 1000) / Math.max(1, System.currentTimeMillis() - tm2));
@@ -543,7 +543,7 @@ public class PrgImplTest {
                 ver.readerMatcher (),
                 ver.browserMatcher()
             }) {
-            	matcher.match(base, vol, PrgImpl.BLOCK_SIZE, 
+                matcher.match(base, vol, PrgImpl.BLOCK_SIZE, 
                     new Password(PASSW.toCharArray(), null), 
                     prg.getProperty(Prg.Prop.HASH_FUNCTION),
                     prg.getProperty(Prg.Prop.BLOCK_CIPHER),
@@ -634,8 +634,8 @@ public class PrgImplTest {
                     Boolean.TRUE.toString());
             assertTrue(prg.setProperty(pns).isSuccess());
             assertTrue(prg.setProperty(new Prg.NamedString(
-            		Prg.Prop.TRIM_PATH, 
-            		Boolean.TRUE.toString())).isSuccess());
+                    Prg.Prop.TRIM_PATH, 
+                    Boolean.TRUE.toString())).isSuccess());
             
             System.out.print("registering...");
             long tm3 = System.currentTimeMillis();
@@ -643,8 +643,8 @@ public class PrgImplTest {
                 public Result onDirectory(String dir) {
                     return Result.ok();
                 }
-    			public void configLocked() {
-    			}
+                public void configLocked() {
+                }
             });
             assertTrue(res.isSuccess());
             System.out.printf(", time spent: %s\n", 
@@ -700,9 +700,9 @@ public class PrgImplTest {
                     }
                     return Result.ok();
                 }
-				public Result onFreeSpace() {
+                public Result onFreeSpace() {
                     return Result.ok();
-				}
+                }
             });
             System.out.printf(" %,d bytes/sec\n",
                     (volBytes * 1000) / Math.max(1, System.currentTimeMillis() - tm2));
@@ -721,7 +721,7 @@ public class PrgImplTest {
                 ver.readerMatcher (),
                 ver.browserMatcher()
             }) {
-            	matcher.match(base, vol, PrgImpl.BLOCK_SIZE, 
+                matcher.match(base, vol, PrgImpl.BLOCK_SIZE, 
                     new Password(PASSW.toCharArray(), null), 
                     hashFunction,
                     blockCipher,
@@ -803,8 +803,8 @@ public class PrgImplTest {
                 public Result onDirectory(String dir) {
                     return Result.ok();
                 }
-    			public void configLocked() {
-    			}
+                public void configLocked() {
+                }
             });
 
             File vol = ver.newVolumeFile();
@@ -826,25 +826,25 @@ public class PrgImplTest {
                 public Result onVolumeWrite(long pos) {
                     return Result.ok();
                 }
-				public Result onFreeSpace() {
-					fspace.v++;
-					return Result.ok();
-				}
+                public Result onFreeSpace() {
+                    fspace.v++;
+                    return Result.ok();
+                }
             }).isSuccess());
             assertTrue(volBytes == vol.length());
             assertTrue((0 == freeSpace && 0 == fspace.v) ||
-            		   (0 < freeSpace && 1L == fspace.v)); 
+                       (0 < freeSpace && 1L == fspace.v)); 
             
             for (Verifier.Matcher matcher : new Verifier.Matcher[] {
                 ver.readerMatcher (),
                 ver.browserMatcher()
-	        }) {
-            	matcher.match(base, vol, PrgImpl.BLOCK_SIZE, 
+            }) {
+                matcher.match(base, vol, PrgImpl.BLOCK_SIZE, 
                     new Password(PASSW.toCharArray(), null), 
                     prg.getProperty(Prg.Prop.HASH_FUNCTION),
                     prg.getProperty(Prg.Prop.BLOCK_CIPHER),
                     vsetup);
-	        }
+            }
             File dec = new File(base, "testFreeSpace.dec.dump");
             assertTrue(!dec.exists() || dec.delete());
             
@@ -926,8 +926,8 @@ public class PrgImplTest {
             public Result onDirectory(String dir) {
                 return Result.ok();
             }
-			public void configLocked() {
-			}
+            public void configLocked() {
+            }
         });
     
         final VarInt    wipedFiles        = new VarInt();
@@ -978,24 +978,24 @@ public class PrgImplTest {
     @Test
     public void testInvalidateNonExistingFile() throws Exception {
 
-    	File noSuchFile = new File(System.getProperty("java.io.tmpdir"),
-   			TestUtils.createTempFileName("testInvalidateNonExistingFile"));
-    	Assert.assertFalse(noSuchFile.exists());
-    	
-    	Prg prg = newPrg();
-    	Assert.assertTrue(prg.setVolumeFile(noSuchFile.getAbsolutePath()).isSuccess()); 
-    	final VarLong ops = new VarLong();
-    	Prg.Result res = prg.invalidate(new Prg.ProgressCallback() {
-			@Override
-			public Result onProgress(double percent) {
-				ops.v++;
-				return Result.ok();
-			}
-    	});
-    	Assert.assertFalse(noSuchFile.exists());
-    	Assert.assertTrue(res.isFailure()); 
-    	Assert.assertTrue(0 == ops.v); 
+        File noSuchFile = new File(System.getProperty("java.io.tmpdir"),
+            TestUtils.createTempFileName("testInvalidateNonExistingFile"));
+        Assert.assertFalse(noSuchFile.exists());
+        
+        Prg prg = newPrg();
+        Assert.assertTrue(prg.setVolumeFile(noSuchFile.getAbsolutePath()).isSuccess()); 
+        final VarLong ops = new VarLong();
+        Prg.Result res = prg.invalidate(new Prg.ProgressCallback() {
+            @Override
+            public Result onProgress(double percent) {
+                ops.v++;
+                return Result.ok();
+            }
+        });
+        Assert.assertFalse(noSuchFile.exists());
+        Assert.assertTrue(res.isFailure()); 
+        Assert.assertTrue(0 == ops.v); 
 
-    	delPrg();
+        delPrg();
     }
 }

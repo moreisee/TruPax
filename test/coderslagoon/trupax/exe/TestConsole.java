@@ -31,8 +31,8 @@ public class TestConsole extends Console {
         this.prompts.add(String.format(fmt, args));
         return this.password.clone();
     }
-	public Console format(String fmt, Object... args) {
+    public Console format(String fmt, Object... args) {
         this.prompts.add(String.format(fmt, args));
-		return this;
-	}
+        return this;
+    }
 }

@@ -248,7 +248,7 @@ public abstract class FileEntry extends Descriptor {
          * @return The size of space free for allocation descriptors.
          */
         private static int freeForAlloc(                
-        		int blockSize,
+                int blockSize,
                 int lengthOfExtendedAttributes) {
             return blockSize - (176 + lengthOfExtendedAttributes);
         }
@@ -260,11 +260,11 @@ public abstract class FileEntry extends Descriptor {
 
         public static long maxFileSize(
                 int blockSize, int lengthOfExtendedAttributes) {
-        	int free = freeForAlloc(blockSize, lengthOfExtendedAttributes);
-        	
-        	long c = free / AllocationDescriptor.Short.LENGTH;
-        	
-        	return (long)AllocationDescriptor.maxLength(blockSize) * c;
+            int free = freeForAlloc(blockSize, lengthOfExtendedAttributes);
+            
+            long c = free / AllocationDescriptor.Short.LENGTH;
+            
+            return (long)AllocationDescriptor.maxLength(blockSize) * c;
         }
     }
     

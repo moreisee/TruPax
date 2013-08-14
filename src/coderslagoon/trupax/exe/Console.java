@@ -29,10 +29,10 @@ public abstract class Console {
             public char[] readPassword(String fmt, Object... args) {
                 return con.readPassword(fmt, args);
             }
-			public Console format(String fmt, Object... args) {
-				con.format(fmt, args);
-				return this;
-			}
+            public Console format(String fmt, Object... args) {
+                con.format(fmt, args);
+                return this;
+            }
         };
     }
 }

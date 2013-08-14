@@ -63,19 +63,19 @@ public class CharacterSet {
     
     @Override
     public boolean equals(Object obj) {
-    	if (obj instanceof CharacterSet) {
-    		CharacterSet cs = (CharacterSet)obj;
-    		
-    		return cs.type == this.type && 
-    		       cs.information.equals(this.information);
-    	}
-    	return false;
+        if (obj instanceof CharacterSet) {
+            CharacterSet cs = (CharacterSet)obj;
+            
+            return cs.type == this.type && 
+                   cs.information.equals(this.information);
+        }
+        return false;
     }
     
     @Override
     public int hashCode() {
-    	return this.type       .hashCode() ^ 
-    	       this.information.hashCode();
+        return this.type       .hashCode() ^ 
+               this.information.hashCode();
     }
     
     public static CharacterSet parse(byte[] buf, int ofs) throws UDFException {

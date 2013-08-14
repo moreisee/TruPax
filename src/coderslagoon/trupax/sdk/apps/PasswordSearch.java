@@ -156,7 +156,7 @@ public class PasswordSearch {
                 break;
             case NUMBERS_LETTERS:
                 s = ("abcdefghijklmnopqrstuvwxyz0123456789" +
-                 	 "ABCDEFGHIJKLMNOPQRSTUVWXYZ").toCharArray();
+                     "ABCDEFGHIJKLMNOPQRSTUVWXYZ").toCharArray();
                 break;
             case PRINTABLE_ASCII:
                 s = new char[127 - ' '];

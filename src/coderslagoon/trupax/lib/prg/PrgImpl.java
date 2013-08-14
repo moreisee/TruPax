@@ -73,33 +73,33 @@ public class PrgImpl extends Prg {
     
     final static String LOG_CTX = "prg"; 
 
-    String        			propsSaveFile;
-    Properties    			props;
-    PrgProps      			pprops = new PrgProps();
-    String        			volumeFile;
-    String        			extractDir;
-    Long          			freeSpace = 0L;
-    Long          			volumeSize;
-    Boolean       			registerTopLevel;
-    List<String>  			objs = new ArrayList<String>();
-    FileNode[]			    viewables;
-    FileRegistrar 			freg;
-    Writer        			wrt;
+    String                  propsSaveFile;
+    Properties              props;
+    PrgProps                pprops = new PrgProps();
+    String                  volumeFile;
+    String                  extractDir;
+    Long                    freeSpace = 0L;
+    Long                    volumeSize;
+    Boolean                 registerTopLevel;
+    List<String>            objs = new ArrayList<String>();
+    FileNode[]              viewables;
+    FileRegistrar           freg;
+    Writer                  wrt;
     RegisterObjectsCallback rocb;
     
     ///////////////////////////////////////////////////////////////////////////
 
     private Result loadProps2(Setup setup) {
         if (setup.propertiesFile != null) {
-        	if (setup.propFileExists &&
-        	    !Prp.loadFromFile(this.props, new File(setup.propertiesFile))) {
+            if (setup.propFileExists &&
+                !Prp.loadFromFile(this.props, new File(setup.propertiesFile))) {
                 return new Result(Result.Code.LOAD_PROPFILE_ERROR,
                         NLS.PRGIMPL_ERR_CANNOT_LOAD_PROPFILE.s(), 
                         null);
-        	}
-        	if (null != setup.cb) {
-        	    setup.cb.onProps();
-        	}
+            }
+            if (null != setup.cb) {
+                setup.cb.onProps();
+            }
             if (setup.saveProperties) {
                 this.propsSaveFile = setup.propertiesFile;
             }
@@ -121,19 +121,19 @@ public class PrgImpl extends Prg {
     }
     
     private Result loadProps(Setup setup) {
-    	Result result = loadProps2(setup);
-    	if (result.isFailure() && setup.resetOnLoadError) {
-    		if (null != setup.cb) {
-    			setup.cb.onLoadErrorReset(result);
-    		}
-    		this.props.clear();
-    		result = Result.ok();
-    	}
-    	return result;
+        Result result = loadProps2(setup);
+        if (result.isFailure() && setup.resetOnLoadError) {
+            if (null != setup.cb) {
+                setup.cb.onLoadErrorReset(result);
+            }
+            this.props.clear();
+            result = Result.ok();
+        }
+        return result;
     }
     
     private Result processArgs(Setup setup) {
-    	String[] args = setup.args;
+        String[] args = setup.args;
         if (null == args) {
             args = new String[0];
         }
@@ -157,14 +157,14 @@ public class PrgImpl extends Prg {
         final int c = ap.params().size();
         int i = -1;
         if (setup.fromCommandLine) {
-        	boolean nep = false;
-        	switch(setup.initOp) {
-    			case WIPE      : if (1 >  c) nep = true; else i = 0; break;
-    			case EXTRACT   : if (2 >  c) nep = true; else i = 1; break;
-    			case INVALIDATE: if (1 != c) nep = true; else i = 1; break;
-    			case DEFAULT   : 
-    			default        : if (2 >  c) nep = true; else i = 1; break;
-        	}
+            boolean nep = false;
+            switch(setup.initOp) {
+                case WIPE      : if (1 >  c) nep = true; else i = 0; break;
+                case EXTRACT   : if (2 >  c) nep = true; else i = 1; break;
+                case INVALIDATE: if (1 != c) nep = true; else i = 1; break;
+                case DEFAULT   : 
+                default        : if (2 >  c) nep = true; else i = 1; break;
+            }
             if (nep) {
                 return new Result(
                     Result.Code.MISSING_CMDLN_ARG,
@@ -172,7 +172,7 @@ public class PrgImpl extends Prg {
                     null);  
             }
             if (1 == i) {
-            	this.volumeFile = ap.params().get(0);
+                this.volumeFile = ap.params().get(0);
             }
         }
         else {
@@ -180,29 +180,29 @@ public class PrgImpl extends Prg {
         }
         
         if (setup.initOp == Setup.InitOp.EXTRACT) {
-        	this.extractDir = i < c ? ap.params().get(i) : ".";
+            this.extractDir = i < c ? ap.params().get(i) : ".";
         }
         else if (setup.initOp != Setup.InitOp.INVALIDATE) {
-	        for (; i < c; i++) {
-	            this.objs.add(ap.params().get(i));
-	        }
+            for (; i < c; i++) {
+                this.objs.add(ap.params().get(i));
+            }
         }
         
         return 0 == c ? Result.ok() : new Result(
-        		Result.Code.GOT_OBJECTS, new Integer(c).toString(), null);
+                Result.Code.GOT_OBJECTS, new Integer(c).toString(), null);
     }
  
     ///////////////////////////////////////////////////////////////////////////
  
     public static Result init() {
-		try {
-			NLS.Reg.instance().load(null);
-		} 
-		catch (BaseLibException ble) {
+        try {
+            NLS.Reg.instance().load(null);
+        } 
+        catch (BaseLibException ble) {
             return new Result(Result.Code.INTERNAL_ERROR, 
-            		"NLS load error", ble.getMessage()); 
-		}
-    	try {
+                    "NLS load error", ble.getMessage()); 
+        }
+        try {
             Registry.setup(true);
             return Result._ok;
         }
@@ -228,18 +228,18 @@ public class PrgImpl extends Prg {
     public Result ctor(Properties props, Setup setup) {
         this.props = props;
         if (null != setup) {
-        	Result res = loadProps(setup);
-        	if (res.isFailure()) {
-        		return res;
-        	}
+            Result res = loadProps(setup);
+            if (res.isFailure()) {
+                return res;
+            }
         }
         return registerClear();
     }
     
     public Result dtor() {
         if (null != this.propsSaveFile) {
-        	if (!Prp.saveToFile(this.props, new File(this.propsSaveFile), true,
-        			              NLS.PRGIMPL_PROPS_COMMENT.s())) {
+            if (!Prp.saveToFile(this.props, new File(this.propsSaveFile), true,
+                                  NLS.PRGIMPL_PROPS_COMMENT.s())) {
                 return new Result(Result.Code.LOAD_PROPFILE_ERROR, 
                     NLS.PRGIMPL_ERR_CANNOT_SAVE_PROPFILE.s(), null); 
             }
@@ -319,22 +319,22 @@ public class PrgImpl extends Prg {
 
     public Result registerClear() {
         this.freg = new FileRegistrar.InMemory(new Comparator<String>() {
-			@Override
-			public int compare(String o1, String o2) {
-				checkConfig();
-				return this.allowMerge && this.caseMerge ?
-					o1.compareTo          (o2) :
-					o1.compareToIgnoreCase(o2);
-			}
-			void checkConfig() {
-				if (null == this.allowMerge) {
-					this.allowMerge = new PrgProps.AllowMerge().get(PrgImpl.this.props);
-					this.caseMerge  = new PrgProps.CaseMerge ().get(PrgImpl.this.props);
-					PrgImpl.this.rocb.configLocked();
-				}
-			}
-			Boolean allowMerge;
-			Boolean caseMerge;
+            @Override
+            public int compare(String o1, String o2) {
+                checkConfig();
+                return this.allowMerge && this.caseMerge ?
+                    o1.compareTo          (o2) :
+                    o1.compareToIgnoreCase(o2);
+            }
+            void checkConfig() {
+                if (null == this.allowMerge) {
+                    this.allowMerge = new PrgProps.AllowMerge().get(PrgImpl.this.props);
+                    this.caseMerge  = new PrgProps.CaseMerge ().get(PrgImpl.this.props);
+                    PrgImpl.this.rocb.configLocked();
+                }
+            }
+            Boolean allowMerge;
+            Boolean caseMerge;
         });
         dirty();
         return Result.ok();
@@ -388,9 +388,9 @@ public class PrgImpl extends Prg {
                 
                 if (!lfs.exists(fn)) {
                     return new Result(
-                    	Result.Code.ERROR_OBJECT_REGISTER,
-                    	NLS.PRGIMPL_NO_SUCH_OBJ_REG_1.fmt(obj), 
-                    	null);  
+                        Result.Code.ERROR_OBJECT_REGISTER,
+                        NLS.PRGIMPL_NO_SUCH_OBJ_REG_1.fmt(obj), 
+                        null);  
                 }
             }
             catch (IOException ioe) {
@@ -409,7 +409,7 @@ public class PrgImpl extends Prg {
             
             try {
                 if (fn.hasAttributes(FileNode.ATTR_DIRECTORY)) {
-                	final VarRef<String> details = new VarRef<String>();
+                    final VarRef<String> details = new VarRef<String>();
                     final int res = FileRegistrar.bulk(
                         this.freg, 
                         fn, 
@@ -420,17 +420,17 @@ public class PrgImpl extends Prg {
                                 return cb.onDirectory(current.path(false)).isSuccess();
                             }
                             public Merge onMerge(FileNode[] nd0, FileNode nd1) {
-                            	Merge merge = onMerge.call(nd0[0], nd1);
-                            	if (Merge.ABORT == merge) {
-                            		details.v = nd1.path(true);
-                            	}
+                                Merge merge = onMerge.call(nd0[0], nd1);
+                                if (Merge.ABORT == merge) {
+                                    details.v = nd1.path(true);
+                                }
                                 return onMerge.call(nd0[0], nd1);
                             }
                             public boolean matches(FileNode file) {
-                            	if (null != fsf.v &&
-                            		!file.hasAttributes(FileNode.ATTR_DIRECTORY)) {
-                            		return fsf.v.matches(file);
-                            	}
+                                if (null != fsf.v &&
+                                    !file.hasAttributes(FileNode.ATTR_DIRECTORY)) {
+                                    return fsf.v.matches(file);
+                                }
                                 return true;
                             }
                         },
@@ -458,9 +458,9 @@ public class PrgImpl extends Prg {
                             return onMerge.call(nd0[0], nd1);
                         }
                     })) {
-                    	return new Result(Result.Code.FILE_COLLISION, 
-                                		  NLS.PRGIMPL_FILE_COLLISION.s(), 
-                                	      fn.path(true));  
+                        return new Result(Result.Code.FILE_COLLISION, 
+                                          NLS.PRGIMPL_FILE_COLLISION.s(), 
+                                          fn.path(true));  
                     }
                 }
             } 
@@ -487,14 +487,14 @@ public class PrgImpl extends Prg {
         if (null == this.viewables) {
             final VarInt count = new VarInt();
             FileRegistrar.walk(this.freg.root(), 
-            		new FileRegistrar.Walker() {
-		                public boolean onNodes(FileNode[] fn) {
-		                    count.v++;
-		                    return true;
-		                }
-		            },
-		            true,
-		            true);
+                    new FileRegistrar.Walker() {
+                        public boolean onNodes(FileNode[] fn) {
+                            count.v++;
+                            return true;
+                        }
+                    },
+                    true,
+                    true);
             this.viewables = new FileNode[count.v];
             FileRegistrar.walk(this.freg.root(), 
                     new FileRegistrar.Walker() {
@@ -529,34 +529,34 @@ public class PrgImpl extends Prg {
         return result;
     }
     
-	public void registerViewSort(final RegObj.Sort sort, final boolean ascending) {
+    public void registerViewSort(final RegObj.Sort sort, final boolean ascending) {
         loadViewables();
         Arrays.sort(this.viewables, new Comparator<FileNode>() {
-			public int compare(FileNode fn1, FileNode fn2) {
-				int r = 0;
-				switch (sort) {
-					case NAME: 
-					{	// FIXME: optimize using weakref
-						r = fn1.path(true).compareTo(fn2.path(true)); 
-						break;
-					}
-					case LENGTH: {
-						long l1 = fn1.hasAttributes(FileNode.ATTR_DIRECTORY) ? -1L : fn1.size();
-						long l2 = fn2.hasAttributes(FileNode.ATTR_DIRECTORY) ? -1L : fn2.size();
-						long d = l1 - l2;
-						r = 0 == d ? 0 : (0 < d ? 1 : -1); 
-						break; 
-					}
-					case TIMESTAMP: {
-						long d = fn1.timestamp() - fn2.timestamp(); 
-						r = 0 == d ? 0 : (0 < d ? 1 : -1); 
-						break; 
-					}
-				}
-				return r * (ascending ? 1 : -1);
-			}
-		});
-	}
+            public int compare(FileNode fn1, FileNode fn2) {
+                int r = 0;
+                switch (sort) {
+                    case NAME: 
+                    {   // FIXME: optimize using weakref
+                        r = fn1.path(true).compareTo(fn2.path(true)); 
+                        break;
+                    }
+                    case LENGTH: {
+                        long l1 = fn1.hasAttributes(FileNode.ATTR_DIRECTORY) ? -1L : fn1.size();
+                        long l2 = fn2.hasAttributes(FileNode.ATTR_DIRECTORY) ? -1L : fn2.size();
+                        long d = l1 - l2;
+                        r = 0 == d ? 0 : (0 < d ? 1 : -1); 
+                        break; 
+                    }
+                    case TIMESTAMP: {
+                        long d = fn1.timestamp() - fn2.timestamp(); 
+                        r = 0 == d ? 0 : (0 < d ? 1 : -1); 
+                        break; 
+                    }
+                }
+                return r * (ascending ? 1 : -1);
+            }
+        });
+    }
     
     ///////////////////////////////////////////////////////////////////////////
 
@@ -591,21 +591,21 @@ public class PrgImpl extends Prg {
                 vol = new File(this.volumeFile);
                 
                 if (vol.exists() && !new PrgProps.Overwrite().get(this.props)) {
-                	vol = null;  // avoids volume being deleted during the cleanup below
+                    vol = null;  // avoids volume being deleted during the cleanup below
                     return new Result(Result.Code.VOLUME_EXISTS,
                             NLS.PRGIMPL_VOL_EXISTS.s(), null);    
                 }
                 
                 @SuppressWarnings("resource")
-				final OutputStream os = new BufferedOutputStream(new FileOutputStream(vol));
+                final OutputStream os = new BufferedOutputStream(new FileOutputStream(vol));
                 
                 OutputStream os2 = new OutputStream() {
-					public void close()                             throws IOException { os.close(); }
-					public void flush()                             throws IOException { os.flush(); }
-					public void write(byte[] buf, int ofs, int len) throws IOException { t(); os.write(buf, ofs, len); }
-					public void write(byte[] buf)                   throws IOException { t(); os.write(buf); }
-					public void write(int b)                        throws IOException { t(); os.write(b); }
-					void t() throws IOException { if (__TEST_write_error) throw new IOException("FAKE_WRITE_"); }
+                    public void close()                             throws IOException { os.close(); }
+                    public void flush()                             throws IOException { os.flush(); }
+                    public void write(byte[] buf, int ofs, int len) throws IOException { t(); os.write(buf, ofs, len); }
+                    public void write(byte[] buf)                   throws IOException { t(); os.write(buf); }
+                    public void write(int b)                        throws IOException { t(); os.write(b); }
+                    void t() throws IOException { if (__TEST_write_error) throw new IOException("FAKE_WRITE_"); }
                 };
     
                 outdev = new BlockDeviceImpl.OutputStreamBlockDevice(
@@ -650,13 +650,13 @@ public class PrgImpl extends Prg {
             catch (IOException ioe) {
                 return new Result(Result.Code.CREATE_VOLUME_ERROR,
                         NLS.PRGIMPL_INIT_TC_BLOCKDEV_ERROR_1.fmt(
-                        		ioe.getLocalizedMessage()),
+                                ioe.getLocalizedMessage()),
                         MiscUtils.dumpError(ioe));
             } 
             catch (TCLibException tle) {
                 return new Result(Result.Code.INTERNAL_ERROR,
                         NLS.PRGIMPL_INTERNAL_ERROR_1.fmt(
-                        		tle.getLocalizedMessage()),    
+                                tle.getLocalizedMessage()),    
                         MiscUtils.dumpError(tle));
             }
             finally {
@@ -670,7 +670,7 @@ public class PrgImpl extends Prg {
                 this.wrt.make(tcbdev, new Writer.Progress() {
                     public void onFile(FileRegistrar.Directory dir, FileNode node) {
                         if (null == dir && null == node) {
-                        	cb.onFreeSpace();
+                            cb.onFreeSpace();
                             return;
                         }
                         cb.onFile(node.path(false), node.size());
@@ -728,7 +728,7 @@ public class PrgImpl extends Prg {
                     return BLOCK_SIZE;
                 }
                 public String label() {
-                	return new PrgProps.Label().get(PrgImpl.this.props);
+                    return new PrgProps.Label().get(PrgImpl.this.props);
                 }
             }) + Header.BLOCK_COUNT * 2;
         } 
@@ -793,170 +793,170 @@ public class PrgImpl extends Prg {
     ///////////////////////////////////////////////////////////////////////////
     
     public Result extract(char[] password, String dir, final ExtractCallback cb) {
-    	RandomAccessFile raf = null;
-    	BlockDevice bdev = null;
-    	TCReader tcr = null;
-    	try {
-    	    raf = new RandomAccessFile(this.volumeFile, "r");  
-    		bdev = new BlockDeviceImpl.FileBlockDevice(raf, BLOCK_SIZE, -1L, true, false);
-    		final Key key = new Password(password, null);
-    		tcr = new TCReader(bdev, key, false);
-    	}
-    	catch (IOException ioe) {
-    		return new Result(Result.Code.CANNOT_OPEN, 
-				NLS.PRGIMPL_CANNOT_OPEN_VOLUME_1.fmt(this.volumeFile),  
-				ioe.getLocalizedMessage());
-    	}
-    	catch (TCLibException tle) {
-    		return new Result(Result.Code.CANNOT_DECRYPT, 
-				NLS.PRGIMPL_CANNOT_UNLOCK_VOLUME.s(), 
-				tle.getLocalizedMessage());
-    	}
-    	finally {
-    		if (null == tcr && null != raf) {
-    			try { raf.close(); } catch (IOException ignored) { }
-    		}
-    	}
-
-    	Reader rmul = new Reader.Multiple(new Reader[] {
-    		new UDFReader(tcr, this.props), 
-    		new FATReader(tcr, this.props) });     
-        
+        RandomAccessFile raf = null;
+        BlockDevice bdev = null;
+        TCReader tcr = null;
         try {
-        	if (null == dir) {
-        		dir = this.extractDir;
-        	}
-	        rmul.extract(new File(dir), new Reader.Progress2() {
-				public Result onMounting(int numOfObjects) {
-					return cb.onOpening(numOfObjects).code ==
-						Prg.Result.Code.ABORTED ? Result.ABORT : Result.OK;
-				}
-				public Result onMount(int numOfFiles, int numOfDirs) {
-					return cb.onOpen(numOfFiles, numOfDirs).code ==
-						Prg.Result.Code.ABORTED ? Result.ABORT : Result.OK;
-				}
-				public Result onDirectory(File obj, long size, Long tstamp) {
-					this.report = false;
-					return Result.OK;
-				}
-				public Result onFile(File obj, long size, Long tstamp) {
-					this.report = true;
-					if (!this.overwrite && obj.exists()) {
-						switch (cb.onConcern(
-							Concern.EXISTS, NLS.PRGIMPL_EXTRACT_FILE_EXISTS_3.fmt( 
-								obj.getAbsolutePath(),
-								obj.length(),
-								size)).code) {
-							case IGNORE : return Result.SKIP;
-							case ABORTED: return Result.ABORT;
-							default     : break;
-						}
-					}
-					cb.onFile(obj.getAbsolutePath(), size);
-					return Result.OK;
-				}
-				public Result onData(long written) {
-					if (this.report && 
-						Prg.Result.Code.ABORTED == cb.onFileWrite(written).code) {
-						return Result.ABORT;
-					}
-					return Result.OK;
-				}
-				public Result onDone(long total) {
-					return onData(total);
-				}
-				boolean report;
-				boolean overwrite = new PrgProps.Overwrite().get(PrgImpl.this.props);
-	        });
-	        return Result.ok();
-        }
-        catch (Reader.Exception re) {
-        	switch(re.code) {
-        		case ABORTED: return Result.aborted();
-        		case ERR_DEV: return new Result(
-    				Result.Code.EXTRACT_ERROR, 
-    				NLS.PRGIMPL_EXTERR_DEV.s(), 
-    				re.details);
-        		default: return new Result(
-    				Result.Code.EXTRACT_ERROR, 
-    				NLS.PRGIMPL_EXTERR_OBJ_2.fmt(
-					      null == re.obj ? "" : re.obj.getAbsolutePath(),  
-					      re.code.toString()), 
-    				re.details); 
-        	}
+            raf = new RandomAccessFile(this.volumeFile, "r");  
+            bdev = new BlockDeviceImpl.FileBlockDevice(raf, BLOCK_SIZE, -1L, true, false);
+            final Key key = new Password(password, null);
+            tcr = new TCReader(bdev, key, false);
         }
         catch (IOException ioe) {
-        	return new Result(Result.Code.EXTRACT_ERROR, 
-        			NLS.PRGIMPL_EXTERR_FAIL.s(), 
-        			ioe.getLocalizedMessage());
+            return new Result(Result.Code.CANNOT_OPEN, 
+                NLS.PRGIMPL_CANNOT_OPEN_VOLUME_1.fmt(this.volumeFile),  
+                ioe.getLocalizedMessage());
+        }
+        catch (TCLibException tle) {
+            return new Result(Result.Code.CANNOT_DECRYPT, 
+                NLS.PRGIMPL_CANNOT_UNLOCK_VOLUME.s(), 
+                tle.getLocalizedMessage());
         }
         finally {
-			try { raf.close(); } catch (IOException ignored) { }
+            if (null == tcr && null != raf) {
+                try { raf.close(); } catch (IOException ignored) { }
+            }
+        }
+
+        Reader rmul = new Reader.Multiple(new Reader[] {
+            new UDFReader(tcr, this.props), 
+            new FATReader(tcr, this.props) });     
+        
+        try {
+            if (null == dir) {
+                dir = this.extractDir;
+            }
+            rmul.extract(new File(dir), new Reader.Progress2() {
+                public Result onMounting(int numOfObjects) {
+                    return cb.onOpening(numOfObjects).code ==
+                        Prg.Result.Code.ABORTED ? Result.ABORT : Result.OK;
+                }
+                public Result onMount(int numOfFiles, int numOfDirs) {
+                    return cb.onOpen(numOfFiles, numOfDirs).code ==
+                        Prg.Result.Code.ABORTED ? Result.ABORT : Result.OK;
+                }
+                public Result onDirectory(File obj, long size, Long tstamp) {
+                    this.report = false;
+                    return Result.OK;
+                }
+                public Result onFile(File obj, long size, Long tstamp) {
+                    this.report = true;
+                    if (!this.overwrite && obj.exists()) {
+                        switch (cb.onConcern(
+                            Concern.EXISTS, NLS.PRGIMPL_EXTRACT_FILE_EXISTS_3.fmt( 
+                                obj.getAbsolutePath(),
+                                obj.length(),
+                                size)).code) {
+                            case IGNORE : return Result.SKIP;
+                            case ABORTED: return Result.ABORT;
+                            default     : break;
+                        }
+                    }
+                    cb.onFile(obj.getAbsolutePath(), size);
+                    return Result.OK;
+                }
+                public Result onData(long written) {
+                    if (this.report && 
+                        Prg.Result.Code.ABORTED == cb.onFileWrite(written).code) {
+                        return Result.ABORT;
+                    }
+                    return Result.OK;
+                }
+                public Result onDone(long total) {
+                    return onData(total);
+                }
+                boolean report;
+                boolean overwrite = new PrgProps.Overwrite().get(PrgImpl.this.props);
+            });
+            return Result.ok();
+        }
+        catch (Reader.Exception re) {
+            switch(re.code) {
+                case ABORTED: return Result.aborted();
+                case ERR_DEV: return new Result(
+                    Result.Code.EXTRACT_ERROR, 
+                    NLS.PRGIMPL_EXTERR_DEV.s(), 
+                    re.details);
+                default: return new Result(
+                    Result.Code.EXTRACT_ERROR, 
+                    NLS.PRGIMPL_EXTERR_OBJ_2.fmt(
+                          null == re.obj ? "" : re.obj.getAbsolutePath(),  
+                          re.code.toString()), 
+                    re.details); 
+            }
+        }
+        catch (IOException ioe) {
+            return new Result(Result.Code.EXTRACT_ERROR, 
+                    NLS.PRGIMPL_EXTERR_FAIL.s(), 
+                    ioe.getLocalizedMessage());
+        }
+        finally {
+            try { raf.close(); } catch (IOException ignored) { }
         }
     }
 
     ///////////////////////////////////////////////////////////////////////////
 
     public Result invalidate(final ProgressCallback cb) {
-    	try {
-	    	FileBlockDevice fbd = null;
-	    	boolean err = true;
-	    	final File fl = new File(this.volumeFile);
-	    	try {
-	    		if (!fl.exists()) {
-	    			throw new TCLibException(String.format(
-	    				NLS.PRGIMPL_FILE_NOT_FOUND_1.s(), fl.getAbsolutePath()));
-	    		}
-	    		
-	    		RandomAccessFile raf = new RandomAccessFile(fl, "rws"); 
-	    		fbd = new FileBlockDevice(raf, BLOCK_SIZE, -1, false, false);
-	    		
-	    		boolean aborted = !TCInvalidate.destroy(fbd, TCInvalidate.HeaderChange.zeros(),
-	    			new TCInvalidate.Progress() {
-	    				double max;
-	    				long pos, step;
-	    				double percent() {
-	    					return (double)(this.pos * 100L) / this.max; 
-	    				}
-						public boolean onStart(long blocks, int blockSize) {
-							this.step = blockSize;
-							this.pos = 0L;
-							this.max = blockSize * blocks;
-							return cb.onProgress(percent()).isSuccess();
-						}
-						public boolean onBlock() {
-							this.pos += this.step;
-							return cb.onProgress(percent()).isSuccess();
-						}
-		    		});
-	    		err = false;
-	    		if (aborted) {
-					return Result.aborted();
-	    		}
-	    	}
-	    	catch (TCLibException tle) {
-				return new Result(Result.Code.INVALIDATE_ERROR,
-					NLS.PRGIMPL_INVALIDATE_ERR_1.fmt(tle.getMessage()), null);
-	    	}
-	    	catch (IOException ioe) {
-				return new Result(Result.Code.INVALIDATE_ERROR,
-					NLS.PRGIMPL_INVALIDATE_ERR_1.fmt(ioe.getMessage()), null);
-	    	}
-	    	finally {
-	    		if (null != fbd) {
-	    			try { fbd.close(err); } catch (IOException ignored) { }
-	    		}
-	    	}
-	    	if (new PrgProps.DeleteAfter().get()) {
-	    		if (!fl.delete()) {
-	    			return new Result(Result.Code.INVALIDATE_ERROR,
-	    						      NLS.PRGIMPL_INVALIDATE_ERRDEL.s(), null);
-	    		}
-	    	}
-	    	return Result.ok();
-    	}
-    	finally {
-    		this.volumeFile = null;
-    	}
-	}
+        try {
+            FileBlockDevice fbd = null;
+            boolean err = true;
+            final File fl = new File(this.volumeFile);
+            try {
+                if (!fl.exists()) {
+                    throw new TCLibException(String.format(
+                        NLS.PRGIMPL_FILE_NOT_FOUND_1.s(), fl.getAbsolutePath()));
+                }
+                
+                RandomAccessFile raf = new RandomAccessFile(fl, "rws"); 
+                fbd = new FileBlockDevice(raf, BLOCK_SIZE, -1, false, false);
+                
+                boolean aborted = !TCInvalidate.destroy(fbd, TCInvalidate.HeaderChange.zeros(),
+                    new TCInvalidate.Progress() {
+                        double max;
+                        long pos, step;
+                        double percent() {
+                            return (double)(this.pos * 100L) / this.max; 
+                        }
+                        public boolean onStart(long blocks, int blockSize) {
+                            this.step = blockSize;
+                            this.pos = 0L;
+                            this.max = blockSize * blocks;
+                            return cb.onProgress(percent()).isSuccess();
+                        }
+                        public boolean onBlock() {
+                            this.pos += this.step;
+                            return cb.onProgress(percent()).isSuccess();
+                        }
+                    });
+                err = false;
+                if (aborted) {
+                    return Result.aborted();
+                }
+            }
+            catch (TCLibException tle) {
+                return new Result(Result.Code.INVALIDATE_ERROR,
+                    NLS.PRGIMPL_INVALIDATE_ERR_1.fmt(tle.getMessage()), null);
+            }
+            catch (IOException ioe) {
+                return new Result(Result.Code.INVALIDATE_ERROR,
+                    NLS.PRGIMPL_INVALIDATE_ERR_1.fmt(ioe.getMessage()), null);
+            }
+            finally {
+                if (null != fbd) {
+                    try { fbd.close(err); } catch (IOException ignored) { }
+                }
+            }
+            if (new PrgProps.DeleteAfter().get()) {
+                if (!fl.delete()) {
+                    return new Result(Result.Code.INVALIDATE_ERROR,
+                                      NLS.PRGIMPL_INVALIDATE_ERRDEL.s(), null);
+                }
+            }
+            return Result.ok();
+        }
+        finally {
+            this.volumeFile = null;
+        }
+    }
 }

@@ -51,7 +51,7 @@ public class PrgTest {
     
     @After
     public void tearDown() {
-    	delPrg();
+        delPrg();
         assertTrue(PrgImpl.cleanup().isSuccess());
         LocalFileSystem.__test_FAKE_READ_ERROR  = false;
         PrgImpl.__TEST_write_error = false;
@@ -64,15 +64,15 @@ public class PrgTest {
     private Prg prgi;
     
     Prg newPrg() {
-    	assertNull(this.prgi);
-    	return (this.prgi = new PrgImpl());
+        assertNull(this.prgi);
+        return (this.prgi = new PrgImpl());
     }
     
     void delPrg() {
-    	if (null != this.prgi) {
+        if (null != this.prgi) {
             assertTrue(this.prgi.dtor().isSuccess());
             this.prgi = null;
-    	}
+        }
     }
     
     ///////////////////////////////////////////////////////////////////////////
@@ -160,8 +160,8 @@ public class PrgTest {
                     c.v++;
                     return Result.ok();
                 }
-    			public void configLocked() {
-    			}
+                public void configLocked() {
+                }
             }).isSuccess());
             assertTrue(0 == c.v);
             assertTrue(prg.resolve().isSuccess());
@@ -181,9 +181,9 @@ public class PrgTest {
                     d.v++;
                     return Result.ok();
                 }
-				public Result onFreeSpace() {
+                public Result onFreeSpace() {
                     return Result.ok();
-				}
+                }
             };
             
             c.v = 0;
@@ -311,8 +311,8 @@ public class PrgTest {
                     dirs.v++;
                     return Result.ok();
                 }
-    			public void configLocked() {
-    			}
+                public void configLocked() {
+                }
             }).isSuccess());
             assertTrue(dirs.v == expects[1][i]);
             
@@ -366,8 +366,8 @@ public class PrgTest {
                     dirs.v++;
                     return Result.ok();
                 }
-    			public void configLocked() {
-    			}
+                public void configLocked() {
+                }
             }).isSuccess());
             assertTrue(dirs.v == 1);
             
@@ -413,8 +413,8 @@ public class PrgTest {
                     dirs.v++;
                     return Result.ok();
                 }
-    			public void configLocked() {
-    			}
+                public void configLocked() {
+                }
             }).isSuccess());
             assertTrue(dirs.v == 1);
             
@@ -455,8 +455,8 @@ public class PrgTest {
                 public Result onDirectory(String dir) {
                     return Result.ok();
                 }
-    			public void configLocked() {
-    			}
+                public void configLocked() {
+                }
             });
             if (allowMerge) {
                 assertTrue(res.isSuccess());
@@ -508,7 +508,7 @@ public class PrgTest {
         File fl1 = new File(baseDir, "x.txt"); TestUtils.fillFile123(fl1, 2);
         File fl2 = new File(dr0    , "y.bmp"); TestUtils.fillFile123(fl2, 3);
         File fl3 = new File(dr0    , "y.txt"); TestUtils.fillFile123(fl3, 4);
-    	
+        
         assertTrue(newPrg().ctor(Prp.global(), new Prg.Setup()).isSuccess());
         Prg prg = this.prgi;
 
@@ -525,8 +525,8 @@ public class PrgTest {
                 dirs.v++;
                 return Result.ok();
             }
-			public void configLocked() {
-			}
+            public void configLocked() {
+            }
         }).isSuccess());
         assertTrue(2 == dirs.v);
         
@@ -543,8 +543,8 @@ public class PrgTest {
             public Result onDirectory(String dir) {
                 return Result.ok();
             }
-			public void configLocked() {
-			}
+            public void configLocked() {
+            }
         }).isSuccess());
         
         // usually this should work because there is always something in the

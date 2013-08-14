@@ -83,7 +83,7 @@ public class CmdLnTest extends TestUtils {
     ///////////////////////////////////////////////////////////////////////////
     
     protected static boolean removePropFiles() {
-    	File pf = MiscUtils.determinePropFile(Exe.class, Exe._propFileName, false);
+        File pf = MiscUtils.determinePropFile(Exe.class, Exe._propFileName, false);
         if (pf.exists() && !pf.delete()) {
             return false;
         }
@@ -98,8 +98,8 @@ public class CmdLnTest extends TestUtils {
     
     @Before
     public void setUp() {
-    	this.runMain = false;
-    	this.stdinBak = System.in;
+        this.runMain = false;
+        this.stdinBak = System.in;
         CmdLn.__TEST_exit_error = new VarRef<CmdLn.ExitError>();
         CmdLn.__TEST_console = this.tcon = new TestConsole();
         assertTrue(removePropFiles());
@@ -205,7 +205,7 @@ public class CmdLnTest extends TestUtils {
                 ver.readerMatcher (),
                 ver.browserMatcher()
             }) {
-            	matcher.match(base, vol, BLOCK_SIZE, 
+                matcher.match(base, vol, BLOCK_SIZE, 
                       new Password(PASSW.toCharArray(), null), 
                      "AES256", "RIPEMD-160", vsetup);
             }
@@ -217,13 +217,13 @@ public class CmdLnTest extends TestUtils {
             
             if (UDFTest.available()) {
                 assertTrue(UDFTest.exec(decfl, BLOCK_SIZE, true, false, false, 
-                		new UDFTest.Listener() {
-        			public boolean onOutput(String ln) {
-        				if (-1 != ln.indexOf(LABEL)) {
-        					sawLabel.v = true;
-        				}
-        				return true;
-        			}
+                        new UDFTest.Listener() {
+                    public boolean onOutput(String ln) {
+                        if (-1 != ln.indexOf(LABEL)) {
+                            sawLabel.v = true;
+                        }
+                        return true;
+                    }
                 }));
                 assertTrue(sawLabel.v);
             }
@@ -411,34 +411,34 @@ public class CmdLnTest extends TestUtils {
     
     @Test
     public void testOptions() {
-    	CmdLn cl;
+        CmdLn cl;
         CmdLn.ExitError ee;
         
         for (C0 c : new C0[] {
             new C0("-v", CmdLnProps.OPTS_VERBOSE),
             new C0("-r", new PrgProps.RecursiveSearch()),
             new C0("--store-full-path"   , new PrgProps.StoreFullPath()),
-        	new C0("--skip-empty-dirs"   , new PrgProps.SkipEmptyDirs()),
-        	new C0("--allow-merge"       , new PrgProps.AllowMerge()),  
-        	new C0("--overwrite"         , new PrgProps.Overwrite()),      
+            new C0("--skip-empty-dirs"   , new PrgProps.SkipEmptyDirs()),
+            new C0("--allow-merge"       , new PrgProps.AllowMerge()),  
+            new C0("--overwrite"         , new PrgProps.Overwrite()),      
             new C0("--keep-broken-volume", new PrgProps.KeepBrokenVolume()),
             new C0("--trim-path"         , new PrgProps.TrimPath()),
             new C0("--wipe"              , CmdLnProps.OPTS_WIPE)
         }) {
-        	cl = new CmdLn();
-        	cl.exec(new String[] { c.t });
+            cl = new CmdLn();
+            cl.exec(new String[] { c.t });
             ee = CmdLn.__TEST_exit_error.v;
             assertTrue(ee.result.code == Prg.Result.Code.MISSING_CMDLN_ARG);
             assertTrue(c.u.get(cl.props));
-        	cl = new CmdLn();
-        	cl.exec(new String[0]);
+            cl = new CmdLn();
+            cl.exec(new String[0]);
             ee = CmdLn.__TEST_exit_error.v;
             assertTrue(ee.result.code == Prg.Result.Code.MISSING_CMDLN_ARG);
             assertFalse(cl.props.contains(c.u.name()));
         }
         
         cl = new CmdLn();
-    	cl.exec(new String[] { "--free-space=123K" });
+        cl.exec(new String[] { "--free-space=123K" });
         ee = CmdLn.__TEST_exit_error.v;
         assertTrue(ee.result.code == Prg.Result.Code.MISSING_CMDLN_ARG);
         assertTrue(CmdLnProps.OPTS_FREESPACE.get(cl.props) == 123000L);
@@ -452,13 +452,13 @@ public class CmdLnTest extends TestUtils {
             new C1("--block-cipher=" , new String[] { "AES256"    , "AES257" }, new PrgProps.BlockCipher ()),
             new C1("--hash-function=", new String[] { "RIPEMD-160", "HASHME" }, new PrgProps.HashFunction())
         }) {
-        	cl = new CmdLn();
-        	cl.exec(new String[] { c.t + c.u[0] });
+            cl = new CmdLn();
+            cl.exec(new String[] { c.t + c.u[0] });
             ee = CmdLn.__TEST_exit_error.v;
             assertTrue(ee.result.code == Prg.Result.Code.MISSING_CMDLN_ARG);
             assertTrue(c.v.get(cl.props).equals(c.u[0]));
-        	cl = new CmdLn();
-        	cl.exec(new String[] { c.t + c.u[1] });
+            cl = new CmdLn();
+            cl.exec(new String[] { c.t + c.u[1] });
             ee = CmdLn.__TEST_exit_error.v;
             assertTrue(ee.result.code == Prg.Result.Code.INVALID_CMDLN_ARG);
             assertFalse(cl.props.contains(c.v.name()));
@@ -484,15 +484,15 @@ public class CmdLnTest extends TestUtils {
     
     @Test
     public void testPropertiesFile() {
-    	String tfn = createTempFileName("testPropertiesFile");
+        String tfn = createTempFileName("testPropertiesFile");
         Exe._propFileName = tfn;
-    	
-    	String userHome = System.getProperty("user.home");
-    	assertNotNull(userHome);
-    	
-    	File cfg = new File(userHome, MiscUtils.makePropertyFileName(tfn));
-    	assertTrue(!cfg.exists() || cfg.delete());
-    	
+        
+        String userHome = System.getProperty("user.home");
+        assertNotNull(userHome);
+        
+        File cfg = new File(userHome, MiscUtils.makePropertyFileName(tfn));
+        assertTrue(!cfg.exists() || cfg.delete());
+        
         Prp.Bool[] pbl = new Prp.Bool[] {
             CmdLnProps.OPTS_VERBOSE,
             CmdLnProps.OPTS_WIPE,
@@ -506,7 +506,7 @@ public class CmdLnTest extends TestUtils {
         
         Properties props = new Properties();
         for (Prp.Bool pb : pbl) {
-        	props.put(pb.name(), Boolean.TRUE.toString());
+            props.put(pb.name(), Boolean.TRUE.toString());
         }
         assertTrue(props.size() == pbl.length);
         assertTrue(Prp.saveToFile(props, cfg, false, "CmdLnTest.testPropertiesFile"));
@@ -518,8 +518,8 @@ public class CmdLnTest extends TestUtils {
         assertTrue(ee.result.code == Prg.Result.Code.MISSING_CMDLN_ARG);
 
         for (Prp.Bool pb : pbl) {
-        	assertTrue(cl.props.containsKey(pb.name()));
-        	assertTrue(pb.get(cl.props));
+            assertTrue(cl.props.containsKey(pb.name()));
+            assertTrue(pb.get(cl.props));
         }
 
         assertTrue(cfg.delete());
@@ -642,57 +642,57 @@ public class CmdLnTest extends TestUtils {
 
     @Test
     public void testUncaughtErrorHandling() throws IOException {
-    	MiscUtils.__TEST_uncaught_now = 9876543210L;
-    	this.runMain = true;
-    	
-    	File dfl = new File(System.getProperty("java.io.tmpdir"), "trupax_uncaught_9876543210.txt");
-    	assertTrue(!dfl.exists() || dfl.delete());
-    	
-    	CmdLn.main(new String[] {});
+        MiscUtils.__TEST_uncaught_now = 9876543210L;
+        this.runMain = true;
+        
+        File dfl = new File(System.getProperty("java.io.tmpdir"), "trupax_uncaught_9876543210.txt");
+        assertTrue(!dfl.exists() || dfl.delete());
+        
+        CmdLn.main(new String[] {});
 
-    	assertTrue(dfl.exists());
-    	assertTrue(dfl.length() > 0L);
-    	
-    	String dump = new String(MiscUtils.readFile(dfl));
-    	assertTrue(-1 != dump.indexOf("uncaught_test"));
-    	assertTrue(-1 != dump.indexOf("processArgs"));
-    	//System.out.println(dump);
-    	
-    	assertTrue(dfl.delete());
+        assertTrue(dfl.exists());
+        assertTrue(dfl.length() > 0L);
+        
+        String dump = new String(MiscUtils.readFile(dfl));
+        assertTrue(-1 != dump.indexOf("uncaught_test"));
+        assertTrue(-1 != dump.indexOf("processArgs"));
+        //System.out.println(dump);
+        
+        assertTrue(dfl.delete());
     }
 
     ///////////////////////////////////////////////////////////////////////////
 
     @Test
     public void testConfirm() throws Exception {
-    	CmdLn cl = new CmdLn();
-		NLS.Reg.instance().load(null);
-    	final String M = "something in a line";
-    	final String P = "[O]verwrite  O[v]erwrite All  [S]kip  S[k]ip All  [C]ancel >";
-    	final String LB = System.getProperty("line.separator");
-    	for (String[] s : new String[][] {
-			{ ""          , null, M+LB+P     },
-			{ "x\no\n"    , "0" , M+LB+P+P   },
-			{ "x\ny\nC"   , "4" , M+LB+P+P+P },
-			{ "skip all\n", "3" , M+LB+P     }
+        CmdLn cl = new CmdLn();
+        NLS.Reg.instance().load(null);
+        final String M = "something in a line";
+        final String P = "[O]verwrite  O[v]erwrite All  [S]kip  S[k]ip All  [C]ancel >";
+        final String LB = System.getProperty("line.separator");
+        for (String[] s : new String[][] {
+            { ""          , null, M+LB+P     },
+            { "x\no\n"    , "0" , M+LB+P+P   },
+            { "x\ny\nC"   , "4" , M+LB+P+P+P },
+            { "skip all\n", "3" , M+LB+P     }
         }) {
-	    	cl.in = new LineNumberReader(new StringReader(s[0]));
-    		Integer exp = null == s[1] ? null : Integer.parseInt(s[1]);
-	    	ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			cl.out = new PrintStream(baos);
-	    	Integer res = cl.confirm(M, NLS.CMDLN_EXISTS_SELECT.s());
-    		cl.out.flush();
-    		String outp = new String(baos.toString());
-	    	assertTrue(res == exp);
-    		assertEquals(outp, s[2]);
-	    }
+            cl.in = new LineNumberReader(new StringReader(s[0]));
+            Integer exp = null == s[1] ? null : Integer.parseInt(s[1]);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            cl.out = new PrintStream(baos);
+            Integer res = cl.confirm(M, NLS.CMDLN_EXISTS_SELECT.s());
+            cl.out.flush();
+            String outp = new String(baos.toString());
+            assertTrue(res == exp);
+            assertEquals(outp, s[2]);
+        }
     }
     
     ///////////////////////////////////////////////////////////////////////////
 
     @Test
     public void testExtract() throws Exception {
-    	final int MAXFLS = 20;
+        final int MAXFLS = 20;
         final Verifier.Setup vsetup = new Verifier.Setup() {
             public boolean  usingAbsolutePath() { return false; }
             public int      maxFiles         () { return MAXFLS; }
@@ -708,7 +708,7 @@ public class CmdLnTest extends TestUtils {
             public long     maxBytes         () { return Long.MAX_VALUE; }
             public String[] basePath         () { return new String[] { "testExtract" }; }
         };
-    	
+        
         Verifier ver = new Verifier(null, null,
                 new PrintStream(new NulOutputStream()), //System.out,
                 System.err,
@@ -746,27 +746,27 @@ public class CmdLnTest extends TestUtils {
         assertTrue(1 == this.tcon.prompts.size());
         final VarInt vfc = new VarInt();
         FilePathWalker fpw = new FilePathWalker() {
-			public boolean onObject(File obj) {
-				assertTrue(obj.exists());
-				String base2 = base.getParent();
-				File eobj = new File(extractDir, obj.getAbsolutePath().substring(base2.length()));
-				assertTrue(eobj.exists());
-				assertTrue(eobj.isDirectory() ^ !obj.isDirectory());
-				assertTrue(obj.lastModified() == eobj.lastModified());
-				if (eobj.isFile()) {
-					long flen = eobj.length();
-					assertTrue(flen >= vsetup.minFileSize() && 
-							   flen <= vsetup.maxFileSize());
-					vfc.v++;
-					try {
-						return TestUtils.areFilesEqual(eobj, obj);
-					}
-					catch (IOException ioe) {
-						fail();
-					}
-				}
-				return true;
-			}
+            public boolean onObject(File obj) {
+                assertTrue(obj.exists());
+                String base2 = base.getParent();
+                File eobj = new File(extractDir, obj.getAbsolutePath().substring(base2.length()));
+                assertTrue(eobj.exists());
+                assertTrue(eobj.isDirectory() ^ !obj.isDirectory());
+                assertTrue(obj.lastModified() == eobj.lastModified());
+                if (eobj.isFile()) {
+                    long flen = eobj.length();
+                    assertTrue(flen >= vsetup.minFileSize() && 
+                               flen <= vsetup.maxFileSize());
+                    vfc.v++;
+                    try {
+                        return TestUtils.areFilesEqual(eobj, obj);
+                    }
+                    catch (IOException ioe) {
+                        fail();
+                    }
+                }
+                return true;
+            }
         };
         assertTrue(fpw.walk(base));
         final int fcount = vfc.v;
@@ -778,78 +778,78 @@ public class CmdLnTest extends TestUtils {
         final VarBool reset = new VarBool();
         final VarInt fcount2 = new VarInt();
         FilePathWalker fpw2 = new FilePathWalker() {
-			public boolean onObject(File obj) {
-				assertTrue(obj.exists());
-				if (obj.isFile()) {
-					fcount2.v++;
-					try {
-						if (reset.v) {
-							new FileOutputStream(obj).close();
-						}
-						assertTrue(0L == new File(obj.getAbsolutePath()).length());
-					}
-					catch (IOException ioe) {
-						fail();
-					}
-				}
-				return true;
-			}
+            public boolean onObject(File obj) {
+                assertTrue(obj.exists());
+                if (obj.isFile()) {
+                    fcount2.v++;
+                    try {
+                        if (reset.v) {
+                            new FileOutputStream(obj).close();
+                        }
+                        assertTrue(0L == new File(obj.getAbsolutePath()).length());
+                    }
+                    catch (IOException ioe) {
+                        fail();
+                    }
+                }
+                return true;
+            }
         };
         
         for (int rsp = 0; rsp < 5; rsp++) {
-        	final boolean repeat;
-        	final char outp;
-        	switch(rsp) {
-	    		case 0: outp = 'o'; repeat = true; break;
-	    		case 1: outp = 'v'; repeat = false; break;
-	    		case 2: outp = 's'; repeat = true; break;
-	    		case 3: outp = 'k'; repeat = false; break;
-	    		case 4: outp = 'c'; repeat = false; break;
-	    		default: fail(); return;
-        	}
-        	StringBuilder sb = new StringBuilder();
-        	for (int i = 0, c = repeat ? MAXFLS : 1; i < c; i++) {
-        		sb.append(outp);
-        		sb.append("\r\n");
-        	}
-        	reset.v = true;					
-        	fcount2.v = 0;
-        	fpw2.walk(extractDir);
-        	assertTrue(MAXFLS == fcount2.v);
+            final boolean repeat;
+            final char outp;
+            switch(rsp) {
+                case 0: outp = 'o'; repeat = true; break;
+                case 1: outp = 'v'; repeat = false; break;
+                case 2: outp = 's'; repeat = true; break;
+                case 3: outp = 'k'; repeat = false; break;
+                case 4: outp = 'c'; repeat = false; break;
+                default: fail(); return;
+            }
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0, c = repeat ? MAXFLS : 1; i < c; i++) {
+                sb.append(outp);
+                sb.append("\r\n");
+            }
+            reset.v = true;                 
+            fcount2.v = 0;
+            fpw2.walk(extractDir);
+            assertTrue(MAXFLS == fcount2.v);
             cl = new CmdLn();
             final VarInt lc = new VarInt();
             cl.in = new LineNumberReader(new StringReader(sb.toString())) {
-				public String readLine() throws IOException {
-					lc.v++;
-					return super.readLine();
-				}
+                public String readLine() throws IOException {
+                    lc.v++;
+                    return super.readLine();
+                }
             };
             cl.exec(args);
             Prg.Result pr = null;
             boolean nowrites = false;
             switch(rsp) {
-	    		case 0: assertTrue(MAXFLS == lc.v); break;
-	    		case 1: assertTrue(1      == lc.v); break;
-	    		case 2: assertTrue(MAXFLS == lc.v); nowrites = true; break;
-	    		case 3: assertTrue(1      == lc.v); nowrites = true; break;
-	    		case 4: assertTrue(1      == lc.v); nowrites = true; pr = Prg.Result.aborted(); break;
-	    		default: fail(); return;
-        	}
+                case 0: assertTrue(MAXFLS == lc.v); break;
+                case 1: assertTrue(1      == lc.v); break;
+                case 2: assertTrue(MAXFLS == lc.v); nowrites = true; break;
+                case 3: assertTrue(1      == lc.v); nowrites = true; break;
+                case 4: assertTrue(1      == lc.v); nowrites = true; pr = Prg.Result.aborted(); break;
+                default: fail(); return;
+            }
             if (null == pr) {
-            	assertNull(CmdLn.__TEST_exit_error.v);
+                assertNull(CmdLn.__TEST_exit_error.v);
             }
             else {
-            	ExitError ee = CmdLn.__TEST_exit_error.v;
-            	assertTrue(ee.result.code == Prg.Result.Code.ABORTED);
+                ExitError ee = CmdLn.__TEST_exit_error.v;
+                assertTrue(ee.result.code == Prg.Result.Code.ABORTED);
             }
             if (nowrites) {
-            	reset.v = false;
-            	fcount2.v = 0;
-            	fpw2.walk(extractDir);
-            	assertTrue(MAXFLS == fcount2.v);
+                reset.v = false;
+                fcount2.v = 0;
+                fpw2.walk(extractDir);
+                assertTrue(MAXFLS == fcount2.v);
             }
             else {
-            	assertTrue(fpw.walk(base));
+                assertTrue(fpw.walk(base));
             }
         }
         
@@ -862,38 +862,38 @@ public class CmdLnTest extends TestUtils {
 
     @Test
     public void testInvalidate() throws Exception {
-    	for (boolean deleteAfter : new boolean[] { false, true }) {
-	    	int flen = Header.SIZE + Header.BLOCK_SIZE + Header.SIZE; 
-	    	File fl = TestUtils.createTempFile("CmdLnTest_testInvalidate", -1);
-	    	byte[] data = new byte[flen];
-	    	Arrays.fill(data, (byte)56);
-	    	Arrays.fill(data, Header.SIZE, Header.SIZE + Header.BLOCK_SIZE, (byte)55);
-	    	RandomAccessFile raf = new RandomAccessFile(fl, "rw");
-	    	raf.write(data);
-	    	raf.close();
-	        CmdLn cl = new CmdLn();
-	        List<String> args = new ArrayList<String>();
-	        args.add("--invalidate");
-	        args.add("-v");
-	        if (deleteAfter) {
-		        args.add("--delete-after");
-	        } 
-	        args.add(fl.getAbsolutePath());
-	        cl.exec(args.toArray(new String[args.size()]));
+        for (boolean deleteAfter : new boolean[] { false, true }) {
+            int flen = Header.SIZE + Header.BLOCK_SIZE + Header.SIZE; 
+            File fl = TestUtils.createTempFile("CmdLnTest_testInvalidate", -1);
+            byte[] data = new byte[flen];
+            Arrays.fill(data, (byte)56);
+            Arrays.fill(data, Header.SIZE, Header.SIZE + Header.BLOCK_SIZE, (byte)55);
+            RandomAccessFile raf = new RandomAccessFile(fl, "rw");
+            raf.write(data);
+            raf.close();
+            CmdLn cl = new CmdLn();
+            List<String> args = new ArrayList<String>();
+            args.add("--invalidate");
+            args.add("-v");
+            if (deleteAfter) {
+                args.add("--delete-after");
+            } 
+            args.add(fl.getAbsolutePath());
+            cl.exec(args.toArray(new String[args.size()]));
             assertNull(CmdLn.__TEST_exit_error.v);
-        	assertTrue(deleteAfter ^ fl.exists());
-        	if (!deleteAfter) {
-	        	data = MiscUtils.readFile(fl);
-	        	for (int ofs : new int[] { 0, Header.SIZE + Header.BLOCK_SIZE }) {
-			        for (int i = 0; i < Header.SIZE; i++) {
-			        	assertTrue(0 == data[i + ofs]);
-			        }
-	        	}
-		        for (int i = Header.SIZE; i < Header.SIZE + Header.BLOCK_SIZE; i++) {
-		        	assertTrue(55 == data[i]);
-		        }
-	        	assertTrue(fl.delete());
-	        } 
-    	}
+            assertTrue(deleteAfter ^ fl.exists());
+            if (!deleteAfter) {
+                data = MiscUtils.readFile(fl);
+                for (int ofs : new int[] { 0, Header.SIZE + Header.BLOCK_SIZE }) {
+                    for (int i = 0; i < Header.SIZE; i++) {
+                        assertTrue(0 == data[i + ofs]);
+                    }
+                }
+                for (int i = Header.SIZE; i < Header.SIZE + Header.BLOCK_SIZE; i++) {
+                    assertTrue(55 == data[i]);
+                }
+                assertTrue(fl.delete());
+            } 
+        }
     }
 }

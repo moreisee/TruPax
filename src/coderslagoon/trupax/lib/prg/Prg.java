@@ -116,9 +116,9 @@ public abstract class Prg {
         }
         /** Sort order definitions, used when lists of objects are returned. */
         public enum Sort {
-        	NAME,
-        	LENGTH,
-        	TIMESTAMP
+            NAME,
+            LENGTH,
+            TIMESTAMP
         }
     }
 
@@ -135,69 +135,69 @@ public abstract class Prg {
          * Error code of a result.
          */
         public enum Code {
-        	/** The operation was successful. */
+            /** The operation was successful. */
             OK(0),
-        	/** Some internal problem occurred. This should not happen and
-        	 * very likely indicates a bug. Please report. */
+            /** Some internal problem occurred. This should not happen and
+             * very likely indicates a bug. Please report. */
             INTERNAL_ERROR(1),
-        	/** Generic error code for a non-operational system or setup. */
+            /** Generic error code for a non-operational system or setup. */
             PRG_ERROR(2),
-        	/** The some self-test routine for a cryptographic operation failed.
-        	 * This usually means that the executable got corrupted or the
-        	 * source code got modified. */
+            /** The some self-test routine for a cryptographic operation failed.
+             * This usually means that the executable got corrupted or the
+             * source code got modified. */
             ALGORITHM_TEST_ERROR(3),
-        	/** The operation was aborted (by a callback). */
+            /** The operation was aborted (by a callback). */
             ABORTED(4),
-        	/** An invalid command line argument got detected. */
+            /** An invalid command line argument got detected. */
             INVALID_CMDLN_ARG(5),
-        	/** One or more command line arguments are missing. */
+            /** One or more command line arguments are missing. */
             MISSING_CMDLN_ARG(6),
-        	/** The registration of a file or directory failed. Example reasons
-        	 * are access problems or objects which vanished. */
+            /** The registration of a file or directory failed. Example reasons
+             * are access problems or objects which vanished. */
             ERROR_OBJECT_REGISTER(7),
-        	/** The property file could not be loaded. */
+            /** The property file could not be loaded. */
             LOAD_PROPFILE_ERROR(8),
-        	/** The property file could not be saved. NOT USED! */
+            /** The property file could not be saved. NOT USED! */
             SAVE_PROPFILE_ERROR(9),
-        	/** Some problem occurred during the computation of the volume
-        	 * layout and size. */
+            /** Some problem occurred during the computation of the volume
+             * layout and size. */
             RESOLVE_ERROR(10),
-        	/** The creation of the volume file file. Reasons could be that
-        	 * the target is write-protected or missing access rights. */
+            /** The creation of the volume file file. Reasons could be that
+             * the target is write-protected or missing access rights. */
             CREATE_VOLUME_ERROR(11),
-        	/** The setup hasn't been completed yet (missing password etc),
-        	 * so the making of the volume cannot commence. */
+            /** The setup hasn't been completed yet (missing password etc),
+             * so the making of the volume cannot commence. */
             MAKE_REJECT(12),
-        	/** Something went wrong during the creation of the volume. */
+            /** Something went wrong during the creation of the volume. */
             MAKE_ERROR(13),
-        	/** Newly added material conflicts with already registered one,
-        	 * there is some overlap in files and/or directories. */
+            /** Newly added material conflicts with already registered one,
+             * there is some overlap in files and/or directories. */
             FILE_COLLISION(14),
-        	/** The volume file exists already and the instance is not
-        	 * configured to overwrite it. */
+            /** The volume file exists already and the instance is not
+             * configured to overwrite it. */
             VOLUME_EXISTS(15),
-        	/** A property of an unknown name was found. */
+            /** A property of an unknown name was found. */
             UNKNOWN_PROPERTY(16),
-        	/** The value of a property is invalid, e.g. when a number was
-        	 * excepted something different was set. */
+            /** The value of a property is invalid, e.g. when a number was
+             * excepted something different was set. */
             INVALID_PROPERTY(17),
-        	/** Objects got passed in the command line and are now registered.
-        	 * Returned by the constructor method of an implementation. */
+            /** Objects got passed in the command line and are now registered.
+             * Returned by the constructor method of an implementation. */
             GOT_OBJECTS(18),
-        	/** Generic signal to tell the caller to ignore an issue. Can be
-        	 * returned by a callback to indicate that despite a problem the
-        	 * operation should continue. */
+            /** Generic signal to tell the caller to ignore an issue. Can be
+             * returned by a callback to indicate that despite a problem the
+             * operation should continue. */
             IGNORE(19),
-        	/** The volume couldn't the opened. This could be an access or some
-        	 * other I/O related issue. */
+            /** The volume couldn't the opened. This could be an access or some
+             * other I/O related issue. */
             CANNOT_OPEN(20),
-        	/** Volume opening failed because of header damage or a password
-        	 * mismatch. */
+            /** Volume opening failed because of header damage or a password
+             * mismatch. */
             CANNOT_DECRYPT(21),
-        	/** Volume extraction failed. There are many reasons like I/O
-        	 * problems or UDF file system corruption. */
+            /** Volume extraction failed. There are many reasons like I/O
+             * problems or UDF file system corruption. */
             EXTRACT_ERROR(22),
-        	/** Volume invalidation failed. Usually an I/O error. */
+            /** Volume invalidation failed. Usually an I/O error. */
             INVALIDATE_ERROR(23);
             
             private Code(int value) {
@@ -271,9 +271,9 @@ public abstract class Prg {
          */
         public final static Result internalError(Throwable err) {
             return new Result(Result.Code.INTERNAL_ERROR,
-            		NLS.PRGIMPL_INTERNAL_ERROR_1.fmt(
-	                    null == err ? null : err.getLocalizedMessage()),
-	                    null == err ? null : MiscUtils.dumpError(err));
+                    NLS.PRGIMPL_INTERNAL_ERROR_1.fmt(
+                        null == err ? null : err.getLocalizedMessage()),
+                        null == err ? null : MiscUtils.dumpError(err));
         }
     }
     
@@ -347,7 +347,7 @@ public abstract class Prg {
          * Label the next created volume should have. Can be any text up to 15
          * characters long. Default is &quot;&quot;. String.
          */
-        public final static String LABEL = PFX + "label"; 			  
+        public final static String LABEL = PFX + "label";             
         /**
          * Whether an invalidated volume should also be deleted. Boolean.
          */
@@ -389,14 +389,14 @@ public abstract class Prg {
         public InitOp initOp = InitOp.DEFAULT;
         /** Initial operation types. */
         public enum InitOp {
-        	/** Default (original) operation (create a volume). */
-        	DEFAULT,
-        	/** Wipe the given objects (only, nothing else). */
-        	WIPE,
-        	/** Extract the given volume to a target directory. */
-        	EXTRACT,
-        	/** Invalidate the given volume. */
-        	INVALIDATE
+            /** Default (original) operation (create a volume). */
+            DEFAULT,
+            /** Wipe the given objects (only, nothing else). */
+            WIPE,
+            /** Extract the given volume to a target directory. */
+            EXTRACT,
+            /** Invalidate the given volume. */
+            INVALIDATE
         }
         /** 
          * Flag to cause an attempt to load properties from the file. 
@@ -417,11 +417,11 @@ public abstract class Prg {
         public Callback cb;
         /** Callback for setup notifications. */
         public interface Callback {
-        	/**
-        	 * Called when the properties got all loaded from file. This is
-        	 * helpful if the caller depends on configuration related
-        	 * information e.g. about what localization settings to use.
-        	 */
+            /**
+             * Called when the properties got all loaded from file. This is
+             * helpful if the caller depends on configuration related
+             * information e.g. about what localization settings to use.
+             */
             void onProps();
             /**
              * Called if the properties got reset due to a load error, This
@@ -462,13 +462,13 @@ public abstract class Prg {
 
         /** The data type of a property value. */
         public enum Type {
-        	/** Boolean flag (stored as "true" or "false"). */
+            /** Boolean flag (stored as "true" or "false"). */
             FLAG,
-        	/** Signed (integer or long) number. */
+            /** Signed (integer or long) number. */
             NUMBER,
-        	/** Arbitrary string. */
+            /** Arbitrary string. */
             STRING,
-        	/** Selection of strings. Only the selected string gets stored. */
+            /** Selection of strings. Only the selected string gets stored. */
             SELECT
         }
 
@@ -554,11 +554,11 @@ public abstract class Prg {
     
     /** Callback invoked during the registration process. */
     public interface RegisterObjectsCallback {
-    	/**
-    	 * Called when a directory was found.
-    	 * @param dir The absolute path of the directory.
-    	 * @return Whether to continue (OK) or not (ABORTED).
-    	 */
+        /**
+         * Called when a directory was found.
+         * @param dir The absolute path of the directory.
+         * @return Whether to continue (OK) or not (ABORTED).
+         */
         public Result onDirectory(String dir);
         
         /**
@@ -572,35 +572,35 @@ public abstract class Prg {
     /** Base for callbacks reporting files. Aborting operation is not supported
      * here by design (not granular enough). */
     public interface FileCallback {
-    	/**
-    	 * Some file was encountered.
-    	 * @param fileName Name of the file (full path).
-    	 * @param fileSize Size of the file in bytes.
-    	 */
+        /**
+         * Some file was encountered.
+         * @param fileName Name of the file (full path).
+         * @param fileSize Size of the file in bytes.
+         */
         public void onFile(String fileName, long fileSize);
     }
 
     /** Callback for the volume make process. */
     public interface MakeCallback extends FileCallback {
-    	/**
-    	 * Called if all files have been written and if the writing of free
-    	 * space data is about to start. This only happens if the amount of
-    	 * free space data is not zero. 
-    	 */
-    	public Result onFreeSpace();
-    	
-    	/**
-    	 * Called if the volume was written to. Together with the expected
-    	 * volume size this can be used to provide precise progress reporting.
-    	 * @param pos New write position in bytes.
-    	 * @return Whether to continue (OK) or not (ABORTED).
-    	 */
+        /**
+         * Called if all files have been written and if the writing of free
+         * space data is about to start. This only happens if the amount of
+         * free space data is not zero. 
+         */
+        public Result onFreeSpace();
+        
+        /**
+         * Called if the volume was written to. Together with the expected
+         * volume size this can be used to provide precise progress reporting.
+         * @param pos New write position in bytes.
+         * @return Whether to continue (OK) or not (ABORTED).
+         */
         public Result onVolumeWrite(long pos);
     }
 
     /** To report some issue during an operation. */
     public enum Concern {
-    	/** Something got skipped. For instance a file could not be wiped */
+        /** Something got skipped. For instance a file could not be wiped */
         SKIP(NLS.PRGIMPL_CONCERN_SKIP),
         /** Something exists already and overwriting it might be a problem .*/
         EXISTS(NLS.PRGIMPL_CONCERN_EXISTS),
@@ -609,7 +609,7 @@ public abstract class Prg {
         /** An error occurred. */
         ERROR(NLS.PRGIMPL_CONCERN_ERROR);
         Concern(NLS.Str str) {
-        	this.str = str;
+            this.str = str;
         }
         NLS.Str str;
         /** 
@@ -624,22 +624,22 @@ public abstract class Prg {
     /** Callback invoked whenever an issue occurred and the user should be
      * asked whether continuing the operation is desirable. */
     public interface ConcernCallback {
-    	/**
-    	 * Called if a concern is raised.
-    	 * @param concern The concern.
-    	 * @param message The (localized) message about what is happening.
-    	 * @return Whether to continue (OK) or not (ABORTED).
-    	 */
+        /**
+         * Called if a concern is raised.
+         * @param concern The concern.
+         * @param message The (localized) message about what is happening.
+         * @return Whether to continue (OK) or not (ABORTED).
+         */
         public Result onConcern(Concern concern, String message);
     }
     
     /** Generic progress callback. */
     public interface ProgressCallback {
-    	/**
-    	 * Progress has been made. Granularity depends on the implementation.
-    	 * @param percent Percent done so far.
-    	 * @return Whether to continue (OK) or not (ABORTED).
-    	 */
+        /**
+         * Progress has been made. Granularity depends on the implementation.
+         * @param percent Percent done so far.
+         * @return Whether to continue (OK) or not (ABORTED).
+         */
         public Result onProgress(double percent);
     }
 
@@ -651,30 +651,30 @@ public abstract class Prg {
      * linear progress information available, since the volume gets walked in
      * one pass, so single files are the given granularity. */
     public interface ExtractCallback extends ConcernCallback, FileCallback {
-    	/**
-    	 * The volume is being opened at this moment. Since this can be a
-    	 * lengthy process (e.g. objects have to be counted first) an occasional
-    	 * update might be beneficial to avoid blocking and provide the chance
-    	 * to stop the extraction before it even started.
-    	 * @param objs Number of objects discovered so far. Purely
-    	 * informational, just to be able to show some non-deterministic
-    	 * progress.
-    	 * @return Whether to continue (OK) or not (ABORTED).
-    	 */
-    	public Result onOpening(int objs);
-    	/**
-    	 * The volume has been opened successfully.
-    	 * @param files Number of files contained in the volume.
-    	 * @param dirs Number of individual directories in the volume.
-    	 * @return Whether to continue (OK) or not (ABORTED).
-    	 */
-    	public Result onOpen(int files, int dirs);
-    	/**
-    	 * The currently opened file has been written to.
-    	 * @param pos Number of bytes written to this file so far.
-    	 * @return Whether to continue (OK) or not (ABORTED).
-    	 */
-    	public Result onFileWrite(long pos);
+        /**
+         * The volume is being opened at this moment. Since this can be a
+         * lengthy process (e.g. objects have to be counted first) an occasional
+         * update might be beneficial to avoid blocking and provide the chance
+         * to stop the extraction before it even started.
+         * @param objs Number of objects discovered so far. Purely
+         * informational, just to be able to show some non-deterministic
+         * progress.
+         * @return Whether to continue (OK) or not (ABORTED).
+         */
+        public Result onOpening(int objs);
+        /**
+         * The volume has been opened successfully.
+         * @param files Number of files contained in the volume.
+         * @param dirs Number of individual directories in the volume.
+         * @return Whether to continue (OK) or not (ABORTED).
+         */
+        public Result onOpen(int files, int dirs);
+        /**
+         * The currently opened file has been written to.
+         * @param pos Number of bytes written to this file so far.
+         * @return Whether to continue (OK) or not (ABORTED).
+         */
+        public Result onFileWrite(long pos);
     }
 
     /**
@@ -811,7 +811,7 @@ public abstract class Prg {
      * Invalidates the given volume, meaning the headers are overwritten with
      * arbitrary data, hence making decryption impossible since this also
      * destroys the actual key. Optionally the volume file gets deleted.
-	 * @param cb Progress callback with the possibility to cancel.
+     * @param cb Progress callback with the possibility to cancel.
      * @return Result of the operation.
      */
     public abstract Result invalidate(ProgressCallback cb);

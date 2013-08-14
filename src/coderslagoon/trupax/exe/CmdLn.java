@@ -59,15 +59,15 @@ public class CmdLn extends Exe {
     public static String __TEST_password;
     
     char[] password(boolean confirm) throws ExitError {
-    	if (null != __TEST_password) {
-    		return __TEST_password.toCharArray();
-    	}
-    	
+        if (null != __TEST_password) {
+            return __TEST_password.toCharArray();
+        }
+        
         String clpassw = CmdLnProps.OPTS_PASSWORD.get(this.props);
         if (null != clpassw) {
             return clpassw.toCharArray();
         }
-    	
+        
         Console con = null == __TEST_console ? Console.system() : 
                               __TEST_console;
         if (null == con) {
@@ -81,10 +81,10 @@ public class CmdLn extends Exe {
             }
             if (0 == passw.length) {
                 con.format(NLS.CMDLN_PASSWORD_EMPTY.s());  
-            	continue;
+                continue;
             }
             if (!confirm) {
-            	return passw;
+                return passw;
             }
             char[] passw2 = con.readPassword(NLS.CMDLN_PASSWORD_REPEAT.s());  
             if (null == passw2 || Shutdown.active()) {
@@ -101,83 +101,83 @@ public class CmdLn extends Exe {
     }
     
     void showUsage() {
-    	try {
-    		System.out.println(new String(IOUtils.readStreamBytes(
-    			getClass().getResourceAsStream("resources/" + NLS.CMDLN_USAGE.s()))));  
-    		
-    		System.out.printf(
-    		    NLS.CMDLN_ABOUT_2.s(), 
+        try {
+            System.out.println(new String(IOUtils.readStreamBytes(
+                getClass().getResourceAsStream("resources/" + NLS.CMDLN_USAGE.s()))));  
+            
+            System.out.printf(
+                NLS.CMDLN_ABOUT_2.s(), 
                 Prg.version(),
                 MiscUtils.copyrightYear(COPYRIGHT_START_YEAR, Calendar.getInstance()));
-    	}
-    	catch (IOException ignored) {
-    	}
+        }
+        catch (IOException ignored) {
+        }
     }
     
     final static int CONFIRM_ABORTED = -1;
     
     Integer confirm(String txt, String selstr) {
-    	this.out.println(txt);
-    	final String[] sel = selstr.split(",");  
-		for (int i = 0; i < sel.length; i++) {
-			sel[i] = sel[i].trim();
-		}
-    	final StringBuilder keys = new StringBuilder(sel.length);
-    	final StringBuilder prompt = new StringBuilder();
-    	for (int i = 0; i < sel.length; i++) {
-    		String s = sel[i];
-    		int j = 0;
-    		String chr = null;
-    		for (; j < s.length(); j++) {
-    		    char c = s.charAt(j);
+        this.out.println(txt);
+        final String[] sel = selstr.split(",");  
+        for (int i = 0; i < sel.length; i++) {
+            sel[i] = sel[i].trim();
+        }
+        final StringBuilder keys = new StringBuilder(sel.length);
+        final StringBuilder prompt = new StringBuilder();
+        for (int i = 0; i < sel.length; i++) {
+            String s = sel[i];
+            int j = 0;
+            String chr = null;
+            for (; j < s.length(); j++) {
+                char c = s.charAt(j);
                 if (127 < c || !Character.isLetter(c)) {
                     continue;
                 }
-    			chr = String.valueOf(c).toLowerCase();
-    			if (-1 == keys.indexOf(chr)) {
-    				break;
-				}
-    		}
-    		if (j == s.length()) {
-    			return null;
-    		}
-    		keys.append(chr);
-    		prompt.append(String.format("%s[%s]%s%s ",  
-    				s.substring(0, j),
-    				s.charAt(j),
-    				s.substring(j + 1),
-    				i < sel.length - 1 ? " " : ""));
-    	}
-    	prompt.append('>');
-		for (int i = 0; i < sel.length; i++) {
-			sel[i] = sel[i].toLowerCase();
-		}
-    	for(;;) {
-    		this.out.print(prompt);
-    		String cmd;
-    		try {
-    			if (null == (cmd = this.in.readLine())) {
-    				throw new IOException();
-    			}
-    		}
-    		catch (IOException unexpected) {
-				return Shutdown.active() ? CONFIRM_ABORTED : null;
-    		}
-			cmd = cmd.toLowerCase();
-    		if (1 == cmd.length()) {
-    			int i = keys.indexOf(String.valueOf(cmd.charAt(0)));
-    			if (-1 != i) {
-    				return i;
-    			}
-    		}
-    		else {
-    			for (int i = 0; i < sel.length; i++) {
-    				if (sel[i].equals(cmd)) {
-    					return i;
-    				}
-    			}
-    		}
-    	}
+                chr = String.valueOf(c).toLowerCase();
+                if (-1 == keys.indexOf(chr)) {
+                    break;
+                }
+            }
+            if (j == s.length()) {
+                return null;
+            }
+            keys.append(chr);
+            prompt.append(String.format("%s[%s]%s%s ",  
+                    s.substring(0, j),
+                    s.charAt(j),
+                    s.substring(j + 1),
+                    i < sel.length - 1 ? " " : ""));
+        }
+        prompt.append('>');
+        for (int i = 0; i < sel.length; i++) {
+            sel[i] = sel[i].toLowerCase();
+        }
+        for(;;) {
+            this.out.print(prompt);
+            String cmd;
+            try {
+                if (null == (cmd = this.in.readLine())) {
+                    throw new IOException();
+                }
+            }
+            catch (IOException unexpected) {
+                return Shutdown.active() ? CONFIRM_ABORTED : null;
+            }
+            cmd = cmd.toLowerCase();
+            if (1 == cmd.length()) {
+                int i = keys.indexOf(String.valueOf(cmd.charAt(0)));
+                if (-1 != i) {
+                    return i;
+                }
+            }
+            else {
+                for (int i = 0; i < sel.length; i++) {
+                    if (sel[i].equals(cmd)) {
+                        return i;
+                    }
+                }
+            }
+        }
     }
     
     ///////////////////////////////////////////////////////////////////////////
@@ -199,10 +199,10 @@ public class CmdLn extends Exe {
             switch(ee.result.code) {
                 case MISSING_CMDLN_ARG:
                 case INVALID_CMDLN_ARG: {
-                	showUsage();
+                    showUsage();
                 }
                 default: {
-                	break;
+                    break;
                 }
             }
      
@@ -216,43 +216,43 @@ public class CmdLn extends Exe {
     }
     
     static Prg.Setup.InitOp initOpFromProps(Properties props) throws ExitError {
-    	Prg.Setup.InitOp iop = Prg.Setup.InitOp.DEFAULT;
-    	int c = 0;
-    	if (CmdLnProps.OPTS_WIPEONLY  .get(props)) { iop = Prg.Setup.InitOp.WIPE      ; c++; }
-    	if (CmdLnProps.OPTS_EXTRACT   .get(props)) { iop = Prg.Setup.InitOp.EXTRACT   ; c++; }
-    	if (CmdLnProps.OPTS_INVALIDATE.get(props)) { iop = Prg.Setup.InitOp.INVALIDATE; c++; }
-    	if (1 < c) {
-    		throw new ExitError(new Prg.Result(
-    			Prg.Result.Code.INVALID_CMDLN_ARG, NLS.CMDLN_VAGUE_OP.s(), null));
-    	}
-    	return iop;
+        Prg.Setup.InitOp iop = Prg.Setup.InitOp.DEFAULT;
+        int c = 0;
+        if (CmdLnProps.OPTS_WIPEONLY  .get(props)) { iop = Prg.Setup.InitOp.WIPE      ; c++; }
+        if (CmdLnProps.OPTS_EXTRACT   .get(props)) { iop = Prg.Setup.InitOp.EXTRACT   ; c++; }
+        if (CmdLnProps.OPTS_INVALIDATE.get(props)) { iop = Prg.Setup.InitOp.INVALIDATE; c++; }
+        if (1 < c) {
+            throw new ExitError(new Prg.Result(
+                Prg.Result.Code.INVALID_CMDLN_ARG, NLS.CMDLN_VAGUE_OP.s(), null));
+        }
+        return iop;
     }
     
     static Long   __TEST_abort_make;
     static Double __TEST_abort_wipe;
     
     void execInternal(String[] args) throws ExitError {
-    	Prg.Setup  setup;
-    	Prg.Result res;
-    	Prg        prg = null;
-    	try {
-        	Prp.global().clear();
+        Prg.Setup  setup;
+        Prg.Result res;
+        Prg        prg = null;
+        try {
+            Prp.global().clear();
 
-    		NLS.Reg.instance().load(null);
-    		File propFile = MiscUtils.determinePropFile(getClass(), Exe._propFileName, false);
-    		
-	        setup = new Prg.Setup();
-	        
-	        setup.args            = processArgs(args);
-	        setup.fromCommandLine = true;
-	        setup.initOp          = initOpFromProps(this.clp.options());
-	        setup.saveProperties  = false;
-	        setup.propertiesFile  = propFile.exists() ? propFile.getAbsolutePath() : null; 
-	        setup.propFileExists  = null != setup.propertiesFile;
+            NLS.Reg.instance().load(null);
+            File propFile = MiscUtils.determinePropFile(getClass(), Exe._propFileName, false);
+            
+            setup = new Prg.Setup();
+            
+            setup.args            = processArgs(args);
+            setup.fromCommandLine = true;
+            setup.initOp          = initOpFromProps(this.clp.options());
+            setup.saveProperties  = false;
+            setup.propertiesFile  = propFile.exists() ? propFile.getAbsolutePath() : null; 
+            setup.propFileExists  = null != setup.propertiesFile;
 
-	        final VarRef<BaseLibException> ble = 
-	          new VarRef<BaseLibException>(); 
-	        setup.cb = new Prg.Setup.Callback() {
+            final VarRef<BaseLibException> ble = 
+              new VarRef<BaseLibException>(); 
+            setup.cb = new Prg.Setup.Callback() {
                 public void onProps() {
                     String langid = ExeProps.Lang.get();
                     if (null != langid) {
@@ -264,29 +264,29 @@ public class CmdLn extends Exe {
                         }
                     }
                 }
-				@Override
-				public void onLoadErrorReset(Result err) {
-				}
+                @Override
+                public void onLoadErrorReset(Result err) {
+                }
             };
-	        
-	        res = PrgImpl.init();
-	        if (res.isSuccess()) {
-		        prg = new PrgImpl();
-		        res = prg.ctor(this.props, setup);
-		        this.props.putAll(this.clp.options());
-		        if (res.isSuccess()) {
-			        if (null != ble.v) {
-			            throw ble.v;
-			        }
-		        }
-	        }
-    	}
-    	catch (BaseLibException ble) {
+            
+            res = PrgImpl.init();
+            if (res.isSuccess()) {
+                prg = new PrgImpl();
+                res = prg.ctor(this.props, setup);
+                this.props.putAll(this.clp.options());
+                if (res.isSuccess()) {
+                    if (null != ble.v) {
+                        throw ble.v;
+                    }
+                }
+            }
+        }
+        catch (BaseLibException ble) {
             throw new ExitError(new Prg.Result(
-            		Prg.Result.Code.INTERNAL_ERROR, 
-            		ble.getLocalizedMessage(), null));
-    	}
-	        
+                    Prg.Result.Code.INTERNAL_ERROR, 
+                    ble.getLocalizedMessage(), null));
+        }
+            
         if (res.isFailure()) {
             throw new ExitError(res);
         }
@@ -298,24 +298,24 @@ public class CmdLn extends Exe {
         
         VarLong tm = new VarLong();
         switch(setup.initOp) {
-	    	case EXTRACT   : extract   (tm); break;
-	    	case INVALIDATE: invalidate(tm); break;
-	    	case WIPE      : wipe      (tm); break;
-        	case DEFAULT:
-        	default        : create(tm); break;
+            case EXTRACT   : extract   (tm); break;
+            case INVALIDATE: invalidate(tm); break;
+            case WIPE      : wipe      (tm); break;
+            case DEFAULT:
+            default        : create(tm); break;
         }
         CmdLn.this.out.printf(NLS.CMDLN_DONE_1.s(),  
                 MiscUtils.printTime(Clock._system.now() - tm.v));
         
         if (this.prg.dtor().isSuccess()) {
-        	PrgImpl.cleanup();
+            PrgImpl.cleanup();
         }
     }
     
     ///////////////////////////////////////////////////////////////////////////
     
     void create(VarLong tm) throws ExitError {
-    	stepRegister();
+        stepRegister();
             
         long freeSpace = CmdLnProps.OPTS_FREESPACE.get(this.props);
         Prg.Result res = this.prg.setFreeSpace(freeSpace);
@@ -351,13 +351,13 @@ public class CmdLn extends Exe {
                         Prg.Result.aborted() : 
                         Prg.Result.ok();
             }
-			@Override
-			public Result onFreeSpace() {
+            @Override
+            public Result onFreeSpace() {
                 CmdLn.this.out.println(NLS.CMDLN_PROGRESS_FREESPACE.s()); 
-				return Shutdown.active() ? 
-						Prg.Result.aborted() : 
-						Prg.Result.ok();
-			}
+                return Shutdown.active() ? 
+                        Prg.Result.aborted() : 
+                        Prg.Result.ok();
+            }
         });
         if (res.isFailure()) {
             throw new ExitError(res);
@@ -369,36 +369,36 @@ public class CmdLn extends Exe {
             res = stepWipe();
 
             if (res.isFailure()) {
-	            throw new ExitError(res);
-	        }
+                throw new ExitError(res);
+            }
         }
     }
     
     private void stepRegister() throws ExitError {
-    	
-    	Prg.Result res = this.prg.registerObjects(new Prg.RegisterObjectsCallback() {
+        
+        Prg.Result res = this.prg.registerObjects(new Prg.RegisterObjectsCallback() {
             public Result onDirectory(String dir) {
                 CmdLn.this.out.printf(NLS.CMDLN_SEARCHING_1.s(), dir); 
                 
                 return Shutdown.active() ? Prg.Result.aborted() : 
                                            Prg.Result.ok();
             }
-			public void configLocked() {
-			}
+            public void configLocked() {
+            }
         });
-    	
-    	if (res.isFailure()) {
+        
+        if (res.isFailure()) {
             throw new ExitError(res);
         }
         Prg.RegSum regSum = this.prg.registerSummary();
         this.out.printf(NLS.CMDLN_REGSUM_3.s(), 
-        		regSum.numberOfDirectories,
-        		regSum.numberOfFiles,
-        		regSum.bytesTotal);
+                regSum.numberOfDirectories,
+                regSum.numberOfFiles,
+                regSum.bytesTotal);
     }
     
     private Prg.Result stepWipe() {
-    	return this.prg.wipe(new Prg.WipeCallback() {
+        return this.prg.wipe(new Prg.WipeCallback() {
             double lastPct;
             public void onFile(String fileName, long fileSize) {
                 CmdLn.this.out.printf(
@@ -411,7 +411,7 @@ public class CmdLn extends Exe {
             }
             public Result onConcern(Concern concern, String message) {
                 @SuppressWarnings("resource")
-				PrintStream ps = concern == Concern.ERROR ? CmdLn.this.err : CmdLn.this.out;
+                PrintStream ps = concern == Concern.ERROR ? CmdLn.this.err : CmdLn.this.out;
                 ps.printf(NLS.CMDLN_CONCERN_2.s(),     
                           concern.localized().toUpperCase(), message);
                 return abortCheck();
@@ -431,69 +431,69 @@ public class CmdLn extends Exe {
     void extract(VarLong tm) throws ExitError {
         char[] passw = password(false);
         tm.v = Clock._system.now();
-    	Result res = this.prg.extract(passw, null, new Prg.ExtractCallback() {
-	        boolean overwriteAll;
-	        boolean skipAll;
-			public Result onConcern(Concern concern, String message) {
-				if (Shutdown.active()) {
-					return Prg.Result.aborted();
-				}
-				if (concern != Concern.EXISTS) {
-					throw new Error(concern.toString());
-				}
-				if (this.overwriteAll) {
-					return Result.ok();
-				}
-				if (this.skipAll) {
-					return new Result(Result.Code.IGNORE, null, null);
-				}
-				Integer cnf = confirm(message, NLS.CMDLN_EXISTS_SELECT.s());  
-				if (null == cnf) {
-					return Result.internalError(null);
-				}
-				switch(cnf) {
-					case 1: this.overwriteAll = true;
-					case 0: return Result.ok();
-					case 3: this.skipAll = true;
-					case 2: return new Result(Result.Code.IGNORE, null, null);
-				}
-				return Result.aborted();
-			}
-			public void onFile(String fileName, long fileSize) {
+        Result res = this.prg.extract(passw, null, new Prg.ExtractCallback() {
+            boolean overwriteAll;
+            boolean skipAll;
+            public Result onConcern(Concern concern, String message) {
+                if (Shutdown.active()) {
+                    return Prg.Result.aborted();
+                }
+                if (concern != Concern.EXISTS) {
+                    throw new Error(concern.toString());
+                }
+                if (this.overwriteAll) {
+                    return Result.ok();
+                }
+                if (this.skipAll) {
+                    return new Result(Result.Code.IGNORE, null, null);
+                }
+                Integer cnf = confirm(message, NLS.CMDLN_EXISTS_SELECT.s());  
+                if (null == cnf) {
+                    return Result.internalError(null);
+                }
+                switch(cnf) {
+                    case 1: this.overwriteAll = true;
+                    case 0: return Result.ok();
+                    case 3: this.skipAll = true;
+                    case 2: return new Result(Result.Code.IGNORE, null, null);
+                }
+                return Result.aborted();
+            }
+            public void onFile(String fileName, long fileSize) {
                 CmdLn.this.out.printf(
                         NLS.CMDLN_PROGRESS_EXTRACT_4.s(), 
                         ++this.fileNum, 
                         this.filesTotal,
                         fileName, 
                         fileSize); 
-			}
-			public Result onOpen(int files, int dirs) {
-				if (Shutdown.active()) {
-					return Prg.Result.aborted();
-				}
-				this.filesTotal = files;
-				this.fileNum = 0;
-				return Result.ok();
-			}
-			public Result onOpening(int objs) {
-				return simpleCheck();
-			}
-			public Result onFileWrite(long pos) {
-				return simpleCheck();
-			}
-			private Result simpleCheck() {
-				if (Shutdown.active()) {
-					return Prg.Result.aborted();
-				}
-				return Prg.Result.ok();
-			}
-			int filesTotal;
-			int fileNum;
-    	});
-    	
-    	if (res.isFailure()) {
-    		throw new ExitError(res);
-    	}
+            }
+            public Result onOpen(int files, int dirs) {
+                if (Shutdown.active()) {
+                    return Prg.Result.aborted();
+                }
+                this.filesTotal = files;
+                this.fileNum = 0;
+                return Result.ok();
+            }
+            public Result onOpening(int objs) {
+                return simpleCheck();
+            }
+            public Result onFileWrite(long pos) {
+                return simpleCheck();
+            }
+            private Result simpleCheck() {
+                if (Shutdown.active()) {
+                    return Prg.Result.aborted();
+                }
+                return Prg.Result.ok();
+            }
+            int filesTotal;
+            int fileNum;
+        });
+        
+        if (res.isFailure()) {
+            throw new ExitError(res);
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -503,14 +503,14 @@ public class CmdLn extends Exe {
         tm.v = Clock._system.now();
 
         Result res = this.prg.invalidate(new Prg.ProgressCallback() {
-			public Result onProgress(double percent) {
-				return Result.ok();
-			}
-    	});
+            public Result onProgress(double percent) {
+                return Result.ok();
+            }
+        });
 
-    	if (res.isFailure()) {
-    		throw new ExitError(res);
-    	}
+        if (res.isFailure()) {
+            throw new ExitError(res);
+        }
     }
     
     ///////////////////////////////////////////////////////////////////////////
@@ -522,9 +522,9 @@ public class CmdLn extends Exe {
         
         Result res = stepWipe();
 
-    	if (res.isFailure()) {
-    		throw new ExitError(res);
-    	}
+        if (res.isFailure()) {
+            throw new ExitError(res);
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -551,18 +551,18 @@ public class CmdLn extends Exe {
 
     final static String PROP_FILE_NAME = "trupaxcmd"; 
 
-	public static void main(String[] args) {
-	    _propFileName = PROP_FILE_NAME; 
-		Shutdown.install("shutdown");   
+    public static void main(String[] args) {
+        _propFileName = PROP_FILE_NAME; 
+        Shutdown.install("shutdown");   
         try {
             CmdLn cl = new CmdLn();
             cl.exec(args);
         }
         catch (Throwable uncaught) {
-        	MiscUtils.dumpUncaughtError(uncaught);
+            MiscUtils.dumpUncaughtError(uncaught);
         }
         finally {
-   			Shutdown.release();
+            Shutdown.release();
         }
-	}
+    }
 }

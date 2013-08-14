@@ -63,12 +63,12 @@ public class UDFReader extends Reader {
         checkPartition();
         locateFileSetDescriptor();
         readRootFileEntry();        
-    	switch(this.progress.onDirectory(toDir, 
-			this.rootFileEntry.informationLength, null)) {
-			case OK   : readDirectory(this.rootFileEntry, toDir, true); break;
-			case ABORT: throwAbort(); break;
-			default   : { }
-		}
+        switch(this.progress.onDirectory(toDir, 
+            this.rootFileEntry.informationLength, null)) {
+            case OK   : readDirectory(this.rootFileEntry, toDir, true); break;
+            case ABORT: throwAbort(); break;
+            default   : { }
+        }
     }
     
     ///////////////////////////////////////////////////////////////////////////
@@ -119,15 +119,15 @@ public class UDFReader extends Reader {
     ///////////////////////////////////////////////////////////////////////////
 
     private void readAnchorVolumeDescriptorPointer() throws IOException {
-    	try {
-	        readBlock(AnchorVolumeDescriptorPointer.LOCATION);
-	        
-	        this.anchorVolumeDescriptorPointer = 
-	            (AnchorVolumeDescriptorPointer)Descriptor.parse(this.block, 0);
-    	}
-    	catch (IOException ioe) {
-    		throw new MountException(ioe.getMessage());
-    	}
+        try {
+            readBlock(AnchorVolumeDescriptorPointer.LOCATION);
+            
+            this.anchorVolumeDescriptorPointer = 
+                (AnchorVolumeDescriptorPointer)Descriptor.parse(this.block, 0);
+        }
+        catch (IOException ioe) {
+            throw new MountException(ioe.getMessage());
+        }
         
         _log.debugf("AVDP is %s", this.anchorVolumeDescriptorPointer);   
     }
@@ -150,17 +150,17 @@ public class UDFReader extends Reader {
             }
         }
         if (null == this.logicalVolumeDescriptor) {
-        	throwDev("missing logical volume descriptor"); 
+            throwDev("missing logical volume descriptor"); 
         }
         if (null == this.partitionDescriptor) {
-        	throwDev("missing partition descriptor"); 
+            throwDev("missing partition descriptor"); 
         }   
     }
 
     private void checkIntegrity() throws IOException {
         ExtentDescriptor ise = this.logicalVolumeDescriptor.integritySequenceExtent;
         if (ise.none()) {
-        	throwDev("no integrity sequence extent present");    
+            throwDev("no integrity sequence extent present");    
         }
         int c = ise.length / this.blockSize;
         for (int i = 0; i < c; i++) {
@@ -174,9 +174,9 @@ public class UDFReader extends Reader {
             else if (d instanceof LogicalVolumeIntegrityDescriptor) {
                 LogicalVolumeIntegrityDescriptor lvid = (LogicalVolumeIntegrityDescriptor)d; 
                 if (Progress.Result.OK != this.progress.onMount(
-                		lvid.numberOfFiles,
+                        lvid.numberOfFiles,
                         lvid.numberOfDirectories)) {
-                	throwAbort();
+                    throwAbort();
                 }
                 return;
             }
@@ -251,83 +251,83 @@ public class UDFReader extends Reader {
     }
    
     public void readDirectory(final FileEntry fe, final File dir, final boolean recursive) throws IOException {
-    	LocalDir ldir = new LocalDir() {
-			public void writeEntries() throws IOException {
-		        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		        readFileEntryData(fe, baos, fe == UDFReader.this.rootFileEntry ? null : dir);
-		        baos.close();
-		        
-		        byte[] fds = baos.toByteArray();
-		        
-		        int ofs2 = 0;
-		        while (ofs2 < fds.length) {
-		            FileIdentifierDescriptor fid = (FileIdentifierDescriptor)Descriptor.parse(fds, ofs2);
-		            ofs2 += fid.length();
-		            
-		            if (0 == fid.fileIdentifierStr.length()) {
-		                continue;
-		            }
-		            
-		            final FileEntry fe2 = readFileEntry(fid.icb);
-		            if (null != fe2) {
-		                switch (fe2.icbTag.fileType) {
-		                    case DIRECTORY: {
-		                        if (recursive) {
-		                        	File dir2 = new File(dir, fid.fileIdentifierStr);
-		                        	long tstamp = fe2.modificationDateAndTime.toCalendar().getTimeInMillis();
-		                        	long size   = fe2.informationLength;
-		                        	switch(UDFReader.this.progress.onDirectory(dir2, size, tstamp)) {
-		                        		case OK: {
-			                        		readDirectory(fe2, dir2, true);
-			                        		break;
-		                        		}
-		                        		case ABORT: {
-		                        			throwAbort();
-		                        		}
-		                        		// SKIP
-		                        		default: {
-		                        			break;
-		                        		}
-		                        	}
-		                        }
-		                        break;
-		                    }
-		                    case RANDOM_ACCESS_BYTE_SEQ: {
-		                    	final File fl = new File(dir, fid.fileIdentifierStr);
-		                    	long tstamp = fe2.modificationDateAndTime.toCalendar().getTimeInMillis();
-		                    	long size   = fe2.informationLength;
-		                    	switch (UDFReader.this.progress.onFile(fl, size, tstamp)) {
-		                    		case OK: {
-		                            	LocalFile lf = new LocalFile() {
-		        							protected void writeData(OutputStream os, long size) throws IOException {
-		        	                            readFileEntryData(fe2, os, fl);
-		        							}
-		                            	};
-		                            	lf.write(fl, size, tstamp, UDFReader.this.progress);
-		                    		    break;
-		                    		}
-		                    		case ABORT: {
-		                    			throwAbort();
-		                    		}
-		                    		// SKIP
-		                    		default: {
-		                    			break;
-		                    		}
-		                        }
-		                        break;
-		                    }
-		                    default: {
-		                        throwDev("unsupported file type %s", fe2.icbTag.fileType); 
-		                    }
-		                }
-		            }
-		        }
-		        if (ofs2 != fds.length) {
-		            throwDev("FID sizes are off by %d", ofs2 - fds.length);    
-		        }
-			}
-    	};
-    	ldir.write(dir, fe.modificationDateAndTime.toCalendar().getTimeInMillis());
+        LocalDir ldir = new LocalDir() {
+            public void writeEntries() throws IOException {
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                readFileEntryData(fe, baos, fe == UDFReader.this.rootFileEntry ? null : dir);
+                baos.close();
+                
+                byte[] fds = baos.toByteArray();
+                
+                int ofs2 = 0;
+                while (ofs2 < fds.length) {
+                    FileIdentifierDescriptor fid = (FileIdentifierDescriptor)Descriptor.parse(fds, ofs2);
+                    ofs2 += fid.length();
+                    
+                    if (0 == fid.fileIdentifierStr.length()) {
+                        continue;
+                    }
+                    
+                    final FileEntry fe2 = readFileEntry(fid.icb);
+                    if (null != fe2) {
+                        switch (fe2.icbTag.fileType) {
+                            case DIRECTORY: {
+                                if (recursive) {
+                                    File dir2 = new File(dir, fid.fileIdentifierStr);
+                                    long tstamp = fe2.modificationDateAndTime.toCalendar().getTimeInMillis();
+                                    long size   = fe2.informationLength;
+                                    switch(UDFReader.this.progress.onDirectory(dir2, size, tstamp)) {
+                                        case OK: {
+                                            readDirectory(fe2, dir2, true);
+                                            break;
+                                        }
+                                        case ABORT: {
+                                            throwAbort();
+                                        }
+                                        // SKIP
+                                        default: {
+                                            break;
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+                            case RANDOM_ACCESS_BYTE_SEQ: {
+                                final File fl = new File(dir, fid.fileIdentifierStr);
+                                long tstamp = fe2.modificationDateAndTime.toCalendar().getTimeInMillis();
+                                long size   = fe2.informationLength;
+                                switch (UDFReader.this.progress.onFile(fl, size, tstamp)) {
+                                    case OK: {
+                                        LocalFile lf = new LocalFile() {
+                                            protected void writeData(OutputStream os, long size) throws IOException {
+                                                readFileEntryData(fe2, os, fl);
+                                            }
+                                        };
+                                        lf.write(fl, size, tstamp, UDFReader.this.progress);
+                                        break;
+                                    }
+                                    case ABORT: {
+                                        throwAbort();
+                                    }
+                                    // SKIP
+                                    default: {
+                                        break;
+                                    }
+                                }
+                                break;
+                            }
+                            default: {
+                                throwDev("unsupported file type %s", fe2.icbTag.fileType); 
+                            }
+                        }
+                    }
+                }
+                if (ofs2 != fds.length) {
+                    throwDev("FID sizes are off by %d", ofs2 - fds.length);    
+                }
+            }
+        };
+        ldir.write(dir, fe.modificationDateAndTime.toCalendar().getTimeInMillis());
     }
     
     public void readFileEntryData(FileEntry fe, OutputStream os, File fl) throws IOException {
@@ -370,8 +370,8 @@ public class UDFReader extends Reader {
                 }
                 catch (IOException ioe) {
                     throw new Exception(Code.ERR_IO, fl, 
-                    		"write of embedded data failed (%s)", 
-                    		ioe.getMessage());
+                            "write of embedded data failed (%s)", 
+                            ioe.getMessage());
                 }
                 total.v += fe.allocationDescriptors.len;
                 break;
@@ -390,7 +390,7 @@ public class UDFReader extends Reader {
         int i = 0;
         for (int c = len / this.blockSize; i < c; i++) {
             dataProgress(total.v);
-        	readLogicalBlock(block + i, buf);
+            readLogicalBlock(block + i, buf);
             os.write(buf);
             total.v += this.blockSize;
         }

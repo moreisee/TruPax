@@ -97,16 +97,16 @@ import coderslagoon.trupax.lib.prg.Prg.Result;
 public class GUI extends Exe implements NLS.Reg.Listener {
     static Log _log = new Log("GUI");     
     
-    Display    	display;
-    Shell      	shell;
-    ShellProps 	shellProps;
-    Composite  	left;
-    Composite  	right;
-    Table      	objects;
+    Display     display;
+    Shell       shell;
+    ShellProps  shellProps;
+    Composite   left;
+    Composite   right;
+    Table       objects;
     TableColumn tcFile, tcSize, tcDate;
-    Label      	info;
-    Button     	btnAddFiles, btnAddFolder, btnClear, btnMake;
-    Button   	chkStoreFullPath, chkIncludeSubfolders, chkWipe;
+    Label       info;
+    Button      btnAddFiles, btnAddFolder, btnClear, btnMake;
+    Button      chkStoreFullPath, chkIncludeSubfolders, chkWipe;
     Combo       cmbMerge;
     MenuItem    mniFile;
     MenuItem    mniFileAddFiles;
@@ -120,11 +120,11 @@ public class GUI extends Exe implements NLS.Reg.Listener {
     MenuItem    mniHelpWebsite;
     MenuItem    mniHelpLang;
     MenuItem    mniHelpAbout;
-    Composite  	spc1, spc2, spc3;
-    Label      	lblFreeSpace, lblLabel;
-    Text       	txtFreeSpace, txtLabel;
+    Composite   spc1, spc2, spc3;
+    Label       lblFreeSpace, lblLabel;
+    Text        txtFreeSpace, txtLabel;
     DropTarget  drop;
-    Menu	   	mnMain;
+    Menu        mnMain;
     Prg         prg;
     Properties  props = Prp.global();
     DateFormat  dateFmt;
@@ -239,10 +239,10 @@ public class GUI extends Exe implements NLS.Reg.Listener {
         this.right.setLayout(gridLayout);
 
         this.objects = new Table(this.left, SWT.BORDER   |
-							                SWT.H_SCROLL | 
-							                SWT.V_SCROLL |
-							                SWT.VIRTUAL  |
-							                SWT.FULL_SELECTION);
+                                            SWT.H_SCROLL | 
+                                            SWT.V_SCROLL |
+                                            SWT.VIRTUAL  |
+                                            SWT.FULL_SELECTION);
         this.objects.setLinesVisible(true);
         this.objects.setHeaderVisible(true);
         this.objects.pack();
@@ -284,7 +284,7 @@ public class GUI extends Exe implements NLS.Reg.Listener {
         this.cmbMerge = new Combo(this.right, SWT.SIMPLE | SWT.READ_ONLY | SWT.DROP_DOWN);
         this.cmbMerge.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
         for (int i = 0; i < 3; i++) {
-        	this.cmbMerge.add("");
+            this.cmbMerge.add("");
         }
         addTooltip(this.cmbMerge, NLS.GUI_TOOLTIP_CMB_MERGE); 
 
@@ -334,42 +334,42 @@ public class GUI extends Exe implements NLS.Reg.Listener {
     }
     
     void addTableColumns() {
-    	// TODO: subclass all of this...
+        // TODO: subclass all of this...
         int w = GUIProps.COL_WIDTH_FILE.get(this.props);
         boolean def = -1 == w;
         int caw = this.objects.getClientArea().width;
         
-    	this.tcFile = new TableColumn(this.objects, SWT.NONE);
-    	w = def ? caw >> 1 : w;
-    	this.tcFile.setWidth(w);
-    	this.tcFile.setData(Prg.RegObj.Sort.NAME);
-    	
+        this.tcFile = new TableColumn(this.objects, SWT.NONE);
+        w = def ? caw >> 1 : w;
+        this.tcFile.setWidth(w);
+        this.tcFile.setData(Prg.RegObj.Sort.NAME);
+        
         int w2 = def ? caw >> 2 : GUIProps.COL_WIDTH_SIZE.get(this.props);
-    	this.tcSize = new TableColumn(this.objects, SWT.NONE | SWT.RIGHT);
-    	this.tcSize.setWidth(w2);
+        this.tcSize = new TableColumn(this.objects, SWT.NONE | SWT.RIGHT);
+        this.tcSize.setWidth(w2);
 
         w2 = def ? caw >> 2 : GUIProps.COL_WIDTH_DATE.get(this.props);
-    	this.tcDate = new TableColumn(this.objects, SWT.NONE);
-    	this.tcDate.setWidth(w2);
-    	this.tcDate.setData(Prg.RegObj.Sort.TIMESTAMP);
+        this.tcDate = new TableColumn(this.objects, SWT.NONE);
+        this.tcDate.setWidth(w2);
+        this.tcDate.setData(Prg.RegObj.Sort.TIMESTAMP);
 
-    	this.tcSize.setData(Prg.RegObj.Sort.LENGTH);
-    	int sortIdx = GUIProps.COL_SORT_IDX.get(this.props);
-    	if (0 <= sortIdx && sortIdx < this.objects.getColumnCount()) {
+        this.tcSize.setData(Prg.RegObj.Sort.LENGTH);
+        int sortIdx = GUIProps.COL_SORT_IDX.get(this.props);
+        if (0 <= sortIdx && sortIdx < this.objects.getColumnCount()) {
             this.objects.setSortColumn(this.objects.getColumn(sortIdx));
             boolean sortAsc = GUIProps.COL_SORT_ASC.get(this.props);
-    		this.objects.setSortDirection(sortAsc ? SWT.UP : SWT.DOWN);
-    	}
-    	
-    	for (final TableColumn tc : this.objects.getColumns()) {
-    		tc.addListener(SWT.Selection, new Listener() {
-				public void handleEvent(Event evt) {
-					sortObjects(tc, true);
-				}
-    		});
-    	}
-    	
-    	onLoadedTableColumns();
+            this.objects.setSortDirection(sortAsc ? SWT.UP : SWT.DOWN);
+        }
+        
+        for (final TableColumn tc : this.objects.getColumns()) {
+            tc.addListener(SWT.Selection, new Listener() {
+                public void handleEvent(Event evt) {
+                    sortObjects(tc, true);
+                }
+            });
+        }
+        
+        onLoadedTableColumns();
     }
     
     void makeMenu() {
@@ -420,15 +420,15 @@ public class GUI extends Exe implements NLS.Reg.Listener {
         onLoadedMenu();
     }
     
-	/** @see coderslagoon.baselib.util.NLS.Reg.Listener#onLoaded() */
-	public void onLoaded() {
+    /** @see coderslagoon.baselib.util.NLS.Reg.Listener#onLoaded() */
+    public void onLoaded() {
         onLoadedShell();
         onLoadedTableColumns();
         onLoadedMenu();
         this.shell.layout();
-	}
+    }
 
-	public void onLoadedMenu() {
+    public void onLoadedMenu() {
         this.mniFile             .setText(NLS.GUI_MN_FILE.s()); 
         this.mniFileAddFiles     .setText(NLS.GUI_MN_FILE_ADDFILES.s());    
         this.mniFileAddFolder    .setText(NLS.GUI_MN_FILE_ADDFOLDER.s());    
@@ -441,10 +441,10 @@ public class GUI extends Exe implements NLS.Reg.Listener {
         this.mniHelpWebsite      .setText(NLS.GUI_MN_HELP_WEBSITE.s());  
         this.mniHelpLang         .setText(NLS.GUI_MN_HELP_LANGUAGE.s());   
         this.mniHelpAbout        .setText(NLS.GUI_MN_HELP_ABOUT_1.fmt(PRODUCT_NAME));   
-	}
+    }
 
-	public void onLoadedShell() {
-				
+    public void onLoadedShell() {
+                
         this.btnAddFiles         .setText(NLS.GUI_BTN_ADDFILES.s()); 
         this.btnAddFolder        .setText(NLS.GUI_BTN_ADDFOLDER.s()); 
         this.chkIncludeSubfolders.setText(NLS.GUI_CHK_INCLUDESUBFOLDERS.s()); 
@@ -459,24 +459,24 @@ public class GUI extends Exe implements NLS.Reg.Listener {
         //        right size, after the language has been changed - but there
         //        must be a better way, somehow ...
         for (int i = 0; i < 2; i++) {
-	        this.cmbMerge.setItem(0, NLS.GUI_CMB_MERGE_NO    .s());
-	        this.cmbMerge.setItem(1, NLS.GUI_CMB_MERGE_YES   .s());
-	        this.cmbMerge.setItem(2, NLS.GUI_CMB_MERGE_YES_CS.s());
-		    this.cmbMerge.select(getPropertyFlag(Prg.Prop.ALLOW_MERGE) ? 
-	                            (getPropertyFlag(Prg.Prop.CASE_MERGE) ? 2 : 1) : 0);
-		    this.cmbMerge.pack(true);
-		}
+            this.cmbMerge.setItem(0, NLS.GUI_CMB_MERGE_NO    .s());
+            this.cmbMerge.setItem(1, NLS.GUI_CMB_MERGE_YES   .s());
+            this.cmbMerge.setItem(2, NLS.GUI_CMB_MERGE_YES_CS.s());
+            this.cmbMerge.select(getPropertyFlag(Prg.Prop.ALLOW_MERGE) ? 
+                                (getPropertyFlag(Prg.Prop.CASE_MERGE) ? 2 : 1) : 0);
+            this.cmbMerge.pack(true);
+        }
         this.right.pack(true);
         this.right.layout();
-	}
+    }
 
-	public void onLoadedTableColumns() {
-    	this.tcFile.setText(NLS.GUI_TC_FILE.s());	
-    	this.tcSize.setText(NLS.GUI_TC_SIZE.s());	
-    	this.tcDate.setText(NLS.GUI_TC_DATE.s());
-	}
+    public void onLoadedTableColumns() {
+        this.tcFile.setText(NLS.GUI_TC_FILE.s());   
+        this.tcSize.setText(NLS.GUI_TC_SIZE.s());   
+        this.tcDate.setText(NLS.GUI_TC_DATE.s());
+    }
 
-	void addListeners() {
+    void addListeners() {
         this.toolTips.shellListen(this.shell);
         NLS.Reg.instance().addListener(this.toolTips);
         
@@ -533,9 +533,9 @@ public class GUI extends Exe implements NLS.Reg.Listener {
     }
 
     void initialize(String[] args) throws ExitError {
-    	Prp.global().clear();
+        Prp.global().clear();
 
-    	File propFile = MiscUtils.determinePropFile(getClass(), Exe._propFileName, true);
+        File propFile = MiscUtils.determinePropFile(getClass(), Exe._propFileName, true);
 
         Prg.Setup setup = new Prg.Setup();
         setup.args             = processArgs(args);
@@ -545,23 +545,23 @@ public class GUI extends Exe implements NLS.Reg.Listener {
         setup.propFileExists   = propFile.exists();
         setup.resetOnLoadError = true;
         setup.cb = new Prg.Setup.Callback() {
-			@Override
-			public void onProps() {
-			}
-			@Override
-			public void onLoadErrorReset(Result err) {
-				GUI.this.setupError = err;
-			}
-		};
+            @Override
+            public void onProps() {
+            }
+            @Override
+            public void onLoadErrorReset(Result err) {
+                GUI.this.setupError = err;
+            }
+        };
         
         this.setupResult = PrgImpl.init();
         if (this.setupResult.isSuccess()) {
-        	this.prg = new PrgImpl();
-        	this.setupResult = this.prg.ctor(this.props, setup);
+            this.prg = new PrgImpl();
+            this.setupResult = this.prg.ctor(this.props, setup);
         }
         if (this.setupResult.isFailure()) {
-        	this.prg = null;
-        	PrgImpl.cleanup();
+            this.prg = null;
+            PrgImpl.cleanup();
             throw new ExitError(this.setupResult);
         }
         
@@ -588,7 +588,7 @@ public class GUI extends Exe implements NLS.Reg.Listener {
         }
         
         if (this.setupResult.code == Prg.Result.Code.GOT_OBJECTS) {
-        	this.registerObjects(new String[] {});
+            this.registerObjects(new String[] {});
         }
  
         while (!this.shell.isDisposed()) {
@@ -601,13 +601,13 @@ public class GUI extends Exe implements NLS.Reg.Listener {
     }
     
     void exit() {
-    	this.pwcache.clear();
+        this.pwcache.clear();
         if (this.prg.dtor().isFailure()) {
             // TODO: msgbox??
         }
         this.prg = null;
         if (PrgImpl.cleanup().isFailure()) {
-        	// can be ignored (for now)
+            // can be ignored (for now)
         }
         for (File fl : GUI.this.manualFiles.values()) {
             fl.delete();
@@ -677,7 +677,7 @@ public class GUI extends Exe implements NLS.Reg.Listener {
             FileDialog2 fd2 = new FileDialog2(GUI.this.shell, SWT.OPEN | SWT.MULTI, GUI.this.props, "addfiles"); 
             fd2.setText(NLS.GUI_DLG_ADDFILES.s()); 
             if (null == fd2.open()) {
-            	return;
+                return;
             }
             registerObjects(fd2.getFilePaths());
         }
@@ -692,7 +692,7 @@ public class GUI extends Exe implements NLS.Reg.Listener {
             dd.setText(NLS.GUI_DLG_ADDFOLDER.s()); 
             dd.setMessage(NLS.GUI_DLG_ADDFOLDER_INFO_1.fmt(
                     getPropertyFlag(Prg.Prop.RECURSIVE_SEARCH) ? 
-                    		NLS.GUI_DLG_ADDFOLDER_INFO_GOSUB.s() : ""));  
+                            NLS.GUI_DLG_ADDFOLDER_INFO_GOSUB.s() : ""));  
             String dir = dd.open();
             if (null == dir) {
                 return;
@@ -710,19 +710,19 @@ public class GUI extends Exe implements NLS.Reg.Listener {
         }
     };
     void clear(boolean refresh) {
-    	GUI.this.prg.registerClear();
-    	this.cmbMerge.setEnabled(true);
-    	updateViews(refresh, refresh);
+        GUI.this.prg.registerClear();
+        this.cmbMerge.setEnabled(true);
+        updateViews(refresh, refresh);
     }
 
     Listener onMake = new Listener() {
         public void handleEvent(Event evt) {
-        	if (storeProperties(true, false)) {
-            	updateViews(true, true);
-        	}
-        	else {
-        		return;
-        	}
+            if (storeProperties(true, false)) {
+                updateViews(true, true);
+            }
+            else {
+                return;
+            }
             make();
         }
     };
@@ -784,15 +784,15 @@ public class GUI extends Exe implements NLS.Reg.Listener {
 
     Listener onLanguage = new Listener() {
         public void handleEvent(Event evt) {
-        	storeProperties(false, false);
-        	String oldid = NLS.Reg.instance().id();
+            storeProperties(false, false);
+            String oldid = NLS.Reg.instance().id();
             LangDialog ldlg = new LangDialog(GUI.this.shell, GUI.this.props, LANGS, PRODUCT_NAME, false);
             ldlg.open();
             ldlg.waitForClose();
             String newid = ldlg.id();
             if (null != newid && !newid.equals(oldid)) {
-            	ExeProps.Lang.set(Prp.global(), ldlg.id());
-            	clear(false);
+                ExeProps.Lang.set(Prp.global(), ldlg.id());
+                clear(false);
                 setInfo(NLS.GUI_INFO_WELCOME_1.fmt(PRODUCT_NAME), false); 
             }
         }
@@ -805,7 +805,7 @@ public class GUI extends Exe implements NLS.Reg.Listener {
                 Exe.PRODUCT_NAME + " " + Prg.version(),
                 NLS.ABOUT_INTRO.s(),
                 String.format(NLS.ABOUT_COPYRIGHT_1.s(), 
-                	MiscUtils.copyrightYear(Exe.COPYRIGHT_START_YEAR, Calendar.getInstance())),
+                    MiscUtils.copyrightYear(Exe.COPYRIGHT_START_YEAR, Calendar.getInstance())),
                     GUI.class.getResourceAsStream("resources/icon48x48.png"),
                     GUI.this.display.getSystemColor(SWT.COLOR_BLACK));
             dlg.open();
@@ -813,38 +813,38 @@ public class GUI extends Exe implements NLS.Reg.Listener {
     };
     
     DropTargetAdapter onDrop = new DropTargetAdapter() {
-    	public void drop(DropTargetEvent evt) {
+        public void drop(DropTargetEvent evt) {
             if (!this.fxfer.isSupportedType(evt.currentDataType)) {
                 return;
             }
             final String[] objs = (String[])evt.data;
             if (null != objs && storeProperties(true, false)) {
-            	if (1 == objs.length) {
-            		final String obj = objs[0]; 
-            		if  (obj.toLowerCase().endsWith(TC_EXT.toLowerCase()) &&
-            			 new File(obj).exists()) {
-						MessageBox2 mb = new MessageBox2(
-							GUI.this.shell, GUI.this.props, 
-							"dropmsgbox", SWT.ICON_QUESTION,
-							NLS.GUI_MSGBOX_DROP.s(),
-							NLS.GUI_MSGBOX_DROP_TITLE.s(),
-							new String[] {
-								NLS.GUI_MSGBOX_DROP_EXTRACT   .s(),
-								NLS.GUI_MSGBOX_DROP_INVALIDATE.s(),
-								NLS.GUI_MSGBOX_DROP_ADD       .s()
-				            },
-				            null, 0);
-						Integer sel = mb.show();
-						if (null == sel) {
-							return;
-						}
-						switch(sel) {
-							case 0: extract   (obj); return; 
-							case 1: invalidate(obj); return; 
-						}
-	            	}
-            	}
-            	registerObjects(objs);
+                if (1 == objs.length) {
+                    final String obj = objs[0]; 
+                    if  (obj.toLowerCase().endsWith(TC_EXT.toLowerCase()) &&
+                         new File(obj).exists()) {
+                        MessageBox2 mb = new MessageBox2(
+                            GUI.this.shell, GUI.this.props, 
+                            "dropmsgbox", SWT.ICON_QUESTION,
+                            NLS.GUI_MSGBOX_DROP.s(),
+                            NLS.GUI_MSGBOX_DROP_TITLE.s(),
+                            new String[] {
+                                NLS.GUI_MSGBOX_DROP_EXTRACT   .s(),
+                                NLS.GUI_MSGBOX_DROP_INVALIDATE.s(),
+                                NLS.GUI_MSGBOX_DROP_ADD       .s()
+                            },
+                            null, 0);
+                        Integer sel = mb.show();
+                        if (null == sel) {
+                            return;
+                        }
+                        switch(sel) {
+                            case 0: extract   (obj); return; 
+                            case 1: invalidate(obj); return; 
+                        }
+                    }
+                }
+                registerObjects(objs);
             }
         }
         public void dragOver(DropTargetEvent evt) {
@@ -861,7 +861,7 @@ public class GUI extends Exe implements NLS.Reg.Listener {
             
             int idx = GUI.this.objects.indexOf(ti);
             if (-1 == idx) {
-            	return;
+                return;
             }
             
             Prg.RegObj ro = GUI.this.prg.registerView(idx, idx + 1)[0];
@@ -887,30 +887,30 @@ public class GUI extends Exe implements NLS.Reg.Listener {
     };
     
     class FreeSpaceListener implements FocusListener, Listener {
-    	String old;
-		public void focusGained(FocusEvent fe) {
-			this.old = txt();
-		}
-		public void focusLost(FocusEvent fe) {
-			String txt = txt();
-			if (null == this.old || this.old.equals(txt)) {
-				return;
-			}
-			if (storeProperties(true, false)) {
-				updateViews(true, true);
-			}
-			else {
-				GUI.this.txtFreeSpace.setText(this.old);
-			}
-		}
+        String old;
+        public void focusGained(FocusEvent fe) {
+            this.old = txt();
+        }
+        public void focusLost(FocusEvent fe) {
+            String txt = txt();
+            if (null == this.old || this.old.equals(txt)) {
+                return;
+            }
+            if (storeProperties(true, false)) {
+                updateViews(true, true);
+            }
+            else {
+                GUI.this.txtFreeSpace.setText(this.old);
+            }
+        }
         public void handleEvent(Event evt) {
-        	if (evt.character == '\r' && storeProperties(true, false)) {
-        		this.old = txt();
-				updateViews(true, true);
-			}
+            if (evt.character == '\r' && storeProperties(true, false)) {
+                this.old = txt();
+                updateViews(true, true);
+            }
         }
         private String txt() {
-        	return GUI.this.txtFreeSpace.getText().trim().toLowerCase();
+            return GUI.this.txtFreeSpace.getText().trim().toLowerCase();
         }
     };
     FreeSpaceListener onFreeSpaceListener = new FreeSpaceListener();
@@ -936,12 +936,12 @@ public class GUI extends Exe implements NLS.Reg.Listener {
         Prg.RegisterObjectsCallback rocb = new
         Prg.RegisterObjectsCallback() {
             public Prg.Result onDirectory(String dir) {
-            	if (null == pdlg.v) {
+                if (null == pdlg.v) {
                     pdlg.v = new Progress(GUI.this.shell, GUI.this.props, false, GUI.this.toolTips);
                     pdlg.v.setText(NLS.GUI_PROGRESS_REGISTERING.s());  
                     pdlg.v.open();
-            	}
-            	SWTUtil.processEvents(GUI.this.display);
+                }
+                SWTUtil.processEvents(GUI.this.display);
                 if (pdlg.v.canceled()) {
                     return Prg.Result.aborted();
                 }
@@ -949,9 +949,9 @@ public class GUI extends Exe implements NLS.Reg.Listener {
                 
                 return Prg.Result.ok();
             }
-			public void configLocked() {
-				GUI.this.cmbMerge.setEnabled(false);
-			}
+            public void configLocked() {
+                GUI.this.cmbMerge.setEnabled(false);
+            }
         };
 
         for (String obj : objs) {
@@ -970,7 +970,7 @@ public class GUI extends Exe implements NLS.Reg.Listener {
         
         this.prg.clearObjects();
         if (null != pdlg.v) {
-        	pdlg.v.close();
+            pdlg.v.close();
         }
         updateViews(true, true);
     }
@@ -982,7 +982,7 @@ public class GUI extends Exe implements NLS.Reg.Listener {
         this.objects.setItemCount(rwc);
         
         if (!sortObjects(null, false)) {
-        	GUI.this.objects.clearAll();
+            GUI.this.objects.clearAll();
         }
         
         if (!setInfo) {
@@ -993,7 +993,7 @@ public class GUI extends Exe implements NLS.Reg.Listener {
 
         Long vbytes = null;
         if (resolve) {
-        	long fspc = GUIProps.PRG_FREESPACE.get(this.props);
+            long fspc = GUIProps.PRG_FREESPACE.get(this.props);
             this.prg.setFreeSpace(fspc);
             
             _log.debugf("resolving (freespace set to %d) ...", fspc);            
@@ -1062,14 +1062,14 @@ public class GUI extends Exe implements NLS.Reg.Listener {
         }
 
         public void onFile(String fileName, long fileSize) {
-        	if (null == fileName) {
-	            this.pdlg.setObject(NLS.GUI_PROGRESS_FREESPACE.s());
-        	}
-        	else {
-	            this.pdlg.setObject(NLS.GUI_PROGRESS_OBJECT_2.fmt(
-	                    fileName,
-	                    MiscUtils.uszToStr(fileSize, true, true, 1).toUpperCase()));
-        	}
+            if (null == fileName) {
+                this.pdlg.setObject(NLS.GUI_PROGRESS_FREESPACE.s());
+            }
+            else {
+                this.pdlg.setObject(NLS.GUI_PROGRESS_OBJECT_2.fmt(
+                        fileName,
+                        MiscUtils.uszToStr(fileSize, true, true, 1).toUpperCase()));
+            }
             SWTUtil.processEvents(GUI.this.display);
         }
         
@@ -1117,18 +1117,18 @@ public class GUI extends Exe implements NLS.Reg.Listener {
                 this.pc.onFile(fileName, fileSize);
             }
             public Prg.Result onVolumeWrite(long pos) {
-            	if (null != SLOMO) try { Thread.sleep(SLOMO); } 
-            	catch (InterruptedException ie) { return Prg.Result.aborted(); }
+                if (null != SLOMO) try { Thread.sleep(SLOMO); } 
+                catch (InterruptedException ie) { return Prg.Result.aborted(); }
                 
-            	return this.pc.onProgress(pos);
+                return this.pc.onProgress(pos);
             }
             ProgressController pc = new 
             ProgressController(pdlg.v, GUI.this.prg.volumeBytes());
-			@Override
-			public Result onFreeSpace() {
+            @Override
+            public Result onFreeSpace() {
                 this.pc.onFile(null, -1L);
                 return Result.ok();
-			}
+            }
         };
         pdlg.v.open();
         
@@ -1220,7 +1220,7 @@ public class GUI extends Exe implements NLS.Reg.Listener {
             
             wstatus = NLS.GUI_INFO_WIPE_CONCERNS_1.fmt(concerns.v); 
         }
-    	clear(false);
+        clear(false);
         this.btnMake.setEnabled(false);
         this.mniFileWipe.setEnabled(false);
         
@@ -1273,105 +1273,105 @@ public class GUI extends Exe implements NLS.Reg.Listener {
         pdlg.open();
 
         try {
-	        final VarLong tm = new VarLong(Clock._system.now());
-	        Prg.Result res;
-	        if ((res = this.prg.setVolumeFile(fname)).isSuccess() &&
-	        	(res = this.prg.extract(passw, dir, new Prg.ExtractCallback() {
-	        	int fcount;
-	        	boolean overwriteAll;
-	        	boolean skipAll;
-	        	long nextRefresh = Clock._system.now();
-				public void onFile(String fileName, long fileSize) {
-		            pdlg.setObject(NLS.GUI_PROGRESS_OBJECT_2.fmt(
-	                    fileName,
-	                    MiscUtils.uszToStr(fileSize, true, true, 1).toUpperCase()));
-		            pdlg.setProgress(++this.fcount);
-		            SWTUtil.processEvents(GUI.this.display);
-				}
-				public Result onConcern(Concern concern, String message) {
-					if (pdlg.canceled()) return Result.aborted();
-					if (Concern.SKIP == concern) {
-						return Result.ok();
-					}
-					else if (Concern.EXISTS == concern) {
-						if (this.overwriteAll) {
-							return Result.ok();
-						}
-						if (this.skipAll) {
-							return new Result(Result.Code.IGNORE, null, null);
-						}
-						MessageBox2 mb = new MessageBox2(
-							GUI.this.shell, GUI.this.props, 
-							"extractmsgbox", SWT.ICON_WARNING,
-							message,
-							NLS.GUI_MSGBOX_EXTRACT_TITLE.s(),
-							new String[] {
-								NLS.GUI_MSGBOX_EXTRACT_OVERWRITE.s(),
-								NLS.GUI_MSGBOX_EXTRACT_SKIP     .s(),
-								NLS.GUI_MSGBOX_EXTRACT_ABORT    .s()
-				            },
-				            NLS.GUI_MSGBOX_EXTRACT_ALL.s(), 1);
-						long tm2 = Clock._system.now();
-						Integer res = mb.show();
-						tm.v += Clock._system.now() - tm2;
-						if (null == res) {
-							return Result.aborted();
-						}
-						switch(res) {
-							case 0: {
-								this.overwriteAll = mb.all();
-								return Result.ok();
-							}
-							case 1: {
-								this.skipAll = mb.all();
-								return new Result(Result.Code.IGNORE, null, null);
-							}
-			            }
-					}
-					return Result.aborted();
-				}
-				public Result onOpening(int objs) {
-					if (pdlg.canceled()) return Result.aborted();
-		            pdlg.setObject(NLS.GUI_PROGRESS_OPENING_1.fmt(objs));
-					return Result.ok();
-				}
-				public Result onOpen(int files, int dirs) {
-					if (pdlg.canceled()) return Result.aborted();
-					pdlg.setProgressMax(files);
-					return Result.ok();
-				}
-				public Result onFileWrite(long pos) {
-					refresh();
-					if (pdlg.canceled()) return Result.aborted();
-	            	if (null != SLOMO) try { Thread.sleep(SLOMO); } 
-	            	catch (InterruptedException ignored) { return Result.aborted(); }
-					return Result.ok();
-				}
-				private void refresh() {
-		        	final int REFRESH_INTVL_MILLIS = 250;
-					long now = Clock._system.now();
-					if (now > this.nextRefresh) {
-						SWTUtil.processEvents(GUI.this.display);
-						this.nextRefresh = now + REFRESH_INTVL_MILLIS;
-					}
-				}
-			})).isSuccess()) {
-	            setInfo(NLS.GUI_INFO_DONE_1.fmt(
-	                MiscUtils.printTime(Clock._system.now() - tm.v)), true);
-	        	return;
-	        }
-	        if (res.code != Prg.Result.Code.ABORTED) {
-	            MessageBox msgBox = new MessageBox(this.shell, SWT.ICON_ERROR);
-	            msgBox.setText(NLS.GUI_MSGBOX_ERROR.s());  
-	            msgBox.setMessage(resultToMsgBoxText(res));
-	            msgBox.open();
-	        }
+            final VarLong tm = new VarLong(Clock._system.now());
+            Prg.Result res;
+            if ((res = this.prg.setVolumeFile(fname)).isSuccess() &&
+                (res = this.prg.extract(passw, dir, new Prg.ExtractCallback() {
+                int fcount;
+                boolean overwriteAll;
+                boolean skipAll;
+                long nextRefresh = Clock._system.now();
+                public void onFile(String fileName, long fileSize) {
+                    pdlg.setObject(NLS.GUI_PROGRESS_OBJECT_2.fmt(
+                        fileName,
+                        MiscUtils.uszToStr(fileSize, true, true, 1).toUpperCase()));
+                    pdlg.setProgress(++this.fcount);
+                    SWTUtil.processEvents(GUI.this.display);
+                }
+                public Result onConcern(Concern concern, String message) {
+                    if (pdlg.canceled()) return Result.aborted();
+                    if (Concern.SKIP == concern) {
+                        return Result.ok();
+                    }
+                    else if (Concern.EXISTS == concern) {
+                        if (this.overwriteAll) {
+                            return Result.ok();
+                        }
+                        if (this.skipAll) {
+                            return new Result(Result.Code.IGNORE, null, null);
+                        }
+                        MessageBox2 mb = new MessageBox2(
+                            GUI.this.shell, GUI.this.props, 
+                            "extractmsgbox", SWT.ICON_WARNING,
+                            message,
+                            NLS.GUI_MSGBOX_EXTRACT_TITLE.s(),
+                            new String[] {
+                                NLS.GUI_MSGBOX_EXTRACT_OVERWRITE.s(),
+                                NLS.GUI_MSGBOX_EXTRACT_SKIP     .s(),
+                                NLS.GUI_MSGBOX_EXTRACT_ABORT    .s()
+                            },
+                            NLS.GUI_MSGBOX_EXTRACT_ALL.s(), 1);
+                        long tm2 = Clock._system.now();
+                        Integer res = mb.show();
+                        tm.v += Clock._system.now() - tm2;
+                        if (null == res) {
+                            return Result.aborted();
+                        }
+                        switch(res) {
+                            case 0: {
+                                this.overwriteAll = mb.all();
+                                return Result.ok();
+                            }
+                            case 1: {
+                                this.skipAll = mb.all();
+                                return new Result(Result.Code.IGNORE, null, null);
+                            }
+                        }
+                    }
+                    return Result.aborted();
+                }
+                public Result onOpening(int objs) {
+                    if (pdlg.canceled()) return Result.aborted();
+                    pdlg.setObject(NLS.GUI_PROGRESS_OPENING_1.fmt(objs));
+                    return Result.ok();
+                }
+                public Result onOpen(int files, int dirs) {
+                    if (pdlg.canceled()) return Result.aborted();
+                    pdlg.setProgressMax(files);
+                    return Result.ok();
+                }
+                public Result onFileWrite(long pos) {
+                    refresh();
+                    if (pdlg.canceled()) return Result.aborted();
+                    if (null != SLOMO) try { Thread.sleep(SLOMO); } 
+                    catch (InterruptedException ignored) { return Result.aborted(); }
+                    return Result.ok();
+                }
+                private void refresh() {
+                    final int REFRESH_INTVL_MILLIS = 250;
+                    long now = Clock._system.now();
+                    if (now > this.nextRefresh) {
+                        SWTUtil.processEvents(GUI.this.display);
+                        this.nextRefresh = now + REFRESH_INTVL_MILLIS;
+                    }
+                }
+            })).isSuccess()) {
+                setInfo(NLS.GUI_INFO_DONE_1.fmt(
+                    MiscUtils.printTime(Clock._system.now() - tm.v)), true);
+                return;
+            }
+            if (res.code != Prg.Result.Code.ABORTED) {
+                MessageBox msgBox = new MessageBox(this.shell, SWT.ICON_ERROR);
+                msgBox.setText(NLS.GUI_MSGBOX_ERROR.s());  
+                msgBox.setMessage(resultToMsgBoxText(res));
+                msgBox.open();
+            }
         }
         finally {
-        	Arrays.fill(passw, '\0');
+            Arrays.fill(passw, '\0');
             pdlg.setCloseConfirmation(null);
-        	pdlg.close();
-        	this.prg.setVolumeFile(null);
+            pdlg.close();
+            this.prg.setVolumeFile(null);
             overwrite.set(this.props, overwriteBak);
         }
     }
@@ -1394,22 +1394,22 @@ public class GUI extends Exe implements NLS.Reg.Listener {
     }
     
     void invalidate(String fname) {
-		MessageBox2 mb = new MessageBox2(
-				GUI.this.shell, GUI.this.props, 
-				"invalidmsgbox", SWT.ICON_WARNING,
-				NLS.GUI_MSGBOX_INVALIDATE_1.fmt(fname),
-				NLS.GUI_MSGBOX_INVALIDATE_TITLE.s(),
-				new String[] {
-					NLS.GUI_MSGBOX_INVALIDATE_YES   .s(),
-					NLS.GUI_MSGBOX_INVALIDATE_YESDEL.s(),
-					NLS.GUI_MSGBOX_INVALIDATE_ABORT .s()
-	            },
-	            null, 2);
-		
-		Integer mbres = mb.show();
-		if (null == mbres || 2 == mbres) {
-			return;
-		}
+        MessageBox2 mb = new MessageBox2(
+                GUI.this.shell, GUI.this.props, 
+                "invalidmsgbox", SWT.ICON_WARNING,
+                NLS.GUI_MSGBOX_INVALIDATE_1.fmt(fname),
+                NLS.GUI_MSGBOX_INVALIDATE_TITLE.s(),
+                new String[] {
+                    NLS.GUI_MSGBOX_INVALIDATE_YES   .s(),
+                    NLS.GUI_MSGBOX_INVALIDATE_YESDEL.s(),
+                    NLS.GUI_MSGBOX_INVALIDATE_ABORT .s()
+                },
+                null, 2);
+        
+        Integer mbres = mb.show();
+        if (null == mbres || 2 == mbres) {
+            return;
+        }
         PrgProps.NBool deleteAfter = new PrgProps.DeleteAfter();
         deleteAfter.set(this.props, 1 == mbres);
 
@@ -1423,30 +1423,30 @@ public class GUI extends Exe implements NLS.Reg.Listener {
         
         this.prg.setVolumeFile(fname);
         long tm = Clock._system.now();
-		Prg.Result res = GUI.this.prg.invalidate(new Prg.ProgressCallback() {
-			public Result onProgress(double percent) {
-		        SWTUtil.processEvents(GUI.this.display);
-		        if (pdlg.canceled()) {
-		        	return Result.aborted();
-		        }
-		        pdlg.setProgress((long)(percent * (double)PCTMUL));
-		        return Result.ok();
-			}
-		});
+        Prg.Result res = GUI.this.prg.invalidate(new Prg.ProgressCallback() {
+            public Result onProgress(double percent) {
+                SWTUtil.processEvents(GUI.this.display);
+                if (pdlg.canceled()) {
+                    return Result.aborted();
+                }
+                pdlg.setProgress((long)(percent * (double)PCTMUL));
+                return Result.ok();
+            }
+        });
         pdlg.setCloseConfirmation(null);
         pdlg.close();
-		
+        
         if (res.isFailure()) {
-        	if (res.code != Prg.Result.Code.ABORTED) {
-	            MessageBox msgBox = new MessageBox(this.shell, SWT.ICON_ERROR);
-	            msgBox.setText(NLS.GUI_MSGBOX_ERROR.s());  
-	            msgBox.setMessage(resultToMsgBoxText(res));
-	            msgBox.open();
-        	}
+            if (res.code != Prg.Result.Code.ABORTED) {
+                MessageBox msgBox = new MessageBox(this.shell, SWT.ICON_ERROR);
+                msgBox.setText(NLS.GUI_MSGBOX_ERROR.s());  
+                msgBox.setMessage(resultToMsgBoxText(res));
+                msgBox.open();
+            }
         }
         else {
             setInfo(NLS.GUI_INFO_DONE_1.fmt(
-            	MiscUtils.printTime(Clock._system.now() - tm)), true);
+                MiscUtils.printTime(Clock._system.now() - tm)), true);
         }
     }
     
@@ -1455,16 +1455,16 @@ public class GUI extends Exe implements NLS.Reg.Listener {
     final static int DETAILS_LIMIT = 64;
     
     String resultToMsgBoxText(Prg.Result res) {
-    	StringBuilder result = new StringBuilder();
-    	result.append(NLS.GUI_MSGBOX_ERROR_TEXT_3.fmt(res.msg, res.code.value, res.code));
-    	if (null != res.details) {
-    		String details = res.details;
-    		if (!this.debug.get()) {
-    			details = MiscUtils.limitString(details, DETAILS_LIMIT, "...");
-    		}
-    		result.append(NLS.GUI_MSGBOX_ERROR_TEXT_DETAILS_1.fmt(details));
-    	}
-    	return result.toString();
+        StringBuilder result = new StringBuilder();
+        result.append(NLS.GUI_MSGBOX_ERROR_TEXT_3.fmt(res.msg, res.code.value, res.code));
+        if (null != res.details) {
+            String details = res.details;
+            if (!this.debug.get()) {
+                details = MiscUtils.limitString(details, DETAILS_LIMIT, "...");
+            }
+            result.append(NLS.GUI_MSGBOX_ERROR_TEXT_DETAILS_1.fmt(details));
+        }
+        return result.toString();
     }
     
     void setInfo(String raw, boolean reversed) {
@@ -1486,25 +1486,25 @@ public class GUI extends Exe implements NLS.Reg.Listener {
     }
     
     boolean sortObjects(TableColumn tc, boolean init) {
-    	if (null == tc) {
-    		tc = GUI.this.objects.getSortColumn();	
-    	}
-		if (null == tc) {
-			if (!init) {
-				return false;
-			}
-			GUI.this.objects.setSortDirection(SWT.UP);
-		}
-		else {
-			GUI.this.objects.setSortDirection(
-			GUI.this.objects.getSortDirection() == SWT.UP ? SWT.DOWN : SWT.UP);
-		}
-		GUI.this.objects.setSortColumn(tc);
-		GUI.this.prg.registerViewSort(
-				(Prg.RegObj.Sort)tc.getData(),
-				GUI.this.objects.getSortDirection() == SWT.UP);
-		GUI.this.objects.clearAll();
-		return true;
+        if (null == tc) {
+            tc = GUI.this.objects.getSortColumn();  
+        }
+        if (null == tc) {
+            if (!init) {
+                return false;
+            }
+            GUI.this.objects.setSortDirection(SWT.UP);
+        }
+        else {
+            GUI.this.objects.setSortDirection(
+            GUI.this.objects.getSortDirection() == SWT.UP ? SWT.DOWN : SWT.UP);
+        }
+        GUI.this.objects.setSortColumn(tc);
+        GUI.this.prg.registerViewSort(
+                (Prg.RegObj.Sort)tc.getData(),
+                GUI.this.objects.getSortDirection() == SWT.UP);
+        GUI.this.objects.clearAll();
+        return true;
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -1518,7 +1518,7 @@ public class GUI extends Exe implements NLS.Reg.Listener {
             System.exit(ee.result.code.ordinal());
         }
         catch (Throwable uncaught) {
-        	MiscUtils.dumpUncaughtError(uncaught);
+            MiscUtils.dumpUncaughtError(uncaught);
         }
     }
 }

@@ -120,10 +120,10 @@ public class PrgProps extends Prp.Registry {
 
     public static class Label extends Prp.Str implements Descriptor {
         public Label() { super(Prg.Prop.LABEL, null); }   
-		public String cmdLnOption    () { return null; }
-		public String cmdLnOptionLong() { return "label"; } 
-		public PropertyInfo info() { return new 
-			   PropertyInfo(PropertyInfo.Type.STRING, ""); } 
+        public String cmdLnOption    () { return null; }
+        public String cmdLnOptionLong() { return "label"; } 
+        public PropertyInfo info() { return new 
+               PropertyInfo(PropertyInfo.Type.STRING, ""); } 
     }
     
     public static abstract class Selection extends coderslagoon.baselib.util.Prp.Str implements Descriptor {
@@ -203,7 +203,7 @@ public class PrgProps extends Prp.Registry {
         }
         catch (CmdLnParser.Error ape) {
             throw new PrgException(
-            		NLS.PRGPROPS_ERR_INVALID_ARGUMENT_1.s(), 
+                    NLS.PRGPROPS_ERR_INVALID_ARGUMENT_1.s(), 
                     ape.getMessage()); 
         }
     }

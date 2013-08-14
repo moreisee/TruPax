@@ -76,7 +76,7 @@ public class Browser implements UDF {
     
     ///////////////////////////////////////////////////////////////////////////     
 
-    int									 blockSize = -1;
+    int                                  blockSize = -1;
     int                                  expectedNumOfFiles = -1; 
     int                                  expectedNumOfDirs = -1;
     int                                  numOfFiles, numOfDirs;
@@ -87,7 +87,7 @@ public class Browser implements UDF {
     PartitionMap[]                       partitionMaps;
     PartitionDescriptor                  partitionDescriptor;
     FileEntry                            rootFileEntry;
-    Stack<String>					     directories = new Stack<String>();
+    Stack<String>                        directories = new Stack<String>();
 
     public LogicalVolumeDescriptor logicalVolumeDescriptor;
     public FileSetDescriptor       fileSetDescriptor;
@@ -95,23 +95,23 @@ public class Browser implements UDF {
     ///////////////////////////////////////////////////////////////////////////
 
     public interface Listener {
-    	public final static char PATH_SEPA = '/';
-    	
-    	public void         onDirectory(String path, long time)              throws IOException;
-    	public OutputStream onFile     (String name, long time, long length) throws IOException;
+        public final static char PATH_SEPA = '/';
+        
+        public void         onDirectory(String path, long time)              throws IOException;
+        public OutputStream onFile     (String name, long time, long length) throws IOException;
     }
 
     public Listener listener;
     
     String makePath(String name) {
-    	final StringBuilder result = new StringBuilder();
-    	for (final String dir : this.directories) {
-    		result.append(Listener.PATH_SEPA);
-    		result.append(dir);
-    	}
-		result.append(Listener.PATH_SEPA);
-		result.append(name);
-		return result.toString();
+        final StringBuilder result = new StringBuilder();
+        for (final String dir : this.directories) {
+            result.append(Listener.PATH_SEPA);
+            result.append(dir);
+        }
+        result.append(Listener.PATH_SEPA);
+        result.append(name);
+        return result.toString();
     }
     
     ///////////////////////////////////////////////////////////////////////////
@@ -150,11 +150,11 @@ public class Browser implements UDF {
         
         int i = 0;
         for (int c = len / this.blockSize; i < c; i++) {
-        	if (_bulkReadProgress && (0 == i % 100000)) {
-        		_log.debugf("read %d blocks", i);
-        		Log.flush();
-        	}
-        	readBlock(block + i, buf, 0);
+            if (_bulkReadProgress && (0 == i % 100000)) {
+                _log.debugf("read %d blocks", i);
+                Log.flush();
+            }
+            readBlock(block + i, buf, 0);
             os.write(buf);
         }
         
@@ -166,14 +166,14 @@ public class Browser implements UDF {
     }
     
     byte[] readBytes(int block, int len) throws IOException {
-    	ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    	
-    	readBytes(block, len, baos);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        
+        readBytes(block, len, baos);
 
-    	baos.flush();
-    	baos.close();
-    	
-    	return baos.toByteArray();
+        baos.flush();
+        baos.close();
+        
+        return baos.toByteArray();
     }
         
     ///////////////////////////////////////////////////////////////////////////
@@ -568,9 +568,9 @@ public class Browser implements UDF {
         this.directories.clear();
         listFiles(fe, recursive, readContent, 0);
         if (!this.directories.empty()) {
-        	throw new UDFException(
-        			"directory stack is out of sync (%d remaining)", 
-        			this.directories.size());
+            throw new UDFException(
+                    "directory stack is out of sync (%d remaining)", 
+                    this.directories.size());
         }
     }
     
@@ -642,7 +642,7 @@ public class Browser implements UDF {
                 
                 switch (fe2.icbTag.fileType) {
                     case DIRECTORY: {
-                    	final String dname = fid.fileIdentifierStr;
+                        final String dname = fid.fileIdentifierStr;
                         _log.infof("file entry \"%s\" is a directory", dname); 
                         if (recursive) {
                             if (++level > MAX_DIR_DEPTH) {
@@ -660,14 +660,14 @@ public class Browser implements UDF {
                         break;
                     }
                     case RANDOM_ACCESS_BYTE_SEQ: {
-                    	final String fname = fid.fileIdentifierStr;
+                        final String fname = fid.fileIdentifierStr;
                         _log.infof("file entry \"%s\" seems to be a file", fname); 
                         this.numOfFiles++;
                         if (readContent) {
                             readFileEntryData(fe2, this.listener.onFile(
-                            		          makePath(fname), 
-                            		          fe2.modificationDateAndTime.toCalendar().getTimeInMillis(),
-                            		          fe2.informationLength));
+                                              makePath(fname), 
+                                              fe2.modificationDateAndTime.toCalendar().getTimeInMillis(),
+                                              fe2.informationLength));
                         }
                         break;
                     }
@@ -733,8 +733,8 @@ public class Browser implements UDF {
     ///////////////////////////////////////////////////////////////////////////     
     
     public Browser(File image, Listener listener) throws IOException {
-    	this(new BlockDeviceImpl.FileBlockDevice(
-    			new RandomAccessFile(image, "r"),   
+        this(new BlockDeviceImpl.FileBlockDevice(
+                new RandomAccessFile(image, "r"),   
                 SECTOR_SIZE,
                 -1L,
                 true, 
@@ -780,15 +780,15 @@ public class Browser implements UDF {
     }
     
     static class DefaultListener implements Listener {
-		public void onDirectory(String name, long time) {
+        public void onDirectory(String name, long time) {
             _log.infof("=== directory '%s' (modified %s)...", name,
                        MiscUtils.calendarFromMillis(time)); 
-		}
-		public OutputStream onFile(String name, long time, long length) throws IOException {
+        }
+        public OutputStream onFile(String name, long time, long length) throws IOException {
             _log.infof("=== file '%s' (%d bytes, modified %s)...", name, length, 
                        MiscUtils.calendarFromMillis(time)); 
             return new MD5OutputStream();
-		}
+        }
     }
     
     public static void main(String[] args) throws Throwable {

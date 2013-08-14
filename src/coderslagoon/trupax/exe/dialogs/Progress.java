@@ -95,23 +95,23 @@ public class Progress extends Dialog {
     ///////////////////////////////////////////////////////////////////////////
 
     public void setCaption(String caption) {
-    	if (this.isDisposed()) {
-    		return;
-    	}
+        if (this.isDisposed()) {
+            return;
+        }
         setText(NLS.PROGRESS_CAPTION_2.fmt(Exe.PRODUCT_NAME, caption)); 
     }
     
     public void setInfo(String info) {
-    	if (this.isDisposed()) {
-    		return;
-    	}
+        if (this.isDisposed()) {
+            return;
+        }
         this.lblInfo.setText(info);
     }
 
     public void setObject(String obj) {
-    	if (this.isDisposed()) {
-    		return;
-    	}
+        if (this.isDisposed()) {
+            return;
+        }
         this.lblObject.setText(obj);
     }
 
@@ -134,14 +134,14 @@ public class Progress extends Dialog {
     double punit;
 
     public void setProgress(long pos) {
-    	if (this.isDisposed() || null == this.pbar) {
-    		return;
-    	}
+        if (this.isDisposed() || null == this.pbar) {
+            return;
+        }
         double dpos = (double)pos;
         dpos /= this.punit;
         int pbarSel = (int)dpos;
         if (this.lastPBarSel != pbarSel) { // avoids widget thrashing 
-        	this.pbar.setSelection(this.lastPBarSel = pbarSel);
+            this.pbar.setSelection(this.lastPBarSel = pbarSel);
         }
     }
     int lastPBarSel = -1;

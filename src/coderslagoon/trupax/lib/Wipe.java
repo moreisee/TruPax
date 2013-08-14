@@ -247,11 +247,11 @@ public class Wipe {
     boolean renameAndDelete(FileNode fn) {
         File fl = new File(fn.path(true));
         if (fl.isDirectory()) {
-        	String[] objs = fl.list();
+            String[] objs = fl.list();
             if (null == objs || objs.length > 0) {
-	            // TODO: this is sort of a hack, lacking better ideas for now...
-	            return true;
-        	}
+                // TODO: this is sort of a hack, lacking better ideas for now...
+                return true;
+            }
         }
         File orig = fl;
         boolean result = true;
@@ -284,8 +284,8 @@ public class Wipe {
     ///////////////////////////////////////////////////////////////////////////
 
     final static char[] RENAME_CHARSET = ("abcdefghijklmnopqrstuvwxyz" +
-    		                              "ABCDEFGHIJKLMNOPQRSTUVWXYZ"  +
-    				                      "0123456789").toCharArray();
+                                          "ABCDEFGHIJKLMNOPQRSTUVWXYZ"  +
+                                          "0123456789").toCharArray();
     final Random rnd = new Random();
      
     String renameChars(int len) {

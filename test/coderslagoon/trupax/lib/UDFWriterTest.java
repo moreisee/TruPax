@@ -71,51 +71,51 @@ import coderslagoon.trupax.lib.io.filesystem.udf.Browser;
 import coderslagoon.trupax.lib.io.filesystem.udf.UDF;
 
 public class UDFWriterTest
-	extends WriterTest
-	implements Browser.Listener, FileRegistrar.Callback {
+    extends WriterTest
+    implements Browser.Listener, FileRegistrar.Callback {
     File tmpDir;
     File rootDir;
 
-	void makeRootDir() {
-	    this.tmpDir = new File(System.getProperty("java.io.tmpdir", null)); 
-	    
-		final String rdname = String.format("%s_%d_%08x", 
-        		this.getClass().getName(), 
-        		System.currentTimeMillis(),
-        		new SecureRandom().nextInt());
+    void makeRootDir() {
+        this.tmpDir = new File(System.getProperty("java.io.tmpdir", null)); 
+        
+        final String rdname = String.format("%s_%d_%08x", 
+                this.getClass().getName(), 
+                System.currentTimeMillis(),
+                new SecureRandom().nextInt());
 
-		this.rootDir = new File(this.tmpDir, rdname);
-		        
+        this.rootDir = new File(this.tmpDir, rdname);
+                
         assertTrue(TestUtils.removeDir(this.rootDir, true));
-		
-		if (!this.rootDir.mkdirs()) {
-			fail(String.format("cannot make root directory '%s'", 
-					           this.rootDir.getAbsolutePath()));
-		}
-	}
-	
-	void delayClock(final long delay) {
+        
+        if (!this.rootDir.mkdirs()) {
+            fail(String.format("cannot make root directory '%s'", 
+                               this.rootDir.getAbsolutePath()));
+        }
+    }
+    
+    void delayClock(final long delay) {
         UDFWriter._clock = new Clock() {
             public long now() {
                 return Clock._system.now() - delay;
             }
         };
-	}
+    }
 
     ///////////////////////////////////////////////////////////////////////////
 
-	final static Log.Level DEF_LOG_LVL = Log.Level.TRACE; 
-	
-	@Before
-	public void setUp() throws IOException {
+    final static Log.Level DEF_LOG_LVL = Log.Level.TRACE; 
+    
+    @Before
+    public void setUp() throws IOException {
         Log.addPrinter(System.out);
         Log.level(DEF_LOG_LVL);
-		makeRootDir();
-	}
-	
-	@After
-	public void tearDown() {
-		assertTrue(TestUtils.removeDir(this.rootDir, true));
+        makeRootDir();
+    }
+    
+    @After
+    public void tearDown() {
+        assertTrue(TestUtils.removeDir(this.rootDir, true));
         UDFWriter.__TEST_limitDirectorySize(-1L);
         UDFWriter.__TEST_noPathLengthCheck = false;
         UDFWriter._clock = Clock._system;
@@ -125,72 +125,72 @@ public class UDFWriterTest
         this.files = null;
         Browser._bulkReadProgress = false;
         Log.reset();
-	}
+    }
 
     ///////////////////////////////////////////////////////////////////////////
 
     final static int BLOCK_SZ = 512;
-	
-	///////////////////////////////////////////////////////////////////////////
-	
-	static int registerDirectory(FileRegistrar freg, 
-			                     FileSystem fs, 
-			                     FileNode dir,
-			                     FileNode bottom) throws IOException {
-		Iterator<FileNode> ifn = fs.list(dir, new FileSystem.Filter() {
-			public boolean matches(FileNode file) {
-				return true;
-			}
-		});
-		
-		ArrayList<FileNode> files = new ArrayList<FileNode>();
-		
-		int result = 0;
-		
-		while (ifn.hasNext()) {
-			FileNode fn = ifn.next();
+    
+    ///////////////////////////////////////////////////////////////////////////
+    
+    static int registerDirectory(FileRegistrar freg, 
+                                 FileSystem fs, 
+                                 FileNode dir,
+                                 FileNode bottom) throws IOException {
+        Iterator<FileNode> ifn = fs.list(dir, new FileSystem.Filter() {
+            public boolean matches(FileNode file) {
+                return true;
+            }
+        });
+        
+        ArrayList<FileNode> files = new ArrayList<FileNode>();
+        
+        int result = 0;
+        
+        while (ifn.hasNext()) {
+            FileNode fn = ifn.next();
 
-			if (fn.hasAttributes(FileNode.ATTR_DIRECTORY)) {
-				result += registerDirectory(freg, fs, fn, bottom);
-			}
-			else {
-				result++;
-			}
+            if (fn.hasAttributes(FileNode.ATTR_DIRECTORY)) {
+                result += registerDirectory(freg, fs, fn, bottom);
+            }
+            else {
+                result++;
+            }
             files.add(fn);
-		}
-		
-		freg.add(files, bottom, null, new FileRegistrar.Callback() {
-			public Merge onMerge(FileNode[] nd0, FileNode nd1) {
-				if (nd0[0].hasAttributes(FileNode.ATTR_DIRECTORY) &&
-				    nd0[0].hasAttributes(FileNode.ATTR_DIRECTORY)) {
-					return Merge.IGNORE;
-				}
-				fail();
-				return null;
-			}
-		});
-		
-		return result;
-	}
-	
-	///////////////////////////////////////////////////////////////////////////
-	
-	@Test
-	public void test0() throws IOException {
-	    File singleFile = new File(this.tmpDir, 
-	            String.format("%08x.dat", new SecureRandom().nextInt()));
-	    
-	    assertTrue(singleFile.delete() || !singleFile.exists());
+        }
+        
+        freg.add(files, bottom, null, new FileRegistrar.Callback() {
+            public Merge onMerge(FileNode[] nd0, FileNode nd1) {
+                if (nd0[0].hasAttributes(FileNode.ATTR_DIRECTORY) &&
+                    nd0[0].hasAttributes(FileNode.ATTR_DIRECTORY)) {
+                    return Merge.IGNORE;
+                }
+                fail();
+                return null;
+            }
+        });
+        
+        return result;
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////
+    
+    @Test
+    public void test0() throws IOException {
+        File singleFile = new File(this.tmpDir, 
+                String.format("%08x.dat", new SecureRandom().nextInt()));
+        
+        assertTrue(singleFile.delete() || !singleFile.exists());
         TestUtils.fillFile123(singleFile, 0);
         
         TestUtils.fillFile123(new File(this.rootDir, "x.dat"), 10);
-		TestUtils.fillFile123(new File(this.rootDir, "y.dat"), 299);
-		
-		File subDir = new File(this.rootDir, "folder");
-		assertTrue(subDir.mkdirs());
-		
-		TestUtils.fillFile123(new File(subDir, "z.dat"), 1001);
-		
+        TestUtils.fillFile123(new File(this.rootDir, "y.dat"), 299);
+        
+        File subDir = new File(this.rootDir, "folder");
+        assertTrue(subDir.mkdirs());
+        
+        TestUtils.fillFile123(new File(subDir, "z.dat"), 1001);
+        
         FileRegistrar freg = new FileRegistrar.InMemory(new DefCmp(false));
         
         LocalFileSystem lfs = new LocalFileSystem(false);
@@ -217,9 +217,9 @@ public class UDFWriterTest
         Writer w = new UDFWriter(freg, props);
         
         long bcount = w.resolve(new Writer.Layout() {
-			public int    blockSize () { return BLOCK_SZ; }
-			public long   freeBlocks() { return 23; }
-			public String label     () { return " mylabel\n";}
+            public int    blockSize () { return BLOCK_SZ; }
+            public long   freeBlocks() { return 23; }
+            public String label     () { return " mylabel\n";}
         });
         assertTrue(0L < bcount);
         assertTrue(0L == (bcount & (1L << 32)));
@@ -281,46 +281,46 @@ public class UDFWriterTest
         data = fc.baos.toByteArray();
         assertTrue(0 == fc.length);
         assertTrue(0 == data.length);
-	}
+    }
 
-	///////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
 
-	boolean captureOutput;
+    boolean captureOutput;
 
-	static class FileCapture {
-		long                  length;
-		ByteArrayOutputStream baos;
-	};
-	
+    static class FileCapture {
+        long                  length;
+        ByteArrayOutputStream baos;
+    };
+    
     Set<String>              dirs  = new HashSet<String>();
     Map<String, FileCapture> files = new HashMap<String, FileCapture>();
-	
-	public void onDirectory(String name, long time) {
-	    //System.out.println("onDirectory '" + name + "'");
-		assertFalse(this.dirs.contains(name));
-		this.dirs.add(name);
-		if (null != this.verify) {
-			verifyDirectory(name, time);
-		}
-	}
+    
+    public void onDirectory(String name, long time) {
+        //System.out.println("onDirectory '" + name + "'");
+        assertFalse(this.dirs.contains(name));
+        this.dirs.add(name);
+        if (null != this.verify) {
+            verifyDirectory(name, time);
+        }
+    }
 
-	public OutputStream onFile(String name, long time, long length) throws IOException {
-		//System.out.println("onFile '" + name + "', " + length + " bytes");
-		FileCapture fc = new FileCapture();
-		fc.length = length;
+    public OutputStream onFile(String name, long time, long length) throws IOException {
+        //System.out.println("onFile '" + name + "', " + length + " bytes");
+        FileCapture fc = new FileCapture();
+        fc.length = length;
         assertNull(this.files.get(name));
-		this.files.put(name, fc);
-		if (null != this.verify) {
-			return verifyFile(name, time, length);
-		}
-		if (this.captureOutput) {
+        this.files.put(name, fc);
+        if (null != this.verify) {
+            return verifyFile(name, time, length);
+        }
+        if (this.captureOutput) {
             return fc.baos = new ByteArrayOutputStream();
-		}
-		else {
+        }
+        else {
             return TestUtils.newNulOutputStream();
-		}
-	}
-	
+        }
+    }
+    
     ///////////////////////////////////////////////////////////////////////////
 
     @Test
@@ -330,7 +330,7 @@ public class UDFWriterTest
         uw.layout = new Writer.Layout() {
             public int    blockSize () { return BSZ; }
             public long   freeBlocks() { return -1; }
-			public String label     () { return null;}
+            public String label     () { return null;}
         };
 
         assertTrue(26        == uw.computeUnallocatedSpaceBitmapLength(24, 13));
@@ -378,36 +378,36 @@ public class UDFWriterTest
 
     @Test
     public void testWithDbgFS() throws IOException {
-    	DbgFileSystem dfs = new DbgFileSystem(true, null);
-    	
-    	final String ROOT = "C";
-    	
-    	assertNotNull(dfs.createFile("0.dat", new String[] { ROOT }, 
-    			1311, 0x100001, FileNode.ATTR_READONLY, false));
-    	
-    	assertNotNull(dfs.createFile("test", new String[] { ROOT, "1", "2" },
-    			0, 0x100002, 0, false));
+        DbgFileSystem dfs = new DbgFileSystem(true, null);
+        
+        final String ROOT = "C";
+        
+        assertNotNull(dfs.createFile("0.dat", new String[] { ROOT }, 
+                1311, 0x100001, FileNode.ATTR_READONLY, false));
+        
+        assertNotNull(dfs.createFile("test", new String[] { ROOT, "1", "2" },
+                0, 0x100002, 0, false));
 
-    	assertNotNull(dfs.createFile(null, new String[] { ROOT, "1", "New Folder" },
-    			0, 0, 0, false));
-    	
-    	FileRegistrar freg = new FileRegistrar.InMemory(new DefCmp(false));
-    	
-    	Iterator<FileNode> roots = dfs.roots();
-    	FileNode root = roots.next();
-    	assertFalse(roots.hasNext());
-    	int res = registerDirectory(freg, dfs, root, root);
-    	assertTrue(2 == res);
+        assertNotNull(dfs.createFile(null, new String[] { ROOT, "1", "New Folder" },
+                0, 0, 0, false));
+        
+        FileRegistrar freg = new FileRegistrar.InMemory(new DefCmp(false));
+        
+        Iterator<FileNode> roots = dfs.roots();
+        FileNode root = roots.next();
+        assertFalse(roots.hasNext());
+        int res = registerDirectory(freg, dfs, root, root);
+        assertTrue(2 == res);
 
-    	FileRegistrar.dump(freg.root(), 0, System.out);
-    	
+        FileRegistrar.dump(freg.root(), 0, System.out);
+        
         Properties props = new Properties();
         Writer w = new UDFWriter(freg, props);
         
         long bcount = w.resolve(new Writer.Layout() {
             public int    blockSize () { return BLOCK_SZ; }
             public long   freeBlocks() { return 0; }
-			public String label     () { return null;}
+            public String label     () { return null;}
         });
         assertTrue(0L < bcount);
         assertTrue(0L == (bcount & 0xffffffff00000000L));
@@ -448,88 +448,88 @@ public class UDFWriterTest
     
     @Test
     public void testOversizedFile() throws IOException {
-    	DbgFileSystem dfs = new DbgFileSystem(true, null);
-    	
-    	final String ROOT = "X";
-    	
-    	assertNotNull(dfs.createFile("maxi.file", new String[] { ROOT }, 
-    			ONE_GB * 20000, 0x100001, FileNode.ATTR_NONE, false));
-    	
-    	FileRegistrar freg = new FileRegistrar.InMemory(new DefCmp(false));
-    	FileNode root = dfs.roots().next();
-    	
-    	assertTrue(1 == registerDirectory(freg, dfs, root, root));
+        DbgFileSystem dfs = new DbgFileSystem(true, null);
+        
+        final String ROOT = "X";
+        
+        assertNotNull(dfs.createFile("maxi.file", new String[] { ROOT }, 
+                ONE_GB * 20000, 0x100001, FileNode.ATTR_NONE, false));
+        
+        FileRegistrar freg = new FileRegistrar.InMemory(new DefCmp(false));
+        FileNode root = dfs.roots().next();
+        
+        assertTrue(1 == registerDirectory(freg, dfs, root, root));
 
         Properties props = new Properties();
         Writer w = new UDFWriter(freg, props);
         
         try {
-        	w.resolve(new Writer.Layout() {
-	            public int    blockSize () { return BLOCK_SZ; }
-	            public long   freeBlocks() { return 0; }
-				public String label     () { return null;}
-	        });
-        	fail();
+            w.resolve(new Writer.Layout() {
+                public int    blockSize () { return BLOCK_SZ; }
+                public long   freeBlocks() { return 0; }
+                public String label     () { return null;}
+            });
+            fail();
         }
         catch (Writer.Exception we) {
-        	assertTrue(we.error == Writer.ERROR_FILE_TOO_LARGE);
-        	assertTrue(TestUtils.resStrValid(we.getMessage()));
+            assertTrue(we.error == Writer.ERROR_FILE_TOO_LARGE);
+            assertTrue(TestUtils.resStrValid(we.getMessage()));
         }
     }
 
     ///////////////////////////////////////////////////////////////////////////
 
     boolean isValidFileSize(long fsz) throws IOException {
-    	final String ROOT = "X";
+        final String ROOT = "X";
 
-       	DbgFileSystem dfs = new DbgFileSystem(true, null);
+        DbgFileSystem dfs = new DbgFileSystem(true, null);
         
-    	assertNotNull(dfs.createFile("largest.file", new String[] { ROOT }, 
-    			fsz, 123, FileNode.ATTR_NONE, false));
-    	
-    	FileRegistrar freg = new FileRegistrar.InMemory(new DefCmp(false));
-    	FileNode root = dfs.roots().next();
-    	
-    	assertTrue(1 == registerDirectory(freg, dfs, root, root));
+        assertNotNull(dfs.createFile("largest.file", new String[] { ROOT }, 
+                fsz, 123, FileNode.ATTR_NONE, false));
+        
+        FileRegistrar freg = new FileRegistrar.InMemory(new DefCmp(false));
+        FileNode root = dfs.roots().next();
+        
+        assertTrue(1 == registerDirectory(freg, dfs, root, root));
 
         Properties props = new Properties();
         Writer w = new UDFWriter(freg, props);
         
         try {
-        	w.resolve(new Writer.Layout() {
-	            public int    blockSize () { return BLOCK_SZ; }
-	            public long   freeBlocks() { return 0; }
-				public String label     () { return null;}
-	        });
-        	return true;
+            w.resolve(new Writer.Layout() {
+                public int    blockSize () { return BLOCK_SZ; }
+                public long   freeBlocks() { return 0; }
+                public String label     () { return null;}
+            });
+            return true;
         }
         catch (Writer.Exception we) {
-        	assertTrue(we.error == Writer.ERROR_FILE_TOO_LARGE);
-        	return false;
+            assertTrue(we.error == Writer.ERROR_FILE_TOO_LARGE);
+            return false;
         }
     }
 
     @Test
     public void testLargestFile() throws IOException {
-    	long fsz = ONE_GB * 2048;
-    	long fsz2 = -1L;
-    	
-    	for (long d = fsz >> 1; 0 < d; d >>= 1) {
-    		if (isValidFileSize(fsz)) {
-    			fsz2 = fsz;
-	        	fsz += d;
-	        }
-    		else {
-	        	fsz -= d;
-	        }
-    	}
-    	
-    	assertFalse(-1L == fsz2);
+        long fsz = ONE_GB * 2048;
+        long fsz2 = -1L;
+        
+        for (long d = fsz >> 1; 0 < d; d >>= 1) {
+            if (isValidFileSize(fsz)) {
+                fsz2 = fsz;
+                fsz += d;
+            }
+            else {
+                fsz -= d;
+            }
+        }
+        
+        assertFalse(-1L == fsz2);
         assertFalse(isValidFileSize(fsz2 + 1));
 
-    	System.out.println("largest file size: " + fsz2);
+        System.out.println("largest file size: " + fsz2);
 
-    	// make sure that we can actually write this
+        // make sure that we can actually write this
         DbgFileSystem dfs = new DbgFileSystem(false, null);
         
         assertNotNull(dfs.createFile("largest.file", new String[] { "B" }, 
@@ -546,7 +546,7 @@ public class UDFWriterTest
         final long bcount = w.resolve(new Writer.Layout() {
             public int    blockSize () { return BLOCK_SZ; }
             public long   freeBlocks() { return 0; }
-			public String label     () { return null;}
+            public String label     () { return null;}
         });
         assertTrue(0L < bcount);
         
@@ -558,7 +558,7 @@ public class UDFWriterTest
         final VarLong total = new VarLong();
         final VarLong last = new VarLong(System.currentTimeMillis());
 
-    	w.make(new HookBlockDevice(new NullWriteDevice(BLOCK_SZ)) {
+        w.make(new HookBlockDevice(new NullWriteDevice(BLOCK_SZ)) {
                 protected boolean onRead(long num) {
                     return false;
                 }
@@ -573,13 +573,13 @@ public class UDFWriterTest
                     return true;
                 }
                 final DecimalFormat df = new DecimalFormat();
-        	},
+            },
             new Writer.Progress() {
                 public void onFile(Directory dir, FileNode node) {
                     fcount.v += null == dir || node == null ? 0 : 1;
                 }
-        	});
-    	
+            });
+        
         assertTrue(total.v + 1 == bcount);  // (progress reports 0..N-1)
         assertTrue(fcount.v == 1);
     }
@@ -614,7 +614,7 @@ public class UDFWriterTest
             w.resolve(new Writer.Layout() {
                 public int    blockSize () { return BLOCK_SZ; }
                 public long   freeBlocks() { return 0; }
-    			public String label     () { return null;}
+                public String label     () { return null;}
             });
             fail();
         }
@@ -648,7 +648,7 @@ public class UDFWriterTest
                 long bcount = w.resolve(new Writer.Layout() {
                     public int    blockSize () { return BLOCK_SZ; }
                     public long   freeBlocks() { return freeblocks.v; }
-        			public String label     () { return null;}
+                    public String label     () { return null;}
                 });
                 assertTrue(0 < bcount);
                 
@@ -779,8 +779,8 @@ public class UDFWriterTest
             fail();
         }
         catch (Writer.Exception we) {
-        	assertTrue(Writer.ERROR_PATH_TOO_LONG == we.error);
-        	assertFalse(resolved.v);
+            assertTrue(Writer.ERROR_PATH_TOO_LONG == we.error);
+            assertFalse(resolved.v);
         }
     }
     
@@ -806,7 +806,7 @@ public class UDFWriterTest
                 assertTrue(0 < w.resolve(new Writer.Layout() {
                     public int    blockSize () { return BLOCK_SZ; }
                     public long   freeBlocks() { return freeblocks.v; }
-        			public String label     () { return null;}
+                    public String label     () { return null;}
                 }));
 
                 last = freeblocks.v;
@@ -827,7 +827,7 @@ public class UDFWriterTest
         long blocks = w.resolve(new Writer.Layout() {
             public int    blockSize () { return BLOCK_SZ; }
             public long   freeBlocks() { return freeblocks.v; }
-			public String label     () { return null;}
+            public String label     () { return null;}
         });
         assertTrue(Integer.MAX_VALUE == blocks);
 
@@ -855,90 +855,90 @@ public class UDFWriterTest
 
     @Test
     public void testRandomVolume0() throws Exception {
-    	final FileNameMaker[] fnmks = new FileNameMaker[] {
-    			null,
-    			new FileNameMaker.Numbered(),
-    		 	new FileNameMaker.RandomASCII(),
-    		 	new FileNameMaker.RandomUnicode(),
+        final FileNameMaker[] fnmks = new FileNameMaker[] {
+                null,
+                new FileNameMaker.Numbered(),
+                new FileNameMaker.RandomASCII(),
+                new FileNameMaker.RandomUnicode(),
         };
-		fnmks[0] = new FileNameMaker.Mixer(fnmks);
-    	
-    	for (final FileNameMaker fnmk : fnmks) {
-    		final int MAX_FILES = 100; // this limit is the winner below
-    		
-	        Combo.Two<FileRegistrar, DbgFileSystem> r = make(
-		        new MakeLayout() {
-		            public long maxData         () { return 7654321L; }
-		            public int  maxDirNameBytes () { return 32; }
-		            public int  maxFileNameBytes() { return 64; }
-		            public int  maxDirs         () { return 30; }
-		            public int  maxFileSize     () { return 100000; }
-		            public int  maxFiles        () { return MAX_FILES; }
-		            public int  maxFilesPerDir  () { return 10; }
-		            public int  maxPathLen      () { return UDF.MAX_PATH_LEN; }
-		        },
-		        new MakeEnv() {
-		            public FileNameMaker fnmk   () { return fnmk; }
-		            public int           rndBase() { return 0xd0debabe; }
-		        });
-	        
-	        FileRegistrar.Walker.Counting fwc = new FileRegistrar.Walker.Counting();
-	        FileRegistrar.walk(r.t.root(), fwc, true, false);
-	        assertTrue(11        == fwc.directories);
-	        assertTrue(MAX_FILES == fwc.files);
-	        
-	        //System.out.println(MiscUtils.fillString(132, '_'));
-	        //FileRegistrar.dump(r.t.root(), 0, System.out);
-	        
-	        Writer w = new UDFWriter(r.t, new Properties());
+        fnmks[0] = new FileNameMaker.Mixer(fnmks);
+        
+        for (final FileNameMaker fnmk : fnmks) {
+            final int MAX_FILES = 100; // this limit is the winner below
+            
+            Combo.Two<FileRegistrar, DbgFileSystem> r = make(
+                new MakeLayout() {
+                    public long maxData         () { return 7654321L; }
+                    public int  maxDirNameBytes () { return 32; }
+                    public int  maxFileNameBytes() { return 64; }
+                    public int  maxDirs         () { return 30; }
+                    public int  maxFileSize     () { return 100000; }
+                    public int  maxFiles        () { return MAX_FILES; }
+                    public int  maxFilesPerDir  () { return 10; }
+                    public int  maxPathLen      () { return UDF.MAX_PATH_LEN; }
+                },
+                new MakeEnv() {
+                    public FileNameMaker fnmk   () { return fnmk; }
+                    public int           rndBase() { return 0xd0debabe; }
+                });
+            
+            FileRegistrar.Walker.Counting fwc = new FileRegistrar.Walker.Counting();
+            FileRegistrar.walk(r.t.root(), fwc, true, false);
+            assertTrue(11        == fwc.directories);
+            assertTrue(MAX_FILES == fwc.files);
+            
+            //System.out.println(MiscUtils.fillString(132, '_'));
+            //FileRegistrar.dump(r.t.root(), 0, System.out);
+            
+            Writer w = new UDFWriter(r.t, new Properties());
 
-	        long blocks = w.resolve(new Writer.Layout() {
-	            public int    blockSize () { return BLOCK_SZ; }
-	            public long   freeBlocks() { return 0; }
-				public String label     () { return null;}
-	        });
-	        assertTrue(0 < blocks);
+            long blocks = w.resolve(new Writer.Layout() {
+                public int    blockSize () { return BLOCK_SZ; }
+                public long   freeBlocks() { return 0; }
+                public String label     () { return null;}
+            });
+            assertTrue(0 < blocks);
 
-	        final VarInt fcount = new VarInt(0);
-	        
-	        ByteArrayOutputStream baos = new ByteArrayOutputStream((int)blocks * BLOCK_SZ);
-	        BlockDevice bdev = new BlockDeviceImpl.OutputStreamBlockDevice(baos, blocks, BLOCK_SZ, true); 
-	        
-	        w.make(bdev, new Writer.Progress() {
-	            public void onFile(Directory dir, FileNode fn) {
-	            	if (fn == null && dir == null) {
-	            		return;
-	            	}
-	                fcount.v++; 
-	            }
-	        });
-	        assertTrue(MAX_FILES == fcount.v);
+            final VarInt fcount = new VarInt(0);
+            
+            ByteArrayOutputStream baos = new ByteArrayOutputStream((int)blocks * BLOCK_SZ);
+            BlockDevice bdev = new BlockDeviceImpl.OutputStreamBlockDevice(baos, blocks, BLOCK_SZ, true); 
+            
+            w.make(bdev, new Writer.Progress() {
+                public void onFile(Directory dir, FileNode fn) {
+                    if (fn == null && dir == null) {
+                        return;
+                    }
+                    fcount.v++; 
+                }
+            });
+            assertTrue(MAX_FILES == fcount.v);
 
-	        byte[] data = baos.toByteArray();
-	        baos.close();
-	        bdev = new BlockDeviceImpl.MemoryBlockDevice(BLOCK_SZ, data, true, false);
+            byte[] data = baos.toByteArray();
+            baos.close();
+            bdev = new BlockDeviceImpl.MemoryBlockDevice(BLOCK_SZ, data, true, false);
 
-	        browse(bdev, Log.Level.WARN, false);
-	        
-	        assertTrue(this.dirs.size () == 11);
-	        assertTrue(this.files.size() == MAX_FILES);
+            browse(bdev, Log.Level.WARN, false);
+            
+            assertTrue(this.dirs.size () == 11);
+            assertTrue(this.files.size() == MAX_FILES);
 
-	        File dump = TestUtils.dumpToFile(data, "UDFWriterTest.testRandomVolume0.dump", true);
-	        try {
-	            if (UDFTest.available()) {
-	                assertTrue(UDFTest.exec(dump, BLOCK_SZ, true, false, false, null));
-	            }
+            File dump = TestUtils.dumpToFile(data, "UDFWriterTest.testRandomVolume0.dump", true);
+            try {
+                if (UDFTest.available()) {
+                    assertTrue(UDFTest.exec(dump, BLOCK_SZ, true, false, false, null));
+                }
             }
-	        finally {
-	        	assertTrue(!dump.exists() || dump.delete());
-	        }
-    	}
+            finally {
+                assertTrue(!dump.exists() || dump.delete());
+            }
+        }
     }
     
     ///////////////////////////////////////////////////////////////////////////
     
     public void runRndVol(final String name, final MakeLayout mlo, 
-    		final int loops, final boolean verify) throws Exception {
+            final int loops, final boolean verify) throws Exception {
         final FileNameMaker fnmk = new FileNameMaker.Mixer(new FileNameMaker[] {
                 new FileNameMaker.RandomASCII(),
                 new FileNameMaker.RandomUnicode(),
@@ -948,8 +948,8 @@ public class UDFWriterTest
         final Random seeder = new Random(0xb00bbebe);
         
         Log.reset();
-    	final long startTm = System.currentTimeMillis();
-    	         
+        final long startTm = System.currentTimeMillis();
+                 
         for (int i = 0; i < loops; i++) {
             System.out.printf("%s - loop %d...\n", name, i);
             
@@ -969,7 +969,7 @@ public class UDFWriterTest
             final long blocks = w.resolve(new Writer.Layout() {
                 public int    blockSize () { return BLOCK_SZ; }
                 public long   freeBlocks() { return 0; }
-    			public String label     () { return null;}
+                public String label     () { return null;}
             });
             assertTrue(0 < blocks);
 
@@ -999,8 +999,8 @@ public class UDFWriterTest
             bdev = new BlockDeviceImpl.FileBlockDevice(raf, BLOCK_SZ, -1L, true, false); 
 
             if (verify) {
-            	this.verify = r.t;
-            	verifyPrepare(r.t.root());
+                this.verify = r.t;
+                verifyPrepare(r.t.root());
             }
             
             browse(bdev, Log.Level.WARN, false);
@@ -1009,7 +1009,7 @@ public class UDFWriterTest
             raf.close();
             
             if (verify) {
-            	verifyFinal(null);
+                verifyFinal(null);
             }
             
             if (UDFTest.available()) {
@@ -1018,33 +1018,33 @@ public class UDFWriterTest
             assertTrue(tmp.delete());
         }
         System.out.printf("test total time: %.3f seconds\n", 
-        		(double)(System.currentTimeMillis() - startTm) / 1000.0);
+                (double)(System.currentTimeMillis() - startTm) / 1000.0);
     }
     
     @Test
     public void testRandomVolume16MB() throws Exception {
        runRndVol(
-        	MiscUtils.currentMethod(),
-        	new MakeLayout() {
-	            public long maxData         () { return 16 * 1024 * 1024; }
-	            public int  maxDirNameBytes () { return 30; }
-	            public int  maxFileNameBytes() { return 100; }
-	            public int  maxDirs         () { return 5000; }
-	            public int  maxFileSize     () { return 1000 * 100; }
-	            public int  maxFiles        () { return 1000 * 1000; }
-	            public int  maxFilesPerDir  () { return 100; }
-	            public int  maxPathLen      () { return UDF.MAX_PATH_LEN; }
-	        }, 
-	        coderslagoon.test.Control.quick() ? 3 : 100,
-	        true);
+            MiscUtils.currentMethod(),
+            new MakeLayout() {
+                public long maxData         () { return 16 * 1024 * 1024; }
+                public int  maxDirNameBytes () { return 30; }
+                public int  maxFileNameBytes() { return 100; }
+                public int  maxDirs         () { return 5000; }
+                public int  maxFileSize     () { return 1000 * 100; }
+                public int  maxFiles        () { return 1000 * 1000; }
+                public int  maxFilesPerDir  () { return 100; }
+                public int  maxPathLen      () { return UDF.MAX_PATH_LEN; }
+            }, 
+            coderslagoon.test.Control.quick() ? 3 : 100,
+            true);
     }
 
     ///////////////////////////////////////////////////////////////////////////
 
     @Test
     public void testLargeFile() throws Exception {
-    	if (coderslagoon.test.Control.quick()) {
-    		return;
+        if (coderslagoon.test.Control.quick()) {
+            return;
         }
         
         DbgFileSystem dfs = new DbgFileSystem(true, null);
@@ -1077,7 +1077,7 @@ public class UDFWriterTest
         long bcount = w.resolve(new Writer.Layout() {
             public int    blockSize () { return BLOCK_SZ; }
             public long   freeBlocks() { return 0; }
-			public String label     () { return null;}
+            public String label     () { return null;}
         });
         assertTrue(0L < bcount);
         assertTrue(0L == (bcount & (1L << 32)));
@@ -1098,7 +1098,7 @@ public class UDFWriterTest
         w.make(bdev, Writer.newDebugProgress(System.out));
         
         System.out.printf("volume with one (%d bytes) large file created in %.3f seconds\n", 
-        		          FSIZE, (double)(System.currentTimeMillis() - tm) / 1000L);
+                          FSIZE, (double)(System.currentTimeMillis() - tm) / 1000L);
 
         this.verify = freg;
         verifyPrepare(freg.root());
@@ -1120,164 +1120,164 @@ public class UDFWriterTest
     
     ///////////////////////////////////////////////////////////////////////////
     
-	public Merge onMerge(FileNode[] nd0, FileNode nd1) {
-		return nd0[0].hasAttributes(FileNode.ATTR_DIRECTORY) &&
-		       nd1   .hasAttributes(FileNode.ATTR_DIRECTORY) ?
-		    	   FileRegistrar.Callback.Merge.IGNORE :
-		       	   FileRegistrar.Callback.Merge.ABORT;
-	}
-	
+    public Merge onMerge(FileNode[] nd0, FileNode nd1) {
+        return nd0[0].hasAttributes(FileNode.ATTR_DIRECTORY) &&
+               nd1   .hasAttributes(FileNode.ATTR_DIRECTORY) ?
+                   FileRegistrar.Callback.Merge.IGNORE :
+                   FileRegistrar.Callback.Merge.ABORT;
+    }
+    
     public boolean onProgress(FileNode current) {
         return true;
     }
 
     ///////////////////////////////////////////////////////////////////////////
 
-	FileRegistrar verify;
-	
-	static class VerifyTag {
-		final static String NAME = "verify.udfwritertest";
-		public int count;
-	}
-	
-	private void verifyPrepare(FileRegistrar.Directory dir) {
-		if (null == dir.nodes()) {
-			assertNull(dir.parent());
-		}
-		else {
-			dir.nodes()[0].setTag(VerifyTag.NAME, new VerifyTag());
-		}
-		Iterator<FileRegistrar.Directory> dirs = dir.dirs();
-		while (dirs.hasNext()) {
-			verifyPrepare(dirs.next());
-		}
-		Iterator<FileNode> files = dir.files();
-		while (files.hasNext()) {
-			files.next().setTag(VerifyTag.NAME, new VerifyTag());
-		}
-	}
-	
-	private static String[] verifyPathItems(final String name) {
-		// NOTE: the name shall not end with a separator!
-		final String sepa = Character.toString(Browser.Listener.PATH_SEPA);
-		
-		assertTrue(name.length() > 0 && 
-				   name.startsWith(sepa));
-		
-		final String[] result = name.substring(1).split(sepa);
-		assertTrue(0 < result.length && result[0].length() > 0);
-		return result;
-	}
-	
-	private FileRegistrar.Directory verifyFindDir(String name, VarRef<String> fname) {
-		FileRegistrar.Directory result = this.verify.root();
-		final String[] pis = verifyPathItems(name);
-		for (int i = 0, c = pis.length - (null == fname ? 0 : 1); i < c; i++) {
-			Iterator<FileRegistrar.Directory> dirs = result.dirs();
-			boolean found = false;
-			while (dirs.hasNext()) {
-				FileRegistrar.Directory dir = dirs.next();
-				if (dir.nodes()[0].name().equals(pis[i])) {
-					result = dir;
-					found = true;
-					break;
-				}
-			}
-			assertTrue(found);
-		}
-		if (null != fname) {
-			fname.v = pis[pis.length - 1];
-		}
-		return result;
-	}
-	
-	private void verifyDirectory(String name, long time) {
-		assertNotNull(this.verify);
+    FileRegistrar verify;
+    
+    static class VerifyTag {
+        final static String NAME = "verify.udfwritertest";
+        public int count;
+    }
+    
+    private void verifyPrepare(FileRegistrar.Directory dir) {
+        if (null == dir.nodes()) {
+            assertNull(dir.parent());
+        }
+        else {
+            dir.nodes()[0].setTag(VerifyTag.NAME, new VerifyTag());
+        }
+        Iterator<FileRegistrar.Directory> dirs = dir.dirs();
+        while (dirs.hasNext()) {
+            verifyPrepare(dirs.next());
+        }
+        Iterator<FileNode> files = dir.files();
+        while (files.hasNext()) {
+            files.next().setTag(VerifyTag.NAME, new VerifyTag());
+        }
+    }
+    
+    private static String[] verifyPathItems(final String name) {
+        // NOTE: the name shall not end with a separator!
+        final String sepa = Character.toString(Browser.Listener.PATH_SEPA);
+        
+        assertTrue(name.length() > 0 && 
+                   name.startsWith(sepa));
+        
+        final String[] result = name.substring(1).split(sepa);
+        assertTrue(0 < result.length && result[0].length() > 0);
+        return result;
+    }
+    
+    private FileRegistrar.Directory verifyFindDir(String name, VarRef<String> fname) {
+        FileRegistrar.Directory result = this.verify.root();
+        final String[] pis = verifyPathItems(name);
+        for (int i = 0, c = pis.length - (null == fname ? 0 : 1); i < c; i++) {
+            Iterator<FileRegistrar.Directory> dirs = result.dirs();
+            boolean found = false;
+            while (dirs.hasNext()) {
+                FileRegistrar.Directory dir = dirs.next();
+                if (dir.nodes()[0].name().equals(pis[i])) {
+                    result = dir;
+                    found = true;
+                    break;
+                }
+            }
+            assertTrue(found);
+        }
+        if (null != fname) {
+            fname.v = pis[pis.length - 1];
+        }
+        return result;
+    }
+    
+    private void verifyDirectory(String name, long time) {
+        assertNotNull(this.verify);
 
-		FileRegistrar.Directory dir = verifyFindDir(name, null);
+        FileRegistrar.Directory dir = verifyFindDir(name, null);
 
-		assertTrue(time == dir.nodes()[0].timestamp());
-		
-   	    ((VerifyTag)dir.nodes()[0].getTag(VerifyTag.NAME)).count++;
-	}
-	
-	private OutputStream verifyFile(final String name, long time, final long length) {
-		assertNotNull(this.verify);
+        assertTrue(time == dir.nodes()[0].timestamp());
+        
+        ((VerifyTag)dir.nodes()[0].getTag(VerifyTag.NAME)).count++;
+    }
+    
+    private OutputStream verifyFile(final String name, long time, final long length) {
+        assertNotNull(this.verify);
 
-		// path exists?
-		VarRef<String> fname = new VarRef<String>();
-		FileRegistrar.Directory dir = verifyFindDir(name, fname);
-		assertNotNull(fname.v);
+        // path exists?
+        VarRef<String> fname = new VarRef<String>();
+        FileRegistrar.Directory dir = verifyFindDir(name, fname);
+        assertNotNull(fname.v);
 
-		// file's there and has the right size and time?
-		final Iterator<FileNode> files = dir.files();
-		FileNode fn = null;
-		while (files.hasNext()) {
-			final FileNode fn2 = files.next();
-			if (fn2.name().equals(fname.v)) {
-				fn = fn2;
-				break;
-			}
-		}
-		if (null == fn) {
-			fail();
-		}
-		if (fn.size() != length) {
-			fail();
-		}
-		if (fn.timestamp() != time) {
-		    fail();
-		}
-		((VerifyTag)fn.getTag(VerifyTag.NAME)).count++;
+        // file's there and has the right size and time?
+        final Iterator<FileNode> files = dir.files();
+        FileNode fn = null;
+        while (files.hasNext()) {
+            final FileNode fn2 = files.next();
+            if (fn2.name().equals(fname.v)) {
+                fn = fn2;
+                break;
+            }
+        }
+        if (null == fn) {
+            fail();
+        }
+        if (fn.size() != length) {
+            fail();
+        }
+        if (fn.timestamp() != time) {
+            fail();
+        }
+        ((VerifyTag)fn.getTag(VerifyTag.NAME)).count++;
 
-		// prepare content matching
-		final InputStream dis = DbgFileSystem.createInputStream(fname.v, length, true);
-		return new OutputStream() {
-			@Override
+        // prepare content matching
+        final InputStream dis = DbgFileSystem.createInputStream(fname.v, length, true);
+        return new OutputStream() {
+            @Override
             public void close() throws IOException {
                 super.close();
                 assertTrue(this.pos == length);
             }
             long pos;
-			@Override
-			public void write(final int b) throws IOException {
-				final int d = dis.read();
-				if (d != (255 & b)) {
-					throw new IOException(String.format(
-							"difference encountered for '%s' at position %d (%d!=%d)", 
-							name, this.pos, d, 255 & b));
-				}
-				this.pos++;
-			}
-		};
-	}
+            @Override
+            public void write(final int b) throws IOException {
+                final int d = dis.read();
+                if (d != (255 & b)) {
+                    throw new IOException(String.format(
+                            "difference encountered for '%s' at position %d (%d!=%d)", 
+                            name, this.pos, d, 255 & b));
+                }
+                this.pos++;
+            }
+        };
+    }
 
-	private void verifyFinal(FileRegistrar.Directory dir) {
-		if (null == dir) {
-			assertNotNull(dir = this.verify.root());
-		}
-		
-		Iterator<FileRegistrar.Directory> dirs = dir.dirs();
-		while (dirs.hasNext()) {
-			FileRegistrar.Directory dir2 = dirs.next();
-			Object tag = dir2.nodes()[0].getTag(VerifyTag.NAME);
-			assertTrue(tag instanceof VerifyTag);
-			assertTrue(1 == ((VerifyTag)tag).count);
-			verifyFinal(dir2);
-		}
+    private void verifyFinal(FileRegistrar.Directory dir) {
+        if (null == dir) {
+            assertNotNull(dir = this.verify.root());
+        }
+        
+        Iterator<FileRegistrar.Directory> dirs = dir.dirs();
+        while (dirs.hasNext()) {
+            FileRegistrar.Directory dir2 = dirs.next();
+            Object tag = dir2.nodes()[0].getTag(VerifyTag.NAME);
+            assertTrue(tag instanceof VerifyTag);
+            assertTrue(1 == ((VerifyTag)tag).count);
+            verifyFinal(dir2);
+        }
 
-		Iterator<FileNode> files = dir.files();
-		while (files.hasNext()) {
-			FileNode fn = files.next();
-			Object tag = fn.getTag(VerifyTag.NAME);
-			assertTrue(tag instanceof VerifyTag);
-			assertTrue(1 == ((VerifyTag)tag).count);
-		}
-	}
+        Iterator<FileNode> files = dir.files();
+        while (files.hasNext()) {
+            FileNode fn = files.next();
+            Object tag = fn.getTag(VerifyTag.NAME);
+            assertTrue(tag instanceof VerifyTag);
+            assertTrue(1 == ((VerifyTag)tag).count);
+        }
+    }
 
     ///////////////////////////////////////////////////////////////////////////
-	
-	public Browser browse(BlockDevice bdev, Log.Level loglvl, boolean capOut) {
+    
+    public Browser browse(BlockDevice bdev, Log.Level loglvl, boolean capOut) {
         Log.level(loglvl);
         
         Browser result = new Browser(bdev, this);
@@ -1293,30 +1293,30 @@ public class UDFWriterTest
             err.printStackTrace(System.err);
             fail();
         }
-	    
-	    Log.level(Log.Level.TRACE);
-	    
-	    return result;
-	}
-	
-	///////////////////////////////////////////////////////////////////////////
+        
+        Log.level(Log.Level.TRACE);
+        
+        return result;
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////
 
-	@Test
-	public void testNormalizeVolumeID() {
-		for (String[] vid : new String[][] {
-				{ "", "" },
-				{ " ", "" },
-				{ "\u1999", "_" },
-				{ "a", "a" },
-				{ "0123456789ABCDE" , "0123456789ABCDE" },
-				{ "0123456789ABCDEF", "0123456789ABCDE" },
-				{ "\nx\ty\rZ", "_x_y_Z" },
-				{ " th is\0 ", "th is_" },
-				{ "!\"$%&/()=?`@;:_", 
-				  "!\"$%&/()=?`@;:_" },
+    @Test
+    public void testNormalizeVolumeID() {
+        for (String[] vid : new String[][] {
+                { "", "" },
+                { " ", "" },
+                { "\u1999", "_" },
+                { "a", "a" },
+                { "0123456789ABCDE" , "0123456789ABCDE" },
+                { "0123456789ABCDEF", "0123456789ABCDE" },
+                { "\nx\ty\rZ", "_x_y_Z" },
+                { " th is\0 ", "th is_" },
+                { "!\"$%&/()=?`@;:_", 
+                  "!\"$%&/()=?`@;:_" },
         }) {
-		    System.out.println(vid[0]);
-			assertEquals(UDFWriter.normalizeVolumeID(vid[0]), vid[1]);
-		}
-	}
+            System.out.println(vid[0]);
+            assertEquals(UDFWriter.normalizeVolumeID(vid[0]), vid[1]);
+        }
+    }
 }

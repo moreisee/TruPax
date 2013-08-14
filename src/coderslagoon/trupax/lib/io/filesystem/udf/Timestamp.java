@@ -67,21 +67,21 @@ public class Timestamp {
     
     @Override
     public int hashCode() {
-    	if (null == this.hashCode) {
-    		this.hashCode = 
-	    		this.timeZone               +
-	    	    this.offsetMinutesUTC       +
-	    	    this.year 					+    
-	    	    this.month 					+                   
-	    	    this.day 					+                     
-	    	    this.hour 					+                    
-	    	    this.minute 				+                  
-	    	    this.second 				+                  
-	    	    this.centiseconds 			+            
-	    	    this.hundredsOfMicroseconds + 
-	    	    this.microseconds;
-    	}
-    	return this.hashCode;
+        if (null == this.hashCode) {
+            this.hashCode = 
+                this.timeZone               +
+                this.offsetMinutesUTC       +
+                this.year                   +    
+                this.month                  +                   
+                this.day                    +                     
+                this.hour                   +                    
+                this.minute                 +                  
+                this.second                 +                  
+                this.centiseconds           +            
+                this.hundredsOfMicroseconds + 
+                this.microseconds;
+        }
+        return this.hashCode;
     }
     Integer hashCode;
     

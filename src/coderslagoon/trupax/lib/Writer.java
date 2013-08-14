@@ -33,22 +33,22 @@ import coderslagoon.baselib.io.FileRegistrar.Directory;
  * based on block storage.
  */
 public abstract class Writer {
-	public final static int ERROR_UNKNOWN = -1;
-	public final static int ERROR_NOERROR = 0;
-	public final static int ERROR_TOO_MUCH_DATA = 1;
-	public final static int ERROR_FILE_SIZE_CHANGED_LO = 2;
-	public final static int ERROR_FILE_SIZE_CHANGED_HI = 3;
-	public final static int ERROR_DIRECTORY_TOO_LARGE = 4;
+    public final static int ERROR_UNKNOWN = -1;
+    public final static int ERROR_NOERROR = 0;
+    public final static int ERROR_TOO_MUCH_DATA = 1;
+    public final static int ERROR_FILE_SIZE_CHANGED_LO = 2;
+    public final static int ERROR_FILE_SIZE_CHANGED_HI = 3;
+    public final static int ERROR_DIRECTORY_TOO_LARGE = 4;
     public final static int ERROR_FILE_TOO_LARGE = 5;
     public final static int ERROR_NAME_TOO_LONG = 6;
     public final static int ERROR_PATH_TOO_LONG = 7;
-	
-	/** custom error codes start at this base...*/
-	public final static int ERROR_CUSTOM_BASE = 1000;
+    
+    /** custom error codes start at this base...*/
+    public final static int ERROR_CUSTOM_BASE = 1000;
 
-	public static class Exception extends IOException {
-    	public final int error;
-    	
+    public static class Exception extends IOException {
+        public final int error;
+        
         private static final long serialVersionUID = 2528273709611685335L;
         public Exception(int error, String fmt, Object... args) {
             super(String.format(fmt, args));
@@ -58,10 +58,10 @@ public abstract class Writer {
     
     ///////////////////////////////////////////////////////////////////////
     
-	/**
-	 * Progress callback to report on the writing to a volume. For more granular
-	 * reports hooking into the output block device is recommended.
-	 */
+    /**
+     * Progress callback to report on the writing to a volume. For more granular
+     * reports hooking into the output block device is recommended.
+     */
     public interface Progress {
         /**
          * @param dir The directory the file is located in logically. Null if
@@ -129,9 +129,9 @@ public abstract class Writer {
      * Definition of a volume layout.
      */
     public interface Layout {
-    	/** 
-    	 * @return The size of a block, multiple of 512. 
-    	 */
+        /** 
+         * @return The size of a block, multiple of 512. 
+         */
         int blockSize();
         /** 
          * @return Number of free blocks to include. The writer should keep

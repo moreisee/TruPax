@@ -51,13 +51,13 @@ import coderslagoon.trupax.lib.io.filesystem.udf.EntityIdentifier.RevisionSuffix
  * Writer to emit UDF 1.02 compatible volumes.
  */
 public class UDFWriter extends Writer implements UDF {
-	public final static int ERROR_INTERNAL_1 = ERROR_CUSTOM_BASE + 0;
-	public final static int ERROR_INTERNAL_2 = ERROR_CUSTOM_BASE + 1;
+    public final static int ERROR_INTERNAL_1 = ERROR_CUSTOM_BASE + 0;
+    public final static int ERROR_INTERNAL_2 = ERROR_CUSTOM_BASE + 1;
     public final static int ERROR_INTERNAL_3 = ERROR_CUSTOM_BASE + 2;
     public final static int ERROR_INTERNAL_4 = ERROR_CUSTOM_BASE + 3;
-	
+    
     Layout      layout;
-    String		volumeID;
+    String      volumeID;
     Progress    progress;     
     BlockDevice bdev;
     Random      rnd = new Random();
@@ -124,25 +124,25 @@ public class UDFWriter extends Writer implements UDF {
     }
     
     void makeVolumeID() {
-    	this.volumeID = this.layout.label();
-    	
-    	this.volumeID = null == this.volumeID ? "UDFVolume" :
-    		  normalizeVolumeID(this.volumeID);
+        this.volumeID = this.layout.label();
+        
+        this.volumeID = null == this.volumeID ? "UDFVolume" :
+              normalizeVolumeID(this.volumeID);
     }
     
     static String normalizeVolumeID(String vid) {
-    	final int MAXLEN = (PrimaryVolumeDescriptor.VOL_ID_LEN / 2) - 1;
+        final int MAXLEN = (PrimaryVolumeDescriptor.VOL_ID_LEN / 2) - 1;
 
-    	final char[] res = vid.substring(0, Math.min(MAXLEN, vid.length())).toCharArray();
-    	
-    	for (int i = 0; i < res.length; i++) {
-    		char c = res[i];
-    		if (' ' > c || c > 127) {
-    			res[i] = '_';
-    		}
-    	}
-    	
-    	return new String(res).trim();
+        final char[] res = vid.substring(0, Math.min(MAXLEN, vid.length())).toCharArray();
+        
+        for (int i = 0; i < res.length; i++) {
+            char c = res[i];
+            if (' ' > c || c > 127) {
+                res[i] = '_';
+            }
+        }
+        
+        return new String(res).trim();
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -213,9 +213,9 @@ public class UDFWriter extends Writer implements UDF {
             }
             
             if (this.blocksTotal > LIMIT_MAX_BLOCKS) {
-            	throw new Exception(ERROR_TOO_MUCH_DATA,
-            				"volume size exceeds the maximum by %d block(s)", 	
-            				this.blocksTotal - LIMIT_MAX_BLOCKS);
+                throw new Exception(ERROR_TOO_MUCH_DATA,
+                            "volume size exceeds the maximum by %d block(s)",   
+                            this.blocksTotal - LIMIT_MAX_BLOCKS);
             }
             
             return this.blocksTotal;
@@ -271,14 +271,14 @@ public class UDFWriter extends Writer implements UDF {
         }
         
         if (this.resolving) {
-        	this.bnum += this.filesAndDirsSize;
+            this.bnum += this.filesAndDirsSize;
             for (int i = 0, c = this.numberOfDirectories + 
-            		            this.numberOfFiles; i < c; i++) {
-            	nextUniqueFileEntryID();
+                                this.numberOfFiles; i < c; i++) {
+                nextUniqueFileEntryID();
             }
         }
         else {
-        	writeDirectory(this.freg.root());
+            writeDirectory(this.freg.root());
         }
         writeFreeBlocks();
         writeSpaceBitmap();
@@ -339,15 +339,15 @@ public class UDFWriter extends Writer implements UDF {
         }
         
         if (this.resolving) {
-        	long rest = AnchorVolumeDescriptorPointer.LOCATION - this.bnum;
-        	this.unallocatedSpace.add(new ExtentDescriptor(
-        			(int)rest  * this.layout.blockSize(), (int)this.bnum));
-        	this.bnum = AnchorVolumeDescriptorPointer.LOCATION;
+            long rest = AnchorVolumeDescriptorPointer.LOCATION - this.bnum;
+            this.unallocatedSpace.add(new ExtentDescriptor(
+                    (int)rest  * this.layout.blockSize(), (int)this.bnum));
+            this.bnum = AnchorVolumeDescriptorPointer.LOCATION;
         }
         else {
-	        while (this.bnum < AnchorVolumeDescriptorPointer.LOCATION) {
-	            this.bdev.write(this.bnum++, block, 0);
-	        }
+            while (this.bnum < AnchorVolumeDescriptorPointer.LOCATION) {
+                this.bdev.write(this.bnum++, block, 0);
+            }
         }
     }
 
@@ -408,7 +408,7 @@ public class UDFWriter extends Writer implements UDF {
     ///////////////////////////////////////////////////////////////////////////
 
     void writeIntegritySequence() throws IOException {
-    	final int ISE_LEN = 16;
+        final int ISE_LEN = 16;
         
         if (this.resolving) {
             this.integritySequenceExtent = new ExtentDescriptor(
@@ -417,9 +417,9 @@ public class UDFWriter extends Writer implements UDF {
             this.bnum += ISE_LEN;
         }
         else {
-        	long bnum0 = this.bnum;
-        	
-        	LogicalVolumeHeaderDescriptor lvhd = new LogicalVolumeHeaderDescriptor();
+            long bnum0 = this.bnum;
+            
+            LogicalVolumeHeaderDescriptor lvhd = new LogicalVolumeHeaderDescriptor();
             lvhd.uniqueID = this.uniqueID;
             lvhd.reserved = new BytePtr(new byte[LogicalVolumeHeaderDescriptor.RESV_LEN]);
             
@@ -874,9 +874,9 @@ public class UDFWriter extends Writer implements UDF {
             
             long expected = posToPBNum((Long)fn.getTag(POS_TAG_NAME));
             if  (expected != pbnum()) {
-            	throw new Exception(ERROR_INTERNAL_4,
-            			"UDFWriter.FILEPOS_MISALIGN_2", 
-            			expected, pbnum());	
+                throw new Exception(ERROR_INTERNAL_4,
+                        "UDFWriter.FILEPOS_MISALIGN_2", 
+                        expected, pbnum()); 
             }
             
             InputStream ins = null;
@@ -894,7 +894,7 @@ public class UDFWriter extends Writer implements UDF {
                     
                     if (this.embedBuf.len != fn.size() || -1 != ins.read()) {
                         throw new Exception(ERROR_INTERNAL_1,
-                        		"small size mismatch for file '%s'", fn.path(true));  
+                                "small size mismatch for file '%s'", fn.path(true));  
                     }
                     
                     embed = this.embedBuf;
@@ -929,14 +929,14 @@ public class UDFWriter extends Writer implements UDF {
                         
                         if (toread > read) {
                             throw new Exception(ERROR_FILE_SIZE_CHANGED_LO,
-                                	"file '%s' smaller than expected", 
-                                	fn.path(true));  
+                                    "file '%s' smaller than expected", 
+                                    fn.path(true));  
                         }
                         rsz += read;
 
                         if (rsz > fsz) {
-                        	throw new Exception(ERROR_INTERNAL_2,
-                        	        "over-read-inconsistency (%d > %d)", rsz, fsz); 
+                            throw new Exception(ERROR_INTERNAL_2,
+                                    "over-read-inconsistency (%d > %d)", rsz, fsz); 
                         }
                         
                         done = rsz == fsz;
@@ -949,8 +949,8 @@ public class UDFWriter extends Writer implements UDF {
 
                     if (-1 != ins.read()) {
                         throw new Exception(ERROR_FILE_SIZE_CHANGED_HI,
-                    		"file '%s' bigger than expected", 
-                    		fn.path(true));   
+                            "file '%s' bigger than expected", 
+                            fn.path(true));   
                     }
                 }
             }
@@ -963,12 +963,12 @@ public class UDFWriter extends Writer implements UDF {
     }
     
     void writeFreeBlocks() throws IOException {
-    	final long freeBlocks = this.layout.freeBlocks();
+        final long freeBlocks = this.layout.freeBlocks();
         if (this.resolving) {
             this.freeBlocksPBnum = pbnum();
         }
         else {
-        	if (0 < freeBlocks) {
+            if (0 < freeBlocks) {
                 this.progress.onFile(null, null);
             }
             byte[] block = clearBlock();
@@ -1102,14 +1102,14 @@ public class UDFWriter extends Writer implements UDF {
             
             Iterator<Directory> dirs = dir.dirs();
             while (dirs.hasNext()) {
-            	Directory dir2 = dirs.next();
+                Directory dir2 = dirs.next();
                 calculateDirectorySize(dir2, pathLen);
                 sz += FileIdentifierDescriptor.size(dir2.nodes()[0].name(), 0);
             }
             
             Iterator<FileNode> files = dir.files();
             while (files.hasNext()) {
-            	FileNode fn = files.next();
+                FileNode fn = files.next();
                 checkPathLength(fn, pathLen);
                 sz += FileIdentifierDescriptor.size(fn.name(), 0);
             }
@@ -1119,9 +1119,9 @@ public class UDFWriter extends Writer implements UDF {
         }
         
         if (sz > LIMIT_DIRECTORY_SIZE) {
-        	throw new Exception(ERROR_DIRECTORY_TOO_LARGE,
-    			"size for directory '%s' beyond the limit", 
-    			null == dir.nodes()[0] ? "" : dir.nodes()[0].name());  
+            throw new Exception(ERROR_DIRECTORY_TOO_LARGE,
+                "size for directory '%s' beyond the limit", 
+                null == dir.nodes()[0] ? "" : dir.nodes()[0].name());  
         }
         
         DirectoryTag.get(dir.nodes()[0]).size = sz;
@@ -1154,12 +1154,12 @@ public class UDFWriter extends Writer implements UDF {
             
             pos++;
             if (maxEmbedSize(fn) < fn.size()) {
-            	long d = fn.size() - maxFileSize(fn); 
-            	if (d > 0) {
-                	throw new Exception(ERROR_FILE_TOO_LARGE,
-            			"file '%s' is too large by %d bytes",  
-            			fn.path(true), d);
-            	}
+                long d = fn.size() - maxFileSize(fn); 
+                if (d > 0) {
+                    throw new Exception(ERROR_FILE_TOO_LARGE,
+                        "file '%s' is too large by %d bytes",  
+                        fn.path(true), d);
+                }
                 pos += bytesToBlocks(fn.size());
             }
         }
@@ -1207,19 +1207,19 @@ public class UDFWriter extends Writer implements UDF {
     }
     
     int checkPathLength(FileNode fn, int pathLen) throws Exception {
-    	if (null == fn || fn.hasAttributes(FileNode.ATTR_ROOT)) {
-    		return 0; // TODO: the root has no length? (assumption!)
-    	}
-    	// TODO: not sure if the maximum path length is in the dstring space
-    	// (Unicode characters count twice) or simply the number of characters
-    	final int result = 1 + pathLen + fn.name().length();
-    	if (result > MAX_PATH_LEN && 
-    	    !__TEST_noPathLengthCheck) {
+        if (null == fn || fn.hasAttributes(FileNode.ATTR_ROOT)) {
+            return 0; // TODO: the root has no length? (assumption!)
+        }
+        // TODO: not sure if the maximum path length is in the dstring space
+        // (Unicode characters count twice) or simply the number of characters
+        final int result = 1 + pathLen + fn.name().length();
+        if (result > MAX_PATH_LEN && 
+            !__TEST_noPathLengthCheck) {
             throw new Exception(ERROR_PATH_TOO_LONG,
-    			"the length path for file '%s' exceeds the maximum of %d characters", 
-    			fn.path(true), MAX_PATH_LEN);  
-    	}
-    	return result;
+                "the length path for file '%s' exceeds the maximum of %d characters", 
+                fn.path(true), MAX_PATH_LEN);  
+        }
+        return result;
     }
     
     public static boolean __TEST_noPathLengthCheck;

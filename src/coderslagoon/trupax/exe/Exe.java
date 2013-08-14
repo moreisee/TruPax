@@ -33,9 +33,9 @@ public abstract class Exe {
     public final static String PRODUCT_SITE = "https://github.com/coderslagoon/TruPax";    
     
     protected final static String[][] LANGS = new String[][] {
-		{ "de"                                         , "Deutsch" },
-		{ coderslagoon.baselib.util.NLS.DEFAULT_LANG_ID, "English" }
-	};
+        { "de"                                         , "Deutsch" },
+        { coderslagoon.baselib.util.NLS.DEFAULT_LANG_ID, "English" }
+    };
     
     ///////////////////////////////////////////////////////////////////////////
 
@@ -56,9 +56,9 @@ public abstract class Exe {
     
     protected String[] processArgs(String[] args) throws ExitError {
         if (null != MiscUtils.__TEST_uncaught_now) {
-        	throw new Error("uncaught_test");  
+            throw new Error("uncaught_test");  
         }
-    	this.clp = new CmdLnParser(); 
+        this.clp = new CmdLnParser(); 
         addCmdLnOptions();
         try {
             return this.clp.parse(args, true, false);

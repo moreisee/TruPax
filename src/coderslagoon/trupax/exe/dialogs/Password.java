@@ -53,7 +53,7 @@ import coderslagoon.trupax.exe.util.PasswordCache;
 public class Password extends Dialog {
     final boolean confirm;
 
-	Label  lblInfo;
+    Label  lblInfo;
     Text   txtPassword;
     Text   txtPassword2;
     Button btnProceed;
@@ -65,7 +65,7 @@ public class Password extends Dialog {
     final Color[] defaultColors = new Color[2];
     
     public Password(Shell parent, Properties props, PasswordCache pwcache, 
-    		        boolean confirm, ToolTips toolTips) {
+                    boolean confirm, ToolTips toolTips) {
         super(parent, props,
               "password." + (confirm ? "confirm" : "noconfirm"),   
               SWT.DIALOG_TRIM | SWT.RESIZE);
@@ -85,11 +85,11 @@ public class Password extends Dialog {
         setLayout(gridLayout);
 
         if (this.confirm) {
-	        this.lblInfo = new Label(this, SWT.NONE);
-	        this.lblInfo.setText(this.confirm ? NLS.PASSWORD_INFO2.s() : NLS.PASSWORD_INFO.s());   
-	        this.lblInfo.setLayoutData(new GridData (SWT.FILL, SWT.CENTER, true, false));
+            this.lblInfo = new Label(this, SWT.NONE);
+            this.lblInfo.setText(this.confirm ? NLS.PASSWORD_INFO2.s() : NLS.PASSWORD_INFO.s());   
+            this.lblInfo.setLayoutData(new GridData (SWT.FILL, SWT.CENTER, true, false));
         }
-	        
+            
         this.txtPassword = new Text(this, SWT.BORDER);
         this.txtPassword.setLayoutData(new GridData (SWT.FILL, SWT.CENTER, true, false));
         this.txtPassword.addKeyListener  (this.onPasswordKey);
@@ -162,15 +162,15 @@ public class Password extends Dialog {
         this.onShowPassword.handleEvent(null);
         
         if (cpflag) {
-        	String lastPassw = this.pwcache.get();
-        	if (null != lastPassw) {
-	        	this.txtPassword.setText(lastPassw);
-	        	colorPassword(this.txtPassword);
-	        	if (null != this.txtPassword2) {
-	        		this.txtPassword2.setText(lastPassw);
-		        	colorPassword(this.txtPassword2);
-	        	}
-        	}
+            String lastPassw = this.pwcache.get();
+            if (null != lastPassw) {
+                this.txtPassword.setText(lastPassw);
+                colorPassword(this.txtPassword);
+                if (null != this.txtPassword2) {
+                    this.txtPassword2.setText(lastPassw);
+                    colorPassword(this.txtPassword2);
+                }
+            }
         }
 
         toolTips.shellListen(this);
@@ -180,30 +180,30 @@ public class Password extends Dialog {
     }
     
     @Override
-	public void shellClosed(ShellEvent e) {
-	}
+    public void shellClosed(ShellEvent e) {
+    }
 
     ///////////////////////////////////////////////////////////////////////////
 
     char[] password;
 
-	void verify() {
-		boolean proceed = true;
-	    if (this.confirm) {
-	        if (!this.txtPassword .getText().equals(
-	             this.txtPassword2.getText())) {
-	            proceed = false;
+    void verify() {
+        boolean proceed = true;
+        if (this.confirm) {
+            if (!this.txtPassword .getText().equals(
+                 this.txtPassword2.getText())) {
+                proceed = false;
             }
-	    }
-	    if (proceed) {
-	    	proceed = 0 < this.txtPassword.getText().length();
-	    }
-	    this.btnProceed.setEnabled(proceed);
-	}
+        }
+        if (proceed) {
+            proceed = 0 < this.txtPassword.getText().length();
+        }
+        this.btnProceed.setEnabled(proceed);
+    }
 
-	public boolean gotPassword() {
+    public boolean gotPassword() {
         return null != this.password;
-	}
+    }
 
     public char[] detachPassword() {
         char[] result = this.password;
@@ -217,10 +217,10 @@ public class Password extends Dialog {
             this.password = null;
         }
         if (reflect) {
-        	this.txtPassword.setText("");
-	        if (this.confirm) {
-	        	this.txtPassword2.setText("");  
-	        }
+            this.txtPassword.setText("");
+            if (this.confirm) {
+                this.txtPassword2.setText("");  
+            }
         }
         verify();
     }
@@ -243,22 +243,22 @@ public class Password extends Dialog {
 
     Listener onProceed = new Listener() {
         public void handleEvent(Event evt) {
-        	Password.this.password = 
-        	Password.this.txtPassword.getText().toCharArray();
-        	storeState();
+            Password.this.password = 
+            Password.this.txtPassword.getText().toCharArray();
+            storeState();
             close();
         }
     };
     
     void storeState() {
-    	boolean cpflag = this.chkCachePassword.getSelection();
+        boolean cpflag = this.chkCachePassword.getSelection();
         GUIProps.OPT_SHOWPASSWORD .set(Prp.global(), this.chkShowPassword.getSelection());
         GUIProps.OPT_CACHEPASSWORD.set(Prp.global(), cpflag);
         if (cpflag) {
-        	this.pwcache.set(new String(this.password));
+            this.pwcache.set(new String(this.password));
         }
         else {
-        	this.pwcache.clear();
+            this.pwcache.clear();
         }
     }
 
@@ -273,69 +273,69 @@ public class Password extends Dialog {
     };
     
     KeyListener onPasswordKey = new KeyListener() {
-		public void keyPressed (KeyEvent kevt) { }
-		public void keyReleased(KeyEvent kevt) {
-			colorPassword((Text)kevt.widget);
-		}
+        public void keyPressed (KeyEvent kevt) { }
+        public void keyReleased(KeyEvent kevt) {
+            colorPassword((Text)kevt.widget);
+        }
     };
     
     FocusListener onPasswordFocus = new FocusListener() {
         public void focusGained(FocusEvent fevt) { }
         public void focusLost  (FocusEvent fevt) {
-			colorPassword((Text)fevt.widget);
+            colorPassword((Text)fevt.widget);
         }
-	};
-	
-	void colorPassword(Text txt) {
-		Color[] colors = computeColors(txt.getText());
-		txt.setBackground(colors[0]);
-		txt.setForeground(colors[1]);
-		verify();
-	}
+    };
+    
+    void colorPassword(Text txt) {
+        Color[] colors = computeColors(txt.getText());
+        txt.setBackground(colors[0]);
+        txt.setForeground(colors[1]);
+        verify();
+    }
       
     ///////////////////////////////////////////////////////////////////////////
 
-	final static int COMPUTE_COLOR_LOOPS = 1000;
+    final static int COMPUTE_COLOR_LOOPS = 1000;
 
     Color[] computeColors(String passw) {
-    	if (0 == passw.length() || 
-    		!GUIProps.OPT_COLORPASSWORD.get()) {
-    		return this.defaultColors;
-    	}
+        if (0 == passw.length() || 
+            !GUIProps.OPT_COLORPASSWORD.get()) {
+            return this.defaultColors;
+        }
 
-    	byte[] pbytes = passw.getBytes();
-    	
-    	MessageDigest md;
-    	try {
-    		md = MessageDigest.getInstance("MD5");  
-    	}
-    	catch (NoSuchAlgorithmException nsae) {
-    		return this.defaultColors;
-    	}
-    		
-    	byte[] digest = new byte[] { 
-    			0x72,0x65,(byte)0x8E,0x76,0x78,0x52,(byte)0xF1,0x66,(byte)0x9F,
-    			0x01,(byte)0xAD,0x5E,(byte)0xC0,0x10,(byte)0xE0,0x2C };
-    	
-    	for (int i = 0; i < COMPUTE_COLOR_LOOPS; i++) {
-    		md.update(digest);
-    		md.update(pbytes);
-    		try {
-    			md.digest(digest, 0, digest.length);
-    		}
-    		catch (DigestException de) {
-    			return this.defaultColors;
-    		}
-    	}
+        byte[] pbytes = passw.getBytes();
+        
+        MessageDigest md;
+        try {
+            md = MessageDigest.getInstance("MD5");  
+        }
+        catch (NoSuchAlgorithmException nsae) {
+            return this.defaultColors;
+        }
+            
+        byte[] digest = new byte[] { 
+                0x72,0x65,(byte)0x8E,0x76,0x78,0x52,(byte)0xF1,0x66,(byte)0x9F,
+                0x01,(byte)0xAD,0x5E,(byte)0xC0,0x10,(byte)0xE0,0x2C };
+        
+        for (int i = 0; i < COMPUTE_COLOR_LOOPS; i++) {
+            md.update(digest);
+            md.update(pbytes);
+            try {
+                md.digest(digest, 0, digest.length);
+            }
+            catch (DigestException de) {
+                return this.defaultColors;
+            }
+        }
 
-    	int r = digest[0] & 0x0ff;
-    	int g = digest[1] & 0x0ff;
-    	int b = digest[2] & 0x0ff;
-    	
-    	Color[] result = new Color[2];
-    	result[0] = new Color(this.getDisplay(), r, g, b);
-    	result[1] = r+g*2+b>512 ? new Color(this.getDisplay(),   0,   0,   0) :
-    							  new Color(this.getDisplay(), 255, 255, 255);
-    	return result;						
+        int r = digest[0] & 0x0ff;
+        int g = digest[1] & 0x0ff;
+        int b = digest[2] & 0x0ff;
+        
+        Color[] result = new Color[2];
+        result[0] = new Color(this.getDisplay(), r, g, b);
+        result[1] = r+g*2+b>512 ? new Color(this.getDisplay(),   0,   0,   0) :
+                                  new Color(this.getDisplay(), 255, 255, 255);
+        return result;                      
     }
 }

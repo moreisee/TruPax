@@ -513,7 +513,7 @@ public class BasicsTest {
         assertTrue(TYPE_COUNT == checks);
         
         for (final int num : new int[] { 0, 1, 65536, -1 }) {
-        	checkTestEID(makeTestEID(num), num);
+            checkTestEID(makeTestEID(num), num);
         }
     }
     
@@ -524,14 +524,14 @@ public class BasicsTest {
     static Calendar CAL2;
     
     static void resetCalendars() {
-    	Calendar c;
+        Calendar c;
         c = Calendar.getInstance(); c.set(1977, 5, 12, 20, 22,  3); c.set(Calendar.MILLISECOND, 123); CAL0 = c;
         c = Calendar.getInstance(); c.set(2014, 2, 11,  5,  4,  7); c.set(Calendar.MILLISECOND, 999); CAL1 = c;
         c = Calendar.getInstance(); c.set(2000,11, 31, 11, 12, 13); c.set(Calendar.MILLISECOND,   1); CAL2 = c;
     }
     
     static {
-    	resetCalendars();
+        resetCalendars();
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -695,7 +695,7 @@ public class BasicsTest {
     
     @Test
     public void testFileSetDescriptor() throws UDFException {
-    	FileSetDescriptor fsd = new FileSetDescriptor(773311);
+        FileSetDescriptor fsd = new FileSetDescriptor(773311);
 
         fsd.recordingDateAndTime                = Timestamp.fromCalendar(CAL0); 
         fsd.interchangeLevel                    = (short)0xabcd;
@@ -729,7 +729,7 @@ public class BasicsTest {
         assertTrue(end < buf.length);
         assertTrue(end == 513);
         while (end < buf.length) {
-        	assertTrue((byte)0xbb == buf[end++]);
+            assertTrue((byte)0xbb == buf[end++]);
         }
         assertTrue((byte)0xbb == buf[0]);
         

@@ -92,12 +92,12 @@ public class FReceipt {
         }
 
         public Dir getDir(String name) {
-        	Dir result = this.dirs.get(name);
-        	if (null != result || FReceipt._caseMatch) {
-        		return result;
-        	}
-        	_caseMatchMisses++;
-        	return this.ldirs.get(name.toLowerCase());
+            Dir result = this.dirs.get(name);
+            if (null != result || FReceipt._caseMatch) {
+                return result;
+            }
+            _caseMatchMisses++;
+            return this.ldirs.get(name.toLowerCase());
         }
 
         public void putFNode(String name, FNode fn) {
@@ -106,12 +106,12 @@ public class FReceipt {
         }
         
         public FNode getFNode(String name) {
-        	FNode result = this.fnodes.get(name);
-        	if (null != result || FReceipt._caseMatch) {
-        		return result;
-        	}
-        	_caseMatchMisses++;
-        	return this.lfnodes.get(name.toLowerCase());
+            FNode result = this.fnodes.get(name);
+            if (null != result || FReceipt._caseMatch) {
+                return result;
+            }
+            _caseMatchMisses++;
+            return this.lfnodes.get(name.toLowerCase());
         }
 
         public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
@@ -218,10 +218,10 @@ public class FReceipt {
             if (fl.isHidden()) {
                 log("HID: %s", fl.getAbsolutePath());
                 if (fl.isDirectory()) {
-                	this.numOfHiddenDirs++;
+                    this.numOfHiddenDirs++;
                 }
                 else {
-                	this.numOfHiddenFiles++;
+                    this.numOfHiddenFiles++;
                 }
             }
             
@@ -398,7 +398,7 @@ public class FReceipt {
             Dir root = new Dir();
             root.name = "";
             if (0 < receipt.length() && !_resetReceipt) {
-        		root = load(receipt);
+                root = load(receipt);
             }
     
             walkPath(path, root);
@@ -422,12 +422,12 @@ public class FReceipt {
                               this.numOfMissingFiles,
                               this.numOfHiddenDirs,
                               this.numOfHiddenFiles,
-                          	  _caseMatchMisses);
+                              _caseMatchMisses);
 
             if (0 < receipt.length()) {
-            	if (!_resetReceipt) {
-            		receipt += ".NEW";
-            	}
+                if (!_resetReceipt) {
+                    receipt += ".NEW";
+                }
             }
             else {
                 receipt = String.format("receipt-%016x.dat", 
@@ -435,7 +435,7 @@ public class FReceipt {
             }
 
             if (_store) {
-            	store(root, receipt);
+                store(root, receipt);
             }
         }
         finally {
@@ -461,7 +461,7 @@ public class FReceipt {
         _caseMatchMisses = 0L;
     }
     static {
-    	resetTweaks();
+        resetTweaks();
     }
     
     public static void main(String[] args) {
