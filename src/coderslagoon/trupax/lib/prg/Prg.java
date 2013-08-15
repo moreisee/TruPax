@@ -27,7 +27,7 @@ import coderslagoon.trupax.lib.NLS;
 /**
  * TruPax program interface. The whole interaction with a TruPax instance
  * happens through this. The API itself was designed in a flat, structured
- * style style, so it can be accessed through potentially different bindings
+ * style, so it can be accessed through potentially different bindings
  * without too much translation required. Implementations are supposed to be
  * thread-safe, meaning one instance per thread, but multiple instances can
  * be present at the same time in the same process.
