@@ -303,39 +303,48 @@ public class Password extends Dialog {
             return this.defaultColors;
         }
 
+        byte[] digest = new byte[0]; 
         byte[] pbytes = passw.getBytes();
-        
-        MessageDigest md;
         try {
-            md = MessageDigest.getInstance("MD5");  
-        }
-        catch (NoSuchAlgorithmException nsae) {
-            return this.defaultColors;
-        }
-            
-        byte[] digest = new byte[] { 
-                0x72,0x65,(byte)0x8E,0x76,0x78,0x52,(byte)0xF1,0x66,(byte)0x9F,
-                0x01,(byte)0xAD,0x5E,(byte)0xC0,0x10,(byte)0xE0,0x2C };
-        
-        for (int i = 0; i < COMPUTE_COLOR_LOOPS; i++) {
-            md.update(digest);
-            md.update(pbytes);
+            MessageDigest md;
             try {
-                md.digest(digest, 0, digest.length);
+                md = MessageDigest.getInstance("MD5");  
             }
-            catch (DigestException de) {
+            catch (NoSuchAlgorithmException nsae) {
                 return this.defaultColors;
             }
+                
+            digest = new byte[] { 
+                0x72,0x65,(byte)0x8E,0x76,0x78,0x52,(byte)0xF1,0x66,(byte)0x9F,
+                0x01,(byte)0xAD,0x5E,(byte)0xC0,0x10,(byte)0xE0,0x2C };
+            
+            for (int i = 0; i < COMPUTE_COLOR_LOOPS; i++) {
+                md.update(digest);
+                md.update(pbytes);
+                try {
+                    md.digest(digest, 0, digest.length);
+                }
+                catch (DigestException de) {
+                    return this.defaultColors;
+                }
+                finally {
+                    md.reset();
+                }
+            }
+    
+            int r = digest[0] & 0x0ff;
+            int g = digest[1] & 0x0ff;
+            int b = digest[2] & 0x0ff;
+            
+            Color[] result = new Color[2];
+            result[0] = new Color(this.getDisplay(), r, g, b);
+            result[1] = r+g*2+b>512 ? new Color(this.getDisplay(),   0,   0,   0) :
+                                      new Color(this.getDisplay(), 255, 255, 255);
+            return result;
         }
-
-        int r = digest[0] & 0x0ff;
-        int g = digest[1] & 0x0ff;
-        int b = digest[2] & 0x0ff;
-        
-        Color[] result = new Color[2];
-        result[0] = new Color(this.getDisplay(), r, g, b);
-        result[1] = r+g*2+b>512 ? new Color(this.getDisplay(),   0,   0,   0) :
-                                  new Color(this.getDisplay(), 255, 255, 255);
-        return result;                      
+        finally {
+            Arrays.fill(pbytes, (byte)0);
+            Arrays.fill(digest, (byte)0);
+        }
     }
 }
