@@ -1,4 +1,4 @@
 #!/bin/bash
 realpath=`readlink -f $0`
 trupaxdir=`dirname $realpath`
-exec -a trupaxgui java -Xmx256m -jar "$trupaxdir/trupax.jar" "$@"
+exec -a trupaxgui java -Xmx1024m -jar "$trupaxdir/trupax.jar" "$@"

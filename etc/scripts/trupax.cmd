@@ -1,6 +1,6 @@
 @echo off
 IF EXIST %SystemRoot%\SysWOW64\java.exe (
-    %SystemRoot%\SysWOW64\java -cp "%~d0%~p0\trupax.jar" coderslagoon.trupax.exe.CmdLn %*
+    %SystemRoot%\SysWOW64\java -Xmx1024m -cp "%~d0%~p0\trupax.jar" coderslagoon.trupax.exe.CmdLn %*
 ) ELSE (
-    java -cp "%~d0%~p0\trupax.jar" coderslagoon.trupax.exe.CmdLn %*
+    java -Xmx1024m -cp "%~d0%~p0\trupax.jar" coderslagoon.trupax.exe.CmdLn %*
 )
