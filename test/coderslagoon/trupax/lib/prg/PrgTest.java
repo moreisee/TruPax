@@ -37,10 +37,7 @@ import coderslagoon.trupax.lib.prg.PrgImpl;
 import coderslagoon.trupax.lib.prg.PrgProps;
 import coderslagoon.trupax.lib.prg.Prg.Result;
 
-
-import static junit.framework.Assert.*;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class PrgTest {
     @Before

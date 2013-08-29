@@ -29,12 +29,10 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import junit.framework.Assert;
-
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
 
 import coderslagoon.baselib.io.NulOutputStream;
 import coderslagoon.baselib.util.MiscUtils;
