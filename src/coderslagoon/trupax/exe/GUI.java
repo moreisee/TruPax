@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicBoolean;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
@@ -40,8 +41,6 @@ import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.events.ShellEvent;
-import org.eclipse.swt.events.ShellListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.FontMetrics;
 import org.eclipse.swt.graphics.GC;
@@ -162,7 +161,11 @@ public class GUI extends Exe implements NLS.Reg.Listener {
     ///////////////////////////////////////////////////////////////////////////
     
     public GUI(String[] args) throws ExitError {
-        try {
+
+        Display.setAppName(Exe.PRODUCT_NAME);
+    	Display.setAppVersion(Prg.version());
+    	
+    	try {
             NLS.Reg.instance().load(null);
             initialize(args);
             this.display = new Display();
@@ -174,6 +177,13 @@ public class GUI extends Exe implements NLS.Reg.Listener {
             throw new ExitError(new Prg.Result(
                     Prg.Result.Code.INTERNAL_ERROR, ble.getMessage(), null));
         }
+    	
+        this.display.addListener(SWT.Dispose, new Listener() {
+            @Override
+            public void handleEvent(Event event) {
+                exit();
+            }
+        });
 
         this.shellProps = new ShellProps(
                 this.shell, 
@@ -203,6 +213,7 @@ public class GUI extends Exe implements NLS.Reg.Listener {
     }
      
     void createShell() {
+        
         GridLayout gridLayout = new GridLayout(2, false);
         gridLayout.marginWidth = 0;
         gridLayout.marginHeight = 0;
@@ -479,23 +490,6 @@ public class GUI extends Exe implements NLS.Reg.Listener {
     void addListeners() {
         this.toolTips.shellListen(this.shell);
         NLS.Reg.instance().addListener(this.toolTips);
-        
-        this.shell.addShellListener(new ShellListener() {
-            public void shellActivated  (ShellEvent e) { }
-            public void shellDeactivated(ShellEvent e) { }
-            public void shellDeiconified(ShellEvent e) { }
-            public void shellIconified  (ShellEvent e) { }  
-            public void shellClosed(ShellEvent e) {
-                GUI.this.storeProperties(false, true);
-                GUI.this.exit();
-            }
-        });
-        
-        this.shell.addListener(SWT.Close, new Listener() {
-            public void handleEvent(Event evt) {
-            }
-        });
-        
         this.display.addFilter(SWT.KeyDown, new Listener() {
             public void handleEvent(Event evt) {
                 if ('d' == evt.keyCode               &&
@@ -597,10 +591,13 @@ public class GUI extends Exe implements NLS.Reg.Listener {
             }
         }
                 
+        this.shell.dispose();
         this.display.dispose();
+        System.exit(0);
     }
     
     void exit() {
+        GUI.this.storeProperties(false, true);
         this.pwcache.clear();
         if (this.prg.dtor().isFailure()) {
             // TODO: msgbox??
@@ -1520,5 +1517,6 @@ public class GUI extends Exe implements NLS.Reg.Listener {
         catch (Throwable uncaught) {
             MiscUtils.dumpUncaughtError(uncaught);
         }
+        System.exit(0);
     }
 }

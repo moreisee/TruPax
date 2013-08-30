@@ -23,6 +23,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Properties;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
@@ -43,6 +44,7 @@ import org.eclipse.swt.widgets.Text;
 import coderslagoon.baselib.swt.dialogs.Dialog;
 import coderslagoon.baselib.swt.util.SWTUtil;
 import coderslagoon.baselib.swt.util.ToolTips;
+import coderslagoon.baselib.util.MiscUtils;
 import coderslagoon.baselib.util.Prp;
 import coderslagoon.trupax.exe.GUI;
 import coderslagoon.trupax.exe.GUIProps;
@@ -290,6 +292,11 @@ public class Password extends Dialog {
         Color[] colors = computeColors(txt.getText());
         txt.setBackground(colors[0]);
         txt.setForeground(colors[1]);
+        if (MiscUtils.underOSX()) {
+            txt.setVisible(false);
+            txt.setVisible(true);
+            txt.setFocus();
+        }
         verify();
     }
       

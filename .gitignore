@@ -6,3 +6,7 @@
 /.settings
 /bin
 /build
+
+# OSX
+.DS_Store
+

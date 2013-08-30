@@ -20,4 +20,7 @@ sed -i -r -e "s/(String\ RELEASE\ = ).*$/\1$RELEASE_PRG/" $FNAME
 FNAME=MANIFEST.MF
 sed -i -r -e "s/(Specification-Version:\ ).*/\1$VERREL/"  $FNAME
 sed -i -r -e "s/(Implementation-Version:\ ).*/\1$VERREL/" $FNAME
+FNAME=etc/Info.plist
+sed -i -r -e "s/(<key>CFBundleShortVersionString<\/key><string>).*/\1$VERREL/" $FNAME
+sed -i -r -e "s/(<key>CFBundleVersion<\/key><string>).*/\1$VERREL/"  		   $FNAME
 
