@@ -35,7 +35,7 @@ import coderslagoon.trupax.lib.NLS;
  */
 public abstract class Prg {
     final static int VERSION = 7;
-    final static String RELEASE = "A";
+    final static String RELEASE = "B";
     
     /**
      * Returns the version number. Mainly for display purposes. Comparisons

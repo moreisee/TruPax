@@ -41,6 +41,8 @@ import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.ShellEvent;
+import org.eclipse.swt.events.ShellListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.FontMetrics;
 import org.eclipse.swt.graphics.GC;
@@ -178,20 +180,23 @@ public class GUI extends Exe implements NLS.Reg.Listener {
                     Prg.Result.Code.INTERNAL_ERROR, ble.getMessage(), null));
         }
     	
-        this.display.addListener(SWT.Dispose, new Listener() {
-            @Override
-            public void handleEvent(Event event) {
-                exit();
-            }
-        });
-
         this.shellProps = new ShellProps(
                 this.shell, 
                 GUIProps.GUI_PFX, 
                 Prp.global(), 
                 new Point(-1, -1),
                 false);
-        
+
+        this.shell.addShellListener(new ShellListener() {
+            public void shellClosed(ShellEvent e) {
+                cleanup();
+            }
+            public void shellActivated  (ShellEvent e) { }
+            public void shellDeactivated(ShellEvent e) { }
+            public void shellDeiconified(ShellEvent e) { }
+            public void shellIconified  (ShellEvent e) { }
+        });
+
         setProgramIcon();
         createShell();
         makeMenu();
@@ -591,12 +596,16 @@ public class GUI extends Exe implements NLS.Reg.Listener {
             }
         }
                 
-        this.shell.dispose();
-        this.display.dispose();
+        if (!this.shell.isDisposed()) {
+            this.shell.dispose();
+        }
+        if (!this.display.isDisposed()) {
+            this.display.dispose();
+        }
         System.exit(0);
     }
     
-    void exit() {
+    void cleanup() {
         GUI.this.storeProperties(false, true);
         this.pwcache.clear();
         if (this.prg.dtor().isFailure()) {
