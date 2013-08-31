@@ -416,7 +416,7 @@ public class GUI extends Exe implements NLS.Reg.Listener {
         this.mniFileInvalidate.addListener(SWT.Selection, this.onInvalidate);
         new MenuItem(mn, SWT.SEPARATOR);
         this.mniFileQuit = new MenuItem(mn, SWT.NONE);
-        this.mniFileQuit.setAccelerator(SWT.MOD1 | 'Q');
+        this.mniFileQuit.setAccelerator(SWT.MOD1 | (MiscUtils.underOSX() ? 'W' : 'Q'));
         this.mniFileQuit.addListener(SWT.Selection, this.onQuit);
 
         this.mniHelp = new MenuItem(this.mnMain, SWT.CASCADE);
