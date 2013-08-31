@@ -16,7 +16,7 @@
 
 <div>
 TruPax saves its settings in a file named <i>trupax.properties</i> under Windows
-or <i>.trupaxrc</i> under Linux, preferably in the location of the executable.
+or as <i>.trupaxrc</i> otherwise, preferably in the location of the executable.
 If this is not possible it chooses the user's home directory (on modern
 Windows systems that's "C:\\Users\\{user-name}"). The file is managed by the
 application and should not be changed by hand.
@@ -43,8 +43,9 @@ folders of former ones. Capitalization of names are ignored, meaning the file
 "image.jpg" replaces the "Image.JPG" for instance. If you don't want this to
 happen use <i>Merge Case Sensitively</i> to allow such conflicts, so "image.jpg"
 and "Image.JPG" will both be stored in the container. Though this can cause
-problems later on in Windows, where for copy and other operations file names
-are not treated in a case sensitive manner. Under Linux there are no such issues.  
+problems later on in Windows or OSX, where for copy and other operations file
+names are not treated in a case sensitive manner. Under Linux there are no such
+issues.  
 <br/><br/>
 Through drag and drop to the GUI one can also add folders and files
 to the selection. Except if it's a single file with the extension .tc, in such
