@@ -165,9 +165,9 @@ public class GUI extends Exe implements NLS.Reg.Listener {
     public GUI(String[] args) throws ExitError {
 
         Display.setAppName(Exe.PRODUCT_NAME);
-    	Display.setAppVersion(Prg.version());
-    	
-    	try {
+        Display.setAppVersion(Prg.version());
+        
+        try {
             NLS.Reg.instance().load(null);
             initialize(args);
             this.display = new Display();
@@ -179,7 +179,7 @@ public class GUI extends Exe implements NLS.Reg.Listener {
             throw new ExitError(new Prg.Result(
                     Prg.Result.Code.INTERNAL_ERROR, ble.getMessage(), null));
         }
-    	
+        
         this.shellProps = new ShellProps(
                 this.shell, 
                 GUIProps.GUI_PFX, 
