@@ -15,9 +15,11 @@ BUILD=TruPax$1
 APPDIR=tmp/TruPax.app
 CONTDIR=$APPDIR/Contents
 CLBASELIBDIR=../CLBaseLib
-DMGFILE=build/trupax$1_osx.dmg
+DMGFILE32=build/trupax$1_osx32.dmg
+DMGFILE64=build/trupax$1_osx64.dmg
 
-rm $DMGFILE
+rm $DMGFILE32
+rm $DMGFILE64
 rm -rf $CONTDIR
 mkdir -p $CONTDIR/MacOS
 mkdir    $CONTDIR/Resources
@@ -33,8 +35,18 @@ chmod 755 $CONTDIR/MacOS/trupaxgui
 
 cp $CLBASELIBDIR/lib/swt/4.3/cocoa-macosx-x86_64/swt.jar $CONTDIR/MacOS/
 
-hdiutil create -srcfolder $APPDIR $DMGFILE
-hdiutil internet-enable -yes $DMGFILE
+hdiutil create -srcfolder $APPDIR $DMGFILE64
+hdiutil internet-enable -yes      $DMGFILE64
+
+cp $CLBASELIBDIR/lib/swt/4.3/cocoa-macosx-x86/swt.jar $CONTDIR/MacOS/
+
+hdiutil create -srcfolder $APPDIR $DMGFILE32
+hdiutil internet-enable -yes      $DMGFILE32
+
+ls -lah $DMGFILE32
+ls -lah $DMGFILE64
+shasum $DMGFILE32
+shasum $DMGFILE64
 
 rm -rf tmp
 
