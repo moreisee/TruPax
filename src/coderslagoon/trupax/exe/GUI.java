@@ -835,6 +835,7 @@ public class GUI extends Exe implements NLS.Reg.Listener {
                 return;
             }
             final String[] objs = (String[])evt.data;
+            Runnable run = null;
             if (null != objs && storeProperties(true, false)) {
                 if (1 == objs.length) {
                     final String obj = objs[0]; 
@@ -856,12 +857,15 @@ public class GUI extends Exe implements NLS.Reg.Listener {
                             return;
                         }
                         switch(sel) {
-                            case 0: extract   (obj); return; 
-                            case 1: invalidate(obj); return; 
+                            case 0: run = new Runnable() { public void run() { extract   (obj); }}; break; 
+                            case 1: run = new Runnable() { public void run() { invalidate(obj); }}; break;
                         }
                     }
                 }
-                registerObjects(objs);
+                if (null != run) {
+                    run = new Runnable() { public void run() { registerObjects(objs); }};
+                }
+                GUI.this.display.asyncExec(run);
             }
         }
         public void dragOver(DropTargetEvent evt) {
