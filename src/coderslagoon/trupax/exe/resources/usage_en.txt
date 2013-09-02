@@ -26,7 +26,7 @@ Options:
 --wipe               Securely erase the original files and folders after the
                      volume has been created successfully.
 --wipe-only          Just securely erase objects, do not create a container.
---extract            Extract the given volume to the current or given location.
+--extract            Extract the given volume to the given location.
 --invalidate         Invalidate the given volume. Use with caution!
 
 Examples: trupax -v -r --label=mytext test.tc mydocs\*.txt diary.txt

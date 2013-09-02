@@ -24,8 +24,7 @@ Optionen:
 --wipe               Die originalen Dateien und Ordner nach der Erstellung der
                      Container-Datei vernichten.
 --wipe-only          Nur vernichten, keine Erstellung eines Containers.
---extract            Die gegebene Container-Datei in den Zielordner oder den
-                     aktuellen Pfad extrahieren.
+--extract            Die gegebene Container-Datei in den Zielordner extrahieren.
 --invalidate         Die gegebene Container-Datei ungültig machen. Vorsicht!
 
 Beispiele: trupax -v -r --label=meinedaten test.tc dokumente\*.txt diary.txt
