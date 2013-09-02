@@ -518,6 +518,7 @@ public class CmdLnTest extends TestUtils {
         assertTrue(ee.result.code == Prg.Result.Code.MISSING_CMDLN_ARG);
 
         for (Prp.Bool pb : pbl) {
+            System.out.println(pb.name());
             assertTrue(cl.props.containsKey(pb.name()));
             assertTrue(pb.get(cl.props));
         }

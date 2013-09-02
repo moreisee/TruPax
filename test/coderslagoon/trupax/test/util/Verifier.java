@@ -69,7 +69,10 @@ public class Verifier {
                     FileNameMaker fnmk, Class<Creator> cclazz) throws IOException {
         this.log = log;
         this.err = err;
-        this.tmpDir = null == tmpDir ? new File(System.getProperty("java.io.tmpdir")) : tmpDir;
+        this.tmpDir = null == tmpDir ? new File(
+            // NOTE: OSX has insanely long temporary paths, this screws up test
+            //       cases right, which admittedly should be a bit more flexible
+            MiscUtils.underOSX() ? "/tmp" : System.getProperty("java.io.tmpdir")) : tmpDir;
         try {
             this.creator = (null == cclazz ? DefaultCreator.class : cclazz).newInstance();
         } 
@@ -573,10 +576,10 @@ public class Verifier {
 
     ///////////////////////////////////////////////////////////////////////////
 
-    public static void fileTimeCheck(File obj, long tm) throws IOException {
+    public void fileTimeCheck(File obj, long tm) throws IOException {
         long ftm = obj.exists() ? obj.lastModified() : -1L;
         if (ftm != tm) {
-            if (obj.equals(new File(System.getProperty("java.io.tmpdir")))) {
+            if (obj.equals(this.tmpDir)) {
                 return;
             }
             throw new IOException(String.format(

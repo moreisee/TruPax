@@ -51,8 +51,8 @@ public class PasswordSearchTest {
                 "abcd1234" + etc
             };
             PasswordSearch.ExitCode ec = PasswordSearch._main(args);
-            if (0 == etc.length()) assertEquals(PasswordSearch.ExitCode.NOT_FOUND,ec);        
-            else                   assertEquals(PasswordSearch.ExitCode.SUCCESS , ec);
+            if (0 == etc.length()) assertEquals(PasswordSearch.ExitCode.NOT_FOUND, ec);        
+            else                   assertEquals(PasswordSearch.ExitCode.SUCCESS  , ec);
         }
     }
     

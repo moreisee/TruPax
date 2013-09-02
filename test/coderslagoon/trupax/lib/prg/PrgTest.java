@@ -23,12 +23,14 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import coderslagoon.baselib.io.IOUtils;
 import coderslagoon.baselib.io.LocalFileSystem;
+import coderslagoon.baselib.util.MiscUtils;
 import coderslagoon.baselib.util.Prp;
 import coderslagoon.baselib.util.VarInt;
 import coderslagoon.test.util.TestUtils;
@@ -36,7 +38,6 @@ import coderslagoon.trupax.lib.prg.Prg;
 import coderslagoon.trupax.lib.prg.PrgImpl;
 import coderslagoon.trupax.lib.prg.PrgProps;
 import coderslagoon.trupax.lib.prg.Prg.Result;
-
 import static org.junit.Assert.*;
 
 public class PrgTest {
@@ -379,9 +380,10 @@ public class PrgTest {
             }
             
             Prg.RegSum rs = prg.registerSummary();
-            assertTrue(rs.bytesTotal          == 123);
-            assertTrue(rs.numberOfDirectories == 1 + depth); 
-            assertTrue(rs.numberOfFiles       == 1);
+            assertEquals(rs.bytesTotal         , 123);
+            // FIXME: figure out why under OSX /tmp/... turns into /private/tmp/... and account for it 
+            assertEquals(rs.numberOfDirectories, 1 + depth + (1 == sfp && MiscUtils.underOSX() ? 1 : 0)); 
+            assertEquals(rs.numberOfFiles      , 1);
 
             delPrg();
         }

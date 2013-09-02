@@ -29,6 +29,7 @@ import java.io.RandomAccessFile;
 import java.util.Iterator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -195,6 +196,9 @@ public class PasswordSearch {
         }
         @Override
         public String next() {
+            if (null == this.c) {
+                return null;
+            }
             for (int i = 0; i < this.c.length; i++) {
                 this.buf[i] = this.set[this.c[i]];
             }
@@ -231,26 +235,31 @@ public class PasswordSearch {
     final AtomicReference<String> found = new AtomicReference<String>();
     
     /** 
-     * Each core calls this code. All of the state is on the stack or made
-     * thread-safe, hence the instance can be shared between all threads.
+     * Each core calls this code.
      */
-    final Runnable run = new Runnable() {
+    class SearchRun implements Runnable {
         @Override
         public void run() {
+            try {
+                unsafeRun();
+            }
+            catch (Throwable err) {
+                err.printStackTrace();
+                System.exit(ExitCode.ERROR.ordinal());
+            }
+        }
+        private void unsafeRun() {
             final PasswordSearch self = PasswordSearch.this;
             byte[] hdr = self.header.clone();
             while (null == PasswordSearch.this.found.get()) {
                 String pw;
-                synchronized(PasswordSearch.this.src) {
-                    if (!self.src.hasNext()) {
+                synchronized(self.src) {
+                    pw = self.src.next();
+                    if (null == pw) {
                         return;
                     }
-                    pw = PasswordSearch.this.src.next();
                 }
                 try {
-                    if ("a_1".equals(pw)) {
-                        pw = "a_1";
-                    }
                     new Header(new Password(pw.toCharArray(), null), hdr, 0);
                     self.found.set(pw);
                     return;
@@ -262,6 +271,9 @@ public class PasswordSearch {
                 catch (TCLibException tle) {
                     tle.printStackTrace(System.err);
                     return;
+                }
+                catch (Throwable err) {
+                    err.printStackTrace();
                 }
             }
         }
@@ -292,7 +304,7 @@ public class PasswordSearch {
         int pcount = Runtime.getRuntime().availableProcessors();
         this.exsvc = Executors.newFixedThreadPool(pcount);
         for (int i = 0; i < pcount; i++) {
-            this.exsvc.execute(this.run);
+            this.exsvc.execute(new SearchRun());
         }
     }
 
@@ -313,8 +325,9 @@ public class PasswordSearch {
     /**
      * Cleans up resources of this instance. Discard after this call is made.
      */
-    public void end() {
+    public void end() throws InterruptedException{
         this.exsvc.shutdown();
+        this.exsvc.awaitTermination(30, TimeUnit.SECONDS);
         this.src.close();
     }
 
