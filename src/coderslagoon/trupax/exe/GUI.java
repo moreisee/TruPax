@@ -862,7 +862,7 @@ public class GUI extends Exe implements NLS.Reg.Listener {
                         }
                     }
                 }
-                if (null != run) {
+                if (null == run) {
                     run = new Runnable() { public void run() { registerObjects(objs); }};
                 }
                 GUI.this.display.asyncExec(run);
