@@ -180,6 +180,17 @@ public class GUI extends Exe implements NLS.Reg.Listener {
                     Prg.Result.Code.INTERNAL_ERROR, ble.getMessage(), null));
         }
         
+        this.display.addFilter(SWT.MouseMove, new Listener() {
+            @Override
+            public void handleEvent(Event event) {
+                Point p = GUI.this.display.getCursorLocation();
+                GUI.this.prg.addRandomSeed(p.x);
+                GUI.this.prg.addRandomSeed(p.y);
+                GUI.this.prg.addRandomSeed(System.currentTimeMillis());
+                GUI.this.prg.addRandomSeed(System.nanoTime());
+            }
+        });
+
         this.shellProps = new ShellProps(
                 this.shell, 
                 GUIProps.GUI_PFX, 

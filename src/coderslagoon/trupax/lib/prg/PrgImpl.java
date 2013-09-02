@@ -24,13 +24,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Properties;
-
 
 import coderslagoon.baselib.io.BlockDevice;
 import coderslagoon.baselib.io.BlockDeviceImpl;
@@ -640,7 +638,7 @@ public class PrgImpl extends Prg {
                         key,
                         hashFunction,
                         blockCipher,
-                        Rand.wrap(new SecureRandom()));
+                        Rand.wrap(Rand.secure()));
                 
                 outdev = null;
             }
@@ -958,5 +956,12 @@ public class PrgImpl extends Prg {
         finally {
             this.volumeFile = null;
         }
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    
+    @Override
+    public void addRandomSeed(long seed) {
+        Rand.secure().setSeed(seed);
     }
 }

@@ -20,7 +20,6 @@ package coderslagoon.trupax.sdk.apps;
 
 import java.io.File;
 import java.io.RandomAccessFile;
-import java.security.SecureRandom;
 import java.util.Arrays;
 
 import coderslagoon.tclib.container.Header;
@@ -85,7 +84,7 @@ public class MakeEmptyVolume {
             RandomAccessFile raf = new RandomAccessFile(fl, "rw");
             
             // create and write the header
-            Rand rnd = Rand.wrap(new SecureRandom());
+            Rand rnd = Rand.wrap(Rand.secure());
             Header hdr = new Header(RIPEMD160.class, AES256.class);
             hdr.generateSalt(rnd);
             hdr.generateKeyMaterial(rnd);

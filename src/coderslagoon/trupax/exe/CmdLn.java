@@ -291,6 +291,10 @@ public class CmdLn extends Exe {
             throw new ExitError(res);
         }
         this.prg = prg;
+        // better than no extra seed, no?
+        this.prg.addRandomSeed(Runtime.getRuntime().freeMemory());
+        this.prg.addRandomSeed(System.currentTimeMillis());
+        this.prg.addRandomSeed(System.nanoTime());
 
         this.out = CmdLnProps.OPTS_VERBOSE.get(this.props) ? 
                 System.out : 

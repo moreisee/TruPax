@@ -388,7 +388,7 @@ public class Header implements Erasable {
     Rand rnd;
     Rand rnd() {
         if (null == this.rnd) {
-            this.rnd = Rand.wrap(new java.security.SecureRandom());
+            this.rnd = Rand.wrap(Rand.secure());
         }
         return this.rnd;
     }

@@ -815,4 +815,10 @@ public abstract class Prg {
      * @return Result of the operation.
      */
     public abstract Result invalidate(ProgressCallback cb);
+    
+    /**
+     * Adds additional seed to the secure random number generator.
+     * @param seed The extra seed value.
+     */
+    public abstract void addRandomSeed(long seed);
 }

@@ -18,6 +18,7 @@ TruPax. If not, see http://www.gnu.org/licenses/.
 
 package coderslagoon.tclib.crypto;
 
+import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -98,4 +99,61 @@ public abstract class Rand implements Testable, Erasable {
     public static Rand wrap(Random random) {
         return new Wrapper(random);
     }
+    
+    ///////////////////////////////////////////////////////////////////////////
+    
+    /**
+     * Provides the global secure random number instance. It should be seeded
+     * with extra data whenever possible, to provide even better randomness.
+     * @return The global secure random number generator. 100% thread-safe too.
+     */
+    public static Random secure() {
+        return _srand;
+    }
+    
+    private final static SecureRandom _srand = new SecureRandom() {
+        public synchronized void setSeed(long seed) {
+            super.setSeed(seed);
+        }
+        public synchronized void nextBytes(byte[] bytes) {
+            super.nextBytes(bytes);
+        }
+        public synchronized int nextInt() {
+            return super.nextInt();
+        }
+        public synchronized int nextInt(int n) {
+            return super.nextInt(n);
+        }
+        public synchronized long nextLong() {
+            return super.nextLong();
+        }
+        public synchronized boolean nextBoolean() {
+            return super.nextBoolean();
+        }
+        public synchronized float nextFloat() {
+            return super.nextFloat();
+        }
+        public synchronized double nextDouble() {
+            return super.nextDouble();
+        }
+        public synchronized double nextGaussian() {
+            return super.nextGaussian();
+        }
+        public synchronized int hashCode() {
+            return super.hashCode();
+        }
+        public synchronized boolean equals(Object obj) {
+            return super.equals(obj);
+        }
+        protected Object clone() throws CloneNotSupportedException {
+            throw new CloneNotSupportedException();
+        }
+        public String toString() {
+            return super.toString();
+        }
+        protected synchronized void finalize() throws Throwable {
+            super.finalize();
+        }
+        private static final long serialVersionUID = 2173765181962678519L;
+    };
 }
